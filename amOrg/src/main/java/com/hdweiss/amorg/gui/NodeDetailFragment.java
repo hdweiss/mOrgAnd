@@ -1,4 +1,4 @@
-package com.hdweiss.amorg;
+package com.hdweiss.amorg.gui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hdweiss.amorg.dummy.DummyContent;
+import com.hdweiss.amorg.R;
 import com.hdweiss.amorg.orgdata.OrgNodeRepository;
 
 /**
@@ -23,10 +23,6 @@ public class NodeDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -43,7 +39,7 @@ public class NodeDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            //mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
         }
     }
 
@@ -53,12 +49,12 @@ public class NodeDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_node_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
+        //if (mItem != null) {
             //((TextView) rootView.findViewById(R.id.node_detail)).setText(mItem.content);
 
             String allNodes = new OrgNodeRepository(getActivity()).allToString();
             ((TextView) rootView.findViewById(R.id.node_detail)).setText(allNodes);
-        }
+        //}
 
         return rootView;
     }

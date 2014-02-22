@@ -1,10 +1,12 @@
-package com.hdweiss.amorg;
+package com.hdweiss.amorg.gui;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+
+import com.hdweiss.amorg.R;
 
 /**
  * An activity representing a single Node detail screen. This

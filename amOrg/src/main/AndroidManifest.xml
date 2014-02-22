@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.hdweiss.amorg.NodeListActivity"
+            android:name=".gui.NodeListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,13 +17,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.hdweiss.amorg.NodeDetailActivity"
+            android:name=".gui.NodeDetailActivity"
             android:label="@string/title_node_detail"
-            android:parentActivityName="com.hdweiss.amorg.NodeListActivity" >
+            android:parentActivityName=".gui.NodeListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hdweiss.amorg.NodeListActivity" />
+                android:value="gui.NodeListActivity" />
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+
+        <activity
+            android:name=".settings.KeySettingActivity" >
+            <intent-filter>
+                <action android:name=".settings.KeySettingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.lamerman.FileDialog">
+        </activity>
+
     </application>
 
 </manifest>

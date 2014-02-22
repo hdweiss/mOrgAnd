@@ -8,7 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="com.hdweiss.amorg.NodeListActivity">
+    tools:context="com.hdweiss.amorg.gui.NodeListActivity">
 
     <!--
     This layout is a two-pane layout for the Nodes
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/node_list"
-        android:name="com.hdweiss.amorg.NodeListFragment"
+        android:name="com.hdweiss.amorg.gui.NodeListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

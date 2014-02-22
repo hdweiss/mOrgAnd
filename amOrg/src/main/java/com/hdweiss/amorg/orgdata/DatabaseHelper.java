@@ -72,10 +72,7 @@ public class DatabaseHelper  extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    /**
-     * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-     * value.
-     */
+
     public Dao<OrgNode, Integer> getOrgNodeDao() throws SQLException {
         if (orgNodeDao == null) {
             orgNodeDao = getDao(OrgNode.class);
@@ -83,10 +80,6 @@ public class DatabaseHelper  extends OrmLiteSqliteOpenHelper {
         return orgNodeDao;
     }
 
-    /**
-     * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SimpleData class. It will
-     * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
-     */
     public RuntimeExceptionDao<OrgNode, Integer> getOrgNodeDataDao() {
         if (orgNodeRuntimeDao == null) {
             orgNodeRuntimeDao = getRuntimeExceptionDao(OrgNode.class);
