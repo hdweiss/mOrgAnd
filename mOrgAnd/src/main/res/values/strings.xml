@@ -2,9 +2,6 @@
 <resources>
 
     <string name="app_name">mOrgAnd</string>
-    <string name="title_node_detail">Node Detail</string>
-
-    <string name="menu_settings">Settings</string>
 
     <!-- File Dialog resources -->
     <string name="location">Location</string>
@@ -17,5 +14,14 @@
     <string name="no_data">No Data</string>
     <color name="gray">#ffff0000</color>
     <string name="err">Error</string>
+    <!-- End of File Dialog Resources -->
+
+
+    <string name="title_activity_main">mOrgAnd</string>
+    <string name="title_agenda">Agenda</string>
+    <string name="title_outline">Outline</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_sync">Synchronize</string>
 
 </resources>
