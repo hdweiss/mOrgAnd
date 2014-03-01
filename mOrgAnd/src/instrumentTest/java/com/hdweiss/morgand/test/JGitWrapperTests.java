@@ -10,10 +10,7 @@ import java.io.File;
 
 public class JGitWrapperTests extends AndroidTestCase {
 
-    private final String localPath = "/sdcard/testrepo";
-
-    private final String remotePathSSH = "git@github.com:hdweiss/test.git";
-    private final String remotePath = "https://github.com/hdweiss/test.git";
+    private String localPath;
 
     private final String testFile = "README.md";
 
@@ -23,12 +20,14 @@ public class JGitWrapperTests extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        this.localPath = preferences.getString("git_local_path", "");
         jGitWrapper = new JGitWrapper(preferences);
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+        jGitWrapper.getGit().close();
     }
 
 
@@ -40,7 +39,7 @@ public class JGitWrapperTests extends AndroidTestCase {
 
     public void testCommitAndPush() throws Exception {
         String orgContents = TestUtils.readFileAsString(localPath + "/" + testFile);
-        TestUtils.writeStringAsFile(orgContents + "\nmoretest", localPath + "/" + testFile);
+        TestUtils.writeStringAsFile(orgContents + "\nmorgand", localPath + "/" + testFile);
         jGitWrapper.commitAllChanges("Automatic commit");
         jGitWrapper.updateChanges();
     }

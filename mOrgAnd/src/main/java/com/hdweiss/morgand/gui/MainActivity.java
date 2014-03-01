@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.settings.SettingsActivity;
-import com.hdweiss.morgand.synchronizer.Synchronizer;
+import com.hdweiss.morgand.synchronizer.SynchronizerTask;
 
 import java.util.Locale;
 
@@ -154,7 +154,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(intent);
                 break;
             case R.id.action_sync:
-                Synchronizer synchronizer = new Synchronizer(this);
+                SynchronizerTask synchronizerTask = new SynchronizerTask(this);
+                synchronizerTask.execute();
                 break;
         }
         return super.onOptionsItemSelected(item);

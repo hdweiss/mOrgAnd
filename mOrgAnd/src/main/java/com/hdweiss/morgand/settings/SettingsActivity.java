@@ -2,6 +2,7 @@ package com.hdweiss.morgand.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +43,15 @@ public class SettingsActivity extends PreferenceActivity {
         super.onPostCreate(savedInstanceState);
 
         setupSimplePreferencesScreen();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        findPreference("git_local_path").setSummary(preferences.getString("git_local_path", ""));
+        findPreference("git_key_info").setSummary(preferences.getString("git_key_info", ""));
     }
 
     /**

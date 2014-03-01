@@ -16,11 +16,10 @@
     <string name="pref_title_git_url">Git Url</string>
     <string name="pref_title_git_commit_author">Git commit author</string>
     <string name="pref_title_git_commit_email">Git commit email</string>
-    <string name="pref_title_git_keyfile">Select ssh keyfile</string>
+    <string name="pref_title_git_keyfile">Private ssh key file</string>
     <string name="pref_title_git_password">Git password</string>
     <string name="pref_title_git_username">Git Username</string>
-    <string name="pref_title_git_key">Key fingerprint</string>
-    <string name="pref_title_git_local_path">Git local path</string>
+    <string name="pref_title_git_local_path">Git local repository path</string>
 
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>

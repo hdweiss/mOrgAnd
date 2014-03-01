@@ -20,8 +20,13 @@
     <string name="title_activity_main">mOrgAnd</string>
     <string name="title_agenda">Agenda</string>
     <string name="title_outline">Outline</string>
+    <string name="title_synchronizing_changes">Synchronizing changes</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_sync">Synchronize</string>
+
+    <string name="error_sync">Synchronization failed</string>
+    <string name="error_key_file_copy">Error copying key file to internal storage</string>
+    <string name="error_key_file_info">Error getting fingerprint from key file</string>
 
 </resources>

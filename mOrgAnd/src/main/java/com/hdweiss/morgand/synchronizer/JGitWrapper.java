@@ -5,9 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hdweiss.morgand.utils.FileUtils;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
@@ -18,10 +15,7 @@ import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.transport.JschConfigSessionFactory;
-import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshSessionFactory;
-import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.util.Iterator;
@@ -38,14 +32,15 @@ public class JGitWrapper {
 
     private final MergeStrategy mergeStrategy = MergeStrategy.OURS;
 
+    // TODO Externalize strings
     public JGitWrapper(SharedPreferences preferences) throws Exception {
         localPath = preferences.getString("git_local_path", "");
         if (TextUtils.isEmpty(localPath))
-            throw new IllegalArgumentException("Must specify git_local_path");
+            throw new IllegalArgumentException("Must specify local git path");
 
         remotePath = preferences.getString("git_url", "");
         if (TextUtils.isEmpty(remotePath))
-            throw new IllegalArgumentException("Must specify git_url");
+            throw new IllegalArgumentException("Must specify remote git url");
 
         commitAuthor = preferences.getString("git_commit_author", "");
         commitEmail = preferences.getString("git_commit_email", "");
@@ -56,13 +51,15 @@ public class JGitWrapper {
 
     private void setupJGitAuthentication(SharedPreferences preferences) {
         String username = preferences.getString("git_username", "");
+        if (TextUtils.isEmpty(username))
+            throw new IllegalArgumentException("Must specify git username");
+
         String password = preferences.getString("git_password", "");
-
         String keyLocation = preferences.getString("git_key_path", "");
-        JGitConfigSessionFactory session = new JGitConfigSessionFactory(username, password, keyLocation, null);
+        if (TextUtils.isEmpty(password) && TextUtils.isEmpty(keyLocation))
+            throw new IllegalArgumentException("Must specify either git password or keyfile path");
 
-        // String knownHostsLocation = "/sdcard/ssh-keys/known_hosts";
-        //JGitConfigSessionFactory session = new JGitConfigSessionFactory(username, password,keyLocation, knownHostsLocation);
+        JGitConfigSessionFactory session = new JGitConfigSessionFactory(username, password, keyLocation);
         SshSessionFactory.setInstance(session);
     }
 
@@ -176,38 +173,5 @@ public class JGitWrapper {
         }
 
         return i;
-    }
-
-    public static class JGitConfigSessionFactory extends JschConfigSessionFactory {
-        private final String username;
-        private final String password;
-        private final String keyLocation;
-        private final String knowHostsLocation;
-
-        public JGitConfigSessionFactory(String username, String password, String keyLocation, String knowHostsLocation) {
-            super();
-            this.username = username;
-            this.password = password;
-            this.keyLocation = keyLocation;
-            this.knowHostsLocation = knowHostsLocation;
-        }
-
-        @Override
-        protected void configure(OpenSshConfig.Host host, Session session) {
-//            session.setConfig("StrictHostKeyChecking", "no");
-//            session.setConfig("HostName", "github.com");
-
-            // TODO Improve logic to decide login method
-            session.setConfig("User", username);
-
-            try {
-                JSch jSch = getJSch(host, FS.DETECTED);
-                jSch.addIdentity(keyLocation);
-                if (TextUtils.isEmpty(knowHostsLocation) == false)
-                    jSch.setKnownHosts(knowHostsLocation);
-            } catch (JSchException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
