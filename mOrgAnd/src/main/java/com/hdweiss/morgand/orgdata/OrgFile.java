@@ -8,6 +8,8 @@ import java.util.Date;
 @DatabaseTable(tableName = "OrgFiles")
 public class OrgFile {
 
+    public static final String AGENDA_FILE_ALIAS = "Agenda Views";
+
     @DatabaseField(generatedId = true)
     public int Id;
 

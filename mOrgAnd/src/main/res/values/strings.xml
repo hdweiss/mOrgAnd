@@ -28,5 +28,11 @@
     <string name="error_sync">Synchronization failed</string>
     <string name="error_key_file_copy">Error copying key file to internal storage</string>
     <string name="error_key_file_info">Error getting fingerprint from key file</string>
+    <string name="action_view">View</string>
+    <string name="action_capture">Capture</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_clockin">Clock in</string>
+    <string name="action_archive">Archive</string>
 
 </resources>

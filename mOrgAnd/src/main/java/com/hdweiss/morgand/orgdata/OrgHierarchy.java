@@ -59,4 +59,8 @@ public class OrgHierarchy {
 
         return builder.toString();
     }
+
+    public boolean isNodeEditable() {
+        return true;
+    }
 }
