@@ -3,8 +3,10 @@ package com.hdweiss.morgand.orgdata;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "OrgNodes")
-public class OrgNode {
+import java.util.Date;
+
+@DatabaseTable(tableName = "OrgFiles")
+public class OrgFile {
 
     @DatabaseField(generatedId = true)
     public int Id;
@@ -12,10 +14,9 @@ public class OrgNode {
     @DatabaseField
     public String name = "";
 
-    public OrgNode() {
-    }
+    @DatabaseField
+    public String path = "";
 
-    public String toString() {
-        return name;
-    }
+    @DatabaseField
+    public Date lastTime;
 }

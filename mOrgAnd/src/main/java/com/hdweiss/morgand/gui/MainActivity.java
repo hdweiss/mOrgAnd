@@ -107,9 +107,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new AgendaFragment();
-                case 1:
                     return new OutlineFragment();
+                case 1:
+                    return new AgendaFragment();
 
                 default:
                     return new AgendaFragment();
@@ -126,9 +126,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_agenda).toUpperCase(l);
-                case 1:
                     return getString(R.string.title_outline).toUpperCase(l);
+                case 1:
+                    return getString(R.string.title_agenda).toUpperCase(l);
             }
             return null;
         }
