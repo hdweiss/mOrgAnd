@@ -47,6 +47,9 @@ public class OutlineFragment extends Fragment {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
+        if (savedInstanceState == null)
+            return;
+
         long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
         if(state != null)
             listView.setState(state);
