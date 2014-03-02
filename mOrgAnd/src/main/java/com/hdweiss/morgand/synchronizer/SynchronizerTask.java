@@ -3,8 +3,10 @@ package com.hdweiss.morgand.synchronizer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.hdweiss.morgand.gui.SynchronizerNotification;
+import com.hdweiss.morgand.orgdata.OrgRepository;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 
 import java.io.PrintWriter;
@@ -26,8 +28,15 @@ public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         try {
+            Log.i("sync", "starting jgit");
             JGitWrapper jGitWrapper = new JGitWrapper(preferences);
             jGitWrapper.updateChanges();
+
+            Log.i("sync", "starting parsing");
+            String localRepoPath = preferences.getString("git_local_path", "");
+            OrgRepository repository = new OrgRepository(localRepoPath);
+            repository.read();
+            Log.i("sync", "ended parsing");
         } catch (IllegalArgumentException ex) {
             throw new ReportableException(ex.getMessage());
         }

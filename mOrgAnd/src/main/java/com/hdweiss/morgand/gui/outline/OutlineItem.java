@@ -1,6 +1,8 @@
 package com.hdweiss.morgand.gui.outline;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.RelativeLayout;
@@ -8,7 +10,7 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
-import com.hdweiss.morgand.orgdata.OrgHierarchy;
+import com.hdweiss.morgand.orgdata.OrgNode;
 
 public class OutlineItem extends RelativeLayout implements Checkable {
 
@@ -43,7 +45,30 @@ public class OutlineItem extends RelativeLayout implements Checkable {
         this.levelFormatting = enabled;
     }
 
-    public void setup(OrgHierarchy node, boolean expanded, DefaultTheme theme) {
-        titleView.setText(node.title);
+    public void setup(OrgNode node, boolean expanded, DefaultTheme theme) {
+
+        SpannableStringBuilder titleSpan = new SpannableStringBuilder(node.title);
+
+        if (levelFormatting)
+            titleSpan.insert(0, applyLevelIndentation(node.getLevel(), titleSpan));
+
+        setupChildrenIndicator(node, theme, titleSpan);
+        titleView.setText(titleSpan);
+    }
+
+    public String applyLevelIndentation(long level, SpannableStringBuilder item) {
+        String indentString = "";
+        for(int i = 0; i < level; i++)
+            indentString += "   ";
+
+        return indentString;
+    }
+
+    public void setupChildrenIndicator(OrgNode node, DefaultTheme theme, SpannableStringBuilder titleSpan) {
+        if (node.children.isEmpty() == false) {
+            titleSpan.append("...");
+            titleSpan.setSpan(new ForegroundColorSpan(theme.defaultForeground),
+                    titleSpan.length() - "...".length(), titleSpan.length(), 0);
+        }
     }
 }

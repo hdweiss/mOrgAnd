@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.outline.OutlineListView;
-import com.hdweiss.morgand.orgdata.OrgHierarchy;
+import com.hdweiss.morgand.orgdata.OrgNode;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 public class OutlineFragment extends Fragment {
@@ -39,7 +39,7 @@ public class OutlineFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         listView.setActivity(getActivity());
-        listView.setData(OrgHierarchy.getRootNodes(getActivity()));
+        listView.setData(OrgNode.getRootNodes());
     }
 
 

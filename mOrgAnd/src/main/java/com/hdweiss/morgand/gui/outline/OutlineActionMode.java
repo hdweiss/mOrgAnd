@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.orgdata.OrgFile;
-import com.hdweiss.morgand.orgdata.OrgHierarchy;
+import com.hdweiss.morgand.orgdata.OrgNode;
 
 
 public class OutlineActionMode implements ActionMode.Callback {
@@ -19,7 +19,7 @@ public class OutlineActionMode implements ActionMode.Callback {
 	private ListView list;
 	private OutlineAdapter adapter;
 	private int listPosition;
-	private OrgHierarchy node;
+	private OrgNode node;
 
 	public OutlineActionMode(Context context) {
 		super();
@@ -51,7 +51,7 @@ public class OutlineActionMode implements ActionMode.Callback {
 		if (this.node != null && this.node.Id >= 0 && node.isNodeEditable()) {
 	        inflater.inflate(R.menu.outline_node, menu);
 		}
-		else if(this.node != null && this.node.type == OrgHierarchy.Type.File) {
+		else if(this.node != null && this.node.type == OrgNode.Type.File) {
 			if(this.node.title.equals(OrgFile.AGENDA_FILE_ALIAS))
 		        inflater.inflate(R.menu.outline_file_uneditable, menu);
 			else

@@ -7,13 +7,13 @@ import android.widget.ArrayAdapter;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
-import com.hdweiss.morgand.orgdata.OrgHierarchy;
+import com.hdweiss.morgand.orgdata.OrgNode;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
+public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 
 	private ArrayList<Boolean> expanded = new ArrayList<Boolean>();
 
@@ -31,7 +31,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 	public void init() {
 		clear();
 		
-		for (OrgHierarchy node : new ArrayList<OrgHierarchy>())
+		for (OrgNode node : new ArrayList<OrgNode>())
 			add(node);
 		
 		notifyDataSetInvalidated();
@@ -53,7 +53,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 		
 		for(int i = 0; i < state.length; i++) {
             try {
-                OrgHierarchy node = OrgHierarchy.getDao(getContext()).queryForId((int) state[i]);
+                OrgNode node = OrgNode.getDao().queryForId((int) state[i]);
                 add(node);
             } catch(Exception ex) {}
 		}
@@ -109,27 +109,27 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 	}
 
 	@Override
-	public void add(OrgHierarchy node) {
+	public void add(OrgNode node) {
 		super.add(node);
 		this.expanded.add(false);
 	}
 
 	@Override
-	public void insert(OrgHierarchy node, int index) {
+	public void insert(OrgNode node, int index) {
 		super.insert(node, index);
 		this.expanded.add(index, false);
 	}
 	
-	public void insertAll(Collection<OrgHierarchy> nodes, int position) {
-        ArrayList<OrgHierarchy> orgHierarchies = new ArrayList<OrgHierarchy>(nodes);
-        Collections.reverse(orgHierarchies);
-		for(OrgHierarchy node: orgHierarchies)
+	public void insertAll(Collection<OrgNode> nodes, int position) {
+        ArrayList<OrgNode> orgNodes = new ArrayList<OrgNode>(nodes);
+        Collections.reverse(orgNodes);
+		for(OrgNode node: orgNodes)
 			insert(node, position);
 		notifyDataSetInvalidated();
 	}
 
 	@Override
-	public void remove(OrgHierarchy node) {
+	public void remove(OrgNode node) {
 		int position = getPosition(node);
 		this.expanded.remove(position);
 		super.remove(node);
@@ -152,7 +152,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 			expand(position);
 	}
 	
-	public void collapse(OrgHierarchy node, int position) {
+	public void collapse(OrgNode node, int position) {
 		int activePos = position + 1;
 		while(activePos < this.expanded.size()) {
 			if(getItem(activePos).getLevel() <= node.getLevel())
@@ -164,8 +164,8 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 	}
 	
 	public void expand(int position) {
-		OrgHierarchy node = getItem(position);
-        new ArrayList<OrgHierarchy>(node.children);
+		OrgNode node = getItem(position);
+        new ArrayList<OrgNode>(node.children);
 		insertAll(node.children, position + 1);
 		this.expanded.set(position, true);
 	}

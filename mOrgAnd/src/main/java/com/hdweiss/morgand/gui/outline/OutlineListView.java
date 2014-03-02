@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.hdweiss.morgand.orgdata.OrgHierarchy;
+import com.hdweiss.morgand.orgdata.OrgNode;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class OutlineListView extends ListView {
 		}
 	}
 
-    public void setData(List<OrgHierarchy> nodes) {
+    public void setData(List<OrgNode> nodes) {
         adapter.clear();
         if (nodes.size() > 0)
             adapter.insertAll(nodes, 0);
@@ -79,7 +79,7 @@ public class OutlineListView extends ListView {
 			if(activeActionMode != null)
 				activeActionMode.finish();
 			
-			OrgHierarchy node = adapter.getItem(position);
+			OrgNode node = adapter.getItem(position);
 			if(node.children.size() > 0) {
 				adapter.collapseExpand(position);
 			}
