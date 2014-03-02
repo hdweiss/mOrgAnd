@@ -9,7 +9,7 @@
     tools:context="com.hdweiss.morgand.gui.MainActivity$PlaceholderFragment">
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

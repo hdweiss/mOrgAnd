@@ -3,6 +3,7 @@ package com.hdweiss.morgand.settings;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,12 @@ public class SettingsActivity extends PreferenceActivity {
 
         findPreference("git_local_path").setSummary(preferences.getString("git_local_path", ""));
         findPreference("git_key_info").setSummary(preferences.getString("git_key_info", ""));
+
+        try {
+            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            findPreference("version").setSummary(versionName);
+        } catch (PackageManager.NameNotFoundException ex) {
+        }
     }
 
     /**

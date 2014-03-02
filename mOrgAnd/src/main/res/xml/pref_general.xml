@@ -6,4 +6,9 @@
         android:summary=""
         android:defaultValue="true" />
 
+    <Preference
+        android:key="version"
+        android:title="@string/pref_title_version"
+        />
+
 </PreferenceScreen>

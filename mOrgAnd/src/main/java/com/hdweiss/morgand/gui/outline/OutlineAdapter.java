@@ -52,10 +52,10 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 		clear();
 		
 		for(int i = 0; i < state.length; i++) {
-			//try {
-				//OrgHierarchy node = new OrgHierarchy(state[i], resolver);
-				// add(node);
-			//} catch (OrgNodeNotFoundException e) {}
+            try {
+                OrgHierarchy node = OrgHierarchy.getDao(getContext()).queryForId((int) state[i]);
+                add(node);
+            } catch(Exception ex) {}
 		}
 	}
 	
@@ -92,7 +92,9 @@ public class OutlineAdapter extends ArrayAdapter<OrgHierarchy> {
 			outlineItem = new OutlineItem(getContext());
 
 		outlineItem.setLevelFormating(levelIndentation);
-		outlineItem.setup(getItem(position), this.expanded.get(position), theme);
+
+        if (this.expanded.size() > position);
+		    outlineItem.setup(getItem(position), this.expanded.get(position), theme);
 		return outlineItem;
 	}
 

@@ -5,21 +5,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.DatabaseHelper;
+import com.hdweiss.morgand.gui.outline.OutlineListView;
 import com.hdweiss.morgand.orgdata.OrgHierarchy;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-
-import java.sql.SQLException;
 
 public class OutlineFragment extends Fragment {
 
-    private TextView textView;
+    private final static String OUTLINE_NODES = "nodes";
+    private final static String OUTLINE_CHECKED_POS = "selection";
+    private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
-    private RuntimeExceptionDao<OrgHierarchy, Integer> orgHierDao;
+    private OutlineListView listView;
 
     @Override
     public void onDestroy() {
@@ -30,9 +28,8 @@ public class OutlineFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        textView = (TextView) rootView.findViewById(R.id.section_label);
-
+        View rootView = inflater.inflate(R.layout.fragment_outline, container, false);
+        listView = (OutlineListView) rootView.findViewById(R.id.list);
         return rootView;
     }
 
@@ -40,11 +37,32 @@ public class OutlineFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        orgHierDao = OpenHelperManager.getHelper(getActivity(), DatabaseHelper.class).getOrgHieararchyDao();
 
-        try {
-            OrgHierarchy hier = orgHierDao.queryBuilder().where().eq(OrgHierarchy.TITLE_FIELD_NAME, "Parent").queryForFirst();
-            textView.setText(hier.toStringRecursively());
-        } catch (SQLException ex) {}
+        listView.setActivity(getActivity());
+        listView.setData(OrgHierarchy.getRootNodes(getActivity()));
+    }
+
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
+        if(state != null)
+            listView.setState(state);
+
+        int checkedPos= savedInstanceState.getInt(OUTLINE_CHECKED_POS, 0);
+        listView.setItemChecked(checkedPos, true);
+
+        int scrollPos = savedInstanceState.getInt(OUTLINE_SCROLL_POS, 0);
+        listView.setSelection(scrollPos);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLongArray(OUTLINE_NODES, listView.getState());
+        outState.putInt(OUTLINE_CHECKED_POS, listView.getCheckedItemPosition());
+        outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
     }
 }

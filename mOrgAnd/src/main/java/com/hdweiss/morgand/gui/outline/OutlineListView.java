@@ -1,7 +1,6 @@
 package com.hdweiss.morgand.gui.outline;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -12,11 +11,12 @@ import android.widget.ListView;
 
 import com.hdweiss.morgand.orgdata.OrgHierarchy;
 
+import java.util.List;
+
 public class OutlineListView extends ListView {
 
 	private Context context;
 	private Activity activity;
-	private ContentResolver resolver;
 
 	private OutlineAdapter adapter;
 	private OutlineActionMode actionMode;
@@ -25,7 +25,6 @@ public class OutlineListView extends ListView {
 	public OutlineListView(Context context, AttributeSet atts) {
 		super(context, atts);
 		this.context = activity;
-		this.resolver = context.getContentResolver();
 		setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		setOnItemClickListener(outlineClickListener);
 		setOnItemLongClickListener(outlineLongClickListener);
@@ -66,6 +65,12 @@ public class OutlineListView extends ListView {
 			return adapter.getItemId(position);
 		}
 	}
+
+    public void setData(List<OrgHierarchy> nodes) {
+        adapter.clear();
+        if (nodes.size() > 0)
+            adapter.insertAll(nodes, 0);
+    }
 	
 	private OnItemClickListener outlineClickListener = new OnItemClickListener() {
 		@Override
