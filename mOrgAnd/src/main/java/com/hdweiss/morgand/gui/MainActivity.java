@@ -1,6 +1,9 @@
 package com.hdweiss.morgand.gui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.orgdata.OrgFile;
+import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.SynchronizerTask;
 
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+
+    private OutlineFragment outlineFragment;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -34,6 +41,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+
+    private SynchServiceReceiver syncReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +84,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+
+        this.syncReceiver = new SynchServiceReceiver();
+        registerReceiver(this.syncReceiver, new IntentFilter(SynchronizerTask.SYNC_UPDATE));
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(syncReceiver);
+        super.onDestroy();
     }
 
     @Override
@@ -108,7 +127,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return new OutlineFragment();
+                    OutlineFragment fragment = new OutlineFragment();
+                    outlineFragment = fragment;
+                    return fragment;
                 case 1:
                     return new AgendaFragment();
 
@@ -158,7 +179,25 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 SynchronizerTask synchronizerTask = new SynchronizerTask(this);
                 synchronizerTask.execute();
                 break;
+            case R.id.action_clearDB:
+                OrgNode.deleteAll();
+                OrgFile.deleteAll();
+                SynchronizerTask.announceUpdate(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void refreshView() {
+        if (outlineFragment != null)
+            outlineFragment.refreshView();
+    }
+
+    private class SynchServiceReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshView();
+        }
     }
 }

@@ -8,6 +8,8 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
+
 @DatabaseTable(tableName = "OrgFiles")
 public class OrgFile {
 
@@ -26,5 +28,13 @@ public class OrgFile {
     public static RuntimeExceptionDao<OrgFile, String> getDao() {
         Context context = Application.getInstace();
         return OpenHelperManager.getHelper(context, DatabaseHelper.class).getRuntimeExceptionDao(OrgFile.class);
+    }
+
+    public static void deleteAll() {
+        try {
+            getDao().deleteBuilder().delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

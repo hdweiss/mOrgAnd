@@ -1,5 +1,9 @@
 package com.hdweiss.morgand.gui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,7 +43,7 @@ public class OutlineFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         listView.setActivity(getActivity());
-        listView.setData(OrgNode.getRootNodes());
+        refreshView();
     }
 
 
@@ -67,5 +71,9 @@ public class OutlineFragment extends Fragment {
         outState.putLongArray(OUTLINE_NODES, listView.getState());
         outState.putInt(OUTLINE_CHECKED_POS, listView.getCheckedItemPosition());
         outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
+    }
+
+    public void refreshView() {
+        listView.setData(OrgNode.getRootNodes());
     }
 }

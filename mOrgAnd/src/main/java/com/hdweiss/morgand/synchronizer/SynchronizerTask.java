@@ -1,6 +1,7 @@
 package com.hdweiss.morgand.synchronizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,6 +15,7 @@ import java.io.StringWriter;
 
 public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
 
+    public static final String SYNC_UPDATE = "com.hdweiss.morgand.synchronizer.action.SYNC_UPDATE";
     private SynchronizerNotification notification;
 
     public SynchronizerTask(Context context) {
@@ -54,6 +56,7 @@ public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
     @Override
     protected void onSuccess(Void aVoid) {
         notification.finalizeNotification();
+        announceUpdate(context);
     }
 
     @Override
@@ -62,5 +65,10 @@ public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
         exception.printStackTrace(new PrintWriter(sw));
         String exceptionAsString = sw.toString();
         notification.errorNotification(exception.getMessage() + "\n" + exceptionAsString);
+    }
+
+    public static void announceUpdate(Context context) {
+        Intent intent = new Intent(SYNC_UPDATE);
+        context.sendBroadcast(intent);
     }
 }

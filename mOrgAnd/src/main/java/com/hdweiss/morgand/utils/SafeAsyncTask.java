@@ -76,7 +76,8 @@ public abstract class SafeAsyncTask<Params, Progress, Result> extends AsyncTask<
             if (exception instanceof ReportableException)
                 reportError(exception.getLocalizedMessage());
             else
-                Log.e("SafeAsyncTask", "safeDoInBackground() threw exception", exception);
+                reportError(exception.getLocalizedMessage());
+            Log.e("SafeAsyncTask", "safeDoInBackground() threw exception", exception);
         }
 
         onError();

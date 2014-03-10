@@ -12,6 +12,8 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @DatabaseTable(tableName = "OrgNodes")
@@ -90,7 +92,9 @@ public class OrgNode {
 
     public static List<OrgNode> getRootNodes() {
         try {
-            return getDao().queryBuilder().where().isNull(PARENT_FIELD_NAME).and().ne(STATE_FIELD_NAME, State.Deleted).query();
+            List<OrgNode> children = getDao().queryBuilder().where().isNull(PARENT_FIELD_NAME).and().ne(STATE_FIELD_NAME, State.Deleted).query();
+            Collections.sort(children, new OrgNodeCompare());
+            return children;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,5 +105,20 @@ public class OrgNode {
     public static RuntimeExceptionDao<OrgNode, Integer> getDao() {
         Context context = Application.getInstace();
         return OpenHelperManager.getHelper(context, DatabaseHelper.class).getRuntimeExceptionDao(OrgNode.class);
+    }
+
+    public static void deleteAll() {
+        try {
+            getDao().deleteBuilder().delete();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static class OrgNodeCompare implements Comparator<OrgNode> {
+        @Override
+        public int compare(OrgNode node1, OrgNode node2) {
+            return node1.title.compareTo(node2.title);
+        }
     }
 }

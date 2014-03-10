@@ -3,8 +3,10 @@ package com.hdweiss.morgand.orgdata;
 import android.text.TextUtils;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.Where;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -37,7 +39,7 @@ public class OrgRepository {
 
     private void read(File parentFile, OrgNode parent) {
         for (File file : parentFile.listFiles()) {
-            if (file.isDirectory() && file.isHidden() == false) {
+            if (file.isDirectory() && file.isHidden() == false && hasOrgFiles(file)) {
                 OrgNode directoryNode = findOrCreateDirectoryNode(file, parent);
                 read(file, directoryNode);
             } else if (file.isFile() && file.getName().endsWith(".org")) {
@@ -46,11 +48,37 @@ public class OrgRepository {
         }
     }
 
+    private boolean hasOrgFiles(File file) {
+        if (file.listFiles() == null)
+            return false;
+
+        for(File subFile: file.listFiles()) {
+            if (file.isDirectory()) {
+                if (hasOrgFiles(subFile))
+                    return true;
+            }
+        }
+
+        File[] files = file.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isFile() && file.getName().endsWith(".org");
+            }
+        });
+
+        return files.length > 0;
+    }
+
     private OrgNode findOrCreateDirectoryNode(File file, OrgNode parent) {
         try {
-            OrgNode node =
-                    nodeDao.queryBuilder().where().eq(OrgNode.PARENT_FIELD_NAME, parent).and().
-                            eq(OrgNode.TITLE_FIELD_NAME, file.getName()).queryForFirst();
+
+            Where<OrgNode,Integer> query = nodeDao.queryBuilder().where();
+            if (parent != null)
+                query.eq(OrgNode.PARENT_FIELD_NAME, parent).and();
+            else
+                query.isNull(OrgNode.PARENT_FIELD_NAME).and();
+            query.eq(OrgNode.TITLE_FIELD_NAME, file.getName());
+            OrgNode node = query.queryForFirst();
             if (node != null)
                 return node;
         } catch (SQLException e) {
