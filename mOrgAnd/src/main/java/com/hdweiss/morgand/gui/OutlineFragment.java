@@ -21,7 +21,7 @@ public class OutlineFragment extends Fragment {
     private final static String OUTLINE_CHECKED_POS = "selection";
     private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
-    private OutlineListView listView;
+    protected OutlineListView listView;
 
     @Override
     public void onDestroy() {

@@ -8,15 +8,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.orgdata.OrgNode;
 
-public class AgendaFragment extends Fragment {
+import java.sql.SQLException;
+import java.util.List;
+
+public class AgendaFragment extends OutlineFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText("Agenda");
-        return rootView;
+    public void refreshView() {
+        try {
+            List<OrgNode> orgNodes = OrgNode.getDao().queryBuilder().where().like(OrgNode.TITLE_FIELD_NAME, "%* NEXT%").query();
+            listView.setData(orgNodes);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
