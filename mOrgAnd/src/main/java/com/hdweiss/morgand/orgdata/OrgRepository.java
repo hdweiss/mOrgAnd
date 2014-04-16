@@ -25,23 +25,23 @@ public class OrgRepository {
         this.fileDao = OrgFile.getDao();
     }
 
-    public void read() {
+    public void parse() {
         File rootFolder = new File(path);
 
         if (rootFolder.exists() == false)
             throw new IllegalArgumentException("Folder " + path + " does not exist");
 
         if (rootFolder.canRead() == false)
-            throw new IllegalArgumentException("Can't read " + path);
+            throw new IllegalArgumentException("Can't parse " + path);
 
-        read(rootFolder, null);
+        parse(rootFolder, null);
     }
 
-    private void read(File parentFile, OrgNode parent) {
+    private void parse(File parentFile, OrgNode parent) {
         for (File file : parentFile.listFiles()) {
             if (file.isDirectory() && file.isHidden() == false && hasOrgFiles(file)) {
                 OrgNode directoryNode = findOrCreateDirectoryNode(file, parent);
-                read(file, directoryNode);
+                parse(file, directoryNode);
             } else if (file.isFile() && file.getName().endsWith(".org")) {
                 parseOrgFile(file, parent);
             }

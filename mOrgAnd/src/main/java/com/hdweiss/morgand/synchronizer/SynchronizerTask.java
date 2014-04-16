@@ -37,7 +37,7 @@ public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
             Log.i("sync", "starting parsing");
             String localRepoPath = preferences.getString("git_local_path", "");
             OrgRepository repository = new OrgRepository(localRepoPath);
-            repository.read();
+            repository.parse();
             Log.i("sync", "ended parsing");
         } catch (IllegalArgumentException ex) {
             throw new ReportableException(ex.getMessage());

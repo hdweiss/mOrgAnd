@@ -48,7 +48,7 @@ public class OutlineActionMode implements ActionMode.Callback {
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
 		
-		if (this.node != null && this.node.Id >= 0 && node.isNodeEditable()) {
+		if (this.node != null && this.node.Id >= 0 && node.isEditable()) {
 	        inflater.inflate(R.menu.outline_node, menu);
 		}
 		else if(this.node != null && this.node.type == OrgNode.Type.File) {

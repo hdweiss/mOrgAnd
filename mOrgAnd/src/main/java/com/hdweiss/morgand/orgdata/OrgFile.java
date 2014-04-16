@@ -37,4 +37,11 @@ public class OrgFile {
             e.printStackTrace();
         }
     }
+
+    public boolean isEditable() {
+        if (node.title == AGENDA_FILE_ALIAS)
+            return false;
+
+        return true;
+    }
 }

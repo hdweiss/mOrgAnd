@@ -12,6 +12,8 @@ import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
 import com.hdweiss.morgand.orgdata.OrgNode;
 
+import java.util.regex.Pattern;
+
 public class OutlineItem extends RelativeLayout implements Checkable {
 
     private TextView titleView;
@@ -71,4 +73,6 @@ public class OutlineItem extends RelativeLayout implements Checkable {
                     titleSpan.length() - "...".length(), titleSpan.length(), 0);
         }
     }
+
+    public static final Pattern urlPattern = Pattern.compile("\\[\\[[^\\]]*\\]\\[([^\\]]*)\\]\\]");
 }

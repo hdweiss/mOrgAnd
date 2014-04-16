@@ -3,6 +3,7 @@ package com.hdweiss.morgand.orgdata;
 import android.content.Context;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.gui.outline.OutlineItem;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
 
 @DatabaseTable(tableName = "OrgNodes")
 public class OrgNode {
 
-
     public enum Type {
-        File, Directory, Date, Heading, Body, Drawer, Check
+        File, Directory, Date, Heading, Body, Drawer, Check, OrgProperty
     };
 
     public enum State {
@@ -30,10 +31,6 @@ public class OrgNode {
 
     @DatabaseField(generatedId = true)
     public int Id;
-
-    public static final String TITLE_FIELD_NAME = "title";
-    @DatabaseField(columnName = TITLE_FIELD_NAME)
-    public String title;
 
     public static final String PARENT_FIELD_NAME = "parent";
     @DatabaseField(foreign = true, columnName = PARENT_FIELD_NAME)
@@ -56,8 +53,17 @@ public class OrgNode {
     @DatabaseField(foreign =  true, columnName = FILE_FIELD_NAME)
     public OrgFile file;
 
+
+    public static final String TITLE_FIELD_NAME = "title";
+    @DatabaseField(columnName = TITLE_FIELD_NAME)
+    public String title;
+
+    @DatabaseField
+    public String tags;
+
     @DatabaseField
     public String inheritedTags;
+
 
     public int getLevel() {
         int level = 0;
@@ -86,9 +92,29 @@ public class OrgNode {
         return builder.toString();
     }
 
-    public boolean isNodeEditable() {
+    public boolean isEditable() {
+        if (type == Type.File || type == Type.Directory)
+            return false;
+
+        if (file.isEditable() == false)
+            return false;
+
         return true;
     }
+
+    public String getCleanedName() {
+        StringBuilder nameBuilder = new StringBuilder(this.title);
+
+        Matcher matcher = OutlineItem.urlPattern.matcher(nameBuilder);
+        while (matcher.find()) {
+            nameBuilder.delete(matcher.start(), matcher.end());
+            nameBuilder.insert(matcher.start(), matcher.group(1));
+            matcher = OutlineItem.urlPattern.matcher(nameBuilder);
+        }
+
+        return nameBuilder.toString();
+    }
+
 
     public static List<OrgNode> getRootNodes() {
         try {
