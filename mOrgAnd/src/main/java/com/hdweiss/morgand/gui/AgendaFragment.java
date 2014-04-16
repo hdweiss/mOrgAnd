@@ -1,13 +1,6 @@
 package com.hdweiss.morgand.gui;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.gui.outline.OutlineAdapter;
 import com.hdweiss.morgand.orgdata.OrgNode;
 
 import java.sql.SQLException;
@@ -20,6 +13,7 @@ public class AgendaFragment extends OutlineFragment {
         try {
             List<OrgNode> orgNodes = OrgNode.getDao().queryBuilder().where().like(OrgNode.TITLE_FIELD_NAME, "%* NEXT%").query();
             listView.setData(orgNodes);
+            ((OutlineAdapter) listView.getAdapter()).setAgendaMode(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

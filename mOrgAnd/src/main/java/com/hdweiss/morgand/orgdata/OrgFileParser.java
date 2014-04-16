@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
 
 public class OrgFileParser {
 
-    private final HashSet<String> excludedTags;
     private final RuntimeExceptionDao<OrgNode, Integer> nodeDao;
 
     private LineNumberReader reader;
     private ParseStack parseStack;
 	private OrgFile orgFile;
+    private final HashSet<String> excludedTags;
 
 	public OrgFileParser() {
         this.excludedTags = PreferenceUtils.getExcludedTags();
@@ -39,7 +39,7 @@ public class OrgFileParser {
 
     private void init(File file, OrgFile orgFile, OrgNode parent) {
         OrgNode rootNode = new OrgNode();
-        rootNode.type = OrgNode.Type.Heading;
+        rootNode.type = OrgNode.Type.Headline;
         rootNode.title = file.getName();
         rootNode.file = orgFile;
         rootNode.parent = parent;
@@ -49,8 +49,8 @@ public class OrgFileParser {
         OrgFile.getDao().update(orgFile);
         this.orgFile = orgFile;
 
-        this.parseStack = new ParseStack();
-        this.parseStack.add(0, rootNode, "");
+        this.parseStack = new ParseStack(excludedTags);
+        this.parseStack.add(0, rootNode);
     }
 
 
@@ -74,7 +74,7 @@ public class OrgFileParser {
         OrgNode.Type type = determineType(line);
         OrgNode node;
         switch(determineType(line)) {
-            case Heading:
+            case Headline:
                 node = getNodeFromHeading(line);
                 break;
 
@@ -82,9 +82,9 @@ public class OrgFileParser {
                 node = getNodeFromDrawer(line);
                 break;
 
-            case Check:
+            case Checkbox:
             case Date:
-            case OrgProperty:
+            case Setting:
                 node = getNodeFromLine(type, line);
                 break;
 
@@ -99,14 +99,14 @@ public class OrgFileParser {
 
     public static OrgNode.Type determineType(final String line) {
         if (line.startsWith("*"))
-            return OrgNode.Type.Heading;
+            return OrgNode.Type.Headline;
 
         if (line.startsWith("#+"))
-            return OrgNode.Type.OrgProperty;
+            return OrgNode.Type.Setting;
 
         String trimmedLine = line.trim();
         if (trimmedLine.startsWith("- [ ]") || trimmedLine.startsWith("- [X]"))
-            return OrgNode.Type.Check;
+            return OrgNode.Type.Checkbox;
 
         if (trimmedLine.matches(".*<\\d{4}-\\d{2}-\\d{2}.*>.*"))
             return OrgNode.Type.Date;
@@ -137,9 +137,9 @@ public class OrgFileParser {
     private static final Pattern headingPattern = Pattern.compile(headingRegex);
 	private OrgNode getNodeFromHeading(final String line) {
         int starCount = numberOfStars(line);
-		if (starCount == parseStack.getCurrentLevel()) { // Heading on same level
+		if (starCount == parseStack.getCurrentLevel()) { // Headline on same level
 			parseStack.pop();
-		} else if (starCount < parseStack.getCurrentLevel()) { // Heading on lower level
+		} else if (starCount < parseStack.getCurrentLevel()) { // Headline on lower level
 			while (starCount <= parseStack.getCurrentLevel())
 				parseStack.pop();
 		}
@@ -147,10 +147,10 @@ public class OrgFileParser {
         Matcher matcher = headingPattern.matcher(line);
         matcher.find();
         final String heading = matcher.group(1);
-        OrgNode node = getNodeFromLine(OrgNode.Type.Heading, heading);
+        OrgNode node = getNodeFromLine(OrgNode.Type.Headline, heading);
         if (matcher.group(2) != null)
             node.tags = matcher.group(2);
-		parseStack.add(starCount, node, "");
+		parseStack.add(starCount, node);
         return node;
     }
 
@@ -209,7 +209,7 @@ public class OrgFileParser {
 
             builder.append(currentLine);
             builder.append("\n");
-            if (TextUtils.isEmpty(endMarker) == false && currentLine.trim() == endMarker)
+            if (TextUtils.isEmpty(endMarker) == false && currentLine.trim().equals(endMarker))
                 break;
         }
 
@@ -218,26 +218,35 @@ public class OrgFileParser {
 
 
 	private class ParseStack {
+        private final HashSet<String> excludedTags;
 		private Stack<Pair<Integer, OrgNode>> parseStack;
 		private Stack<String> tagStack;
 
-		public ParseStack() {
+		public ParseStack(HashSet<String> excludedTags) {
 			this.parseStack = new Stack<Pair<Integer, OrgNode>>();
 			this.tagStack = new Stack<String>();
+            this.excludedTags = excludedTags;
 		}
 
-		public void add(int level, OrgNode node, String tags) {
+		public void add(int level, OrgNode node) {
 			parseStack.push(new Pair<Integer, OrgNode>(level, node));
-			tagStack.push(stripTags(tags));
+			tagStack.push(stripTags(node));
 		}
 
-		private String stripTags(String tags) {
+		private String stripTags(OrgNode node) {
+            String tags = "";
+            if (TextUtils.isEmpty(node.tags) == false)
+                tags += node.tags;
+
+            if (TextUtils.isEmpty(node.inheritedTags) == false)
+                tags += node.inheritedTags;
+
 			if (excludedTags == null || TextUtils.isEmpty(tags))
 				return tags;
 
 			StringBuilder result = new StringBuilder();
 			for (String tag: tags.split(":")) {
-				if (excludedTags.contains(tag) == false) {
+				if (excludedTags.contains(tag) == false && TextUtils.isEmpty(tag) == false) {
 					result.append(tag);
 					result.append(":");
 				}

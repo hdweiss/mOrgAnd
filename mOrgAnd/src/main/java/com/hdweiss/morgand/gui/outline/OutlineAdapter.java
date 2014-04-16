@@ -19,7 +19,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 
 	private DefaultTheme theme;
 	
-	private boolean levelIndentation = true;
+	private boolean agendaMode = false;
 	
 	public OutlineAdapter(Context context) {
 		super(context, R.layout.outline_item);
@@ -91,15 +91,15 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		if (convertView == null)
 			outlineItem = new OutlineItem(getContext());
 
-		outlineItem.setLevelFormating(levelIndentation);
+		outlineItem.setAgendaMode(agendaMode);
 
         if (this.expanded.size() > position);
 		    outlineItem.setup(getItem(position), this.expanded.get(position), theme);
 		return outlineItem;
 	}
 
-	public void setLevelIndentation(boolean enabled) {
-		this.levelIndentation = enabled;
+	public void setAgendaMode(boolean agendaMode) {
+		this.agendaMode = agendaMode;
 	}
 	
 	@Override

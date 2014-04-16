@@ -28,6 +28,8 @@ public class DefaultTheme {
 
 	public int defaultForeground = Color.rgb(0xc0, 0xc0, 0xc0);
 	public int defaultBackground = Color.rgb(0x00, 0x00, 0x00);
+    public int settingsForeground = Color.rgb(0x69, 0x6e, 0x52);
+    public int drawerForeground = Color.rgb(0x5a, 0x5a, 0x4b);
 	
 	public int[] levelColors;
 	
