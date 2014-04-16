@@ -105,7 +105,7 @@ public class OrgFileParser {
             return OrgNode.Type.OrgProperty;
 
         String trimmedLine = line.trim();
-        if (trimmedLine.startsWith("- [ ]"))
+        if (trimmedLine.startsWith("- [ ]") || trimmedLine.startsWith("- [X]"))
             return OrgNode.Type.Check;
 
         if (trimmedLine.matches(".*<\\d{4}-\\d{2}-\\d{2}.*>.*"))

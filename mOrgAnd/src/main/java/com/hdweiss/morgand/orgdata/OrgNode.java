@@ -23,7 +23,7 @@ public class OrgNode {
 
     public enum Type {
         File, Directory, Date, Heading, Body, Drawer, Check, OrgProperty
-    };
+    }
 
     public enum State {
         Clean, Dirty, Deleted
