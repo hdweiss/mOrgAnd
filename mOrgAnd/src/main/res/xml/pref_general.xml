@@ -1,11 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:key="example_checkbox"
-        android:title="@string/pref_title_enable_sync"
-        android:summary=""
-        android:defaultValue="true" />
-
     <Preference
         android:key="version"
         android:title="@string/pref_title_version"

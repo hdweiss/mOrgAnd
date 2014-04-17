@@ -3,6 +3,7 @@ package com.hdweiss.morgand.orgdata;
 import android.text.TextUtils;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public class OrgRepository {
             throw new IllegalArgumentException("Path can't be empty");
 
         this.path = path;
-        this.nodeDao = OrgNode.getDao();
+        this.nodeDao = OrgNodeRepository.getDao();
         this.fileDao = OrgFile.getDao();
     }
 
@@ -104,7 +105,9 @@ public class OrgRepository {
                 return;
 
             try {
-                nodeDao.deleteBuilder().where().eq(OrgNode.FILE_FIELD_NAME, orgFile).query();
+                DeleteBuilder<OrgNode, Integer> deleteBuilder = nodeDao.deleteBuilder();
+                deleteBuilder.where().eq(OrgNode.FILE_FIELD_NAME, orgFile);
+                deleteBuilder.delete();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

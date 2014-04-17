@@ -12,7 +12,6 @@ import android.provider.CalendarContract;
 import android.text.format.Time;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.CalendarEntry;
 import com.hdweiss.morgand.orgdata.OrgNodeDate;
 
 public class CalendarWrapper {
@@ -216,18 +215,19 @@ public class CalendarWrapper {
 			}
 			cursor.close();
 		} catch (SQLException e) {
-		}
+            e.printStackTrace();
+        }
 
 		return result;
 	}
 	
 	public void refreshPreferences() {
-		this.reminderEnabled = sharedPreferences.getBoolean("calendarReminder",
+		this.reminderEnabled = sharedPreferences.getBoolean("calendar_reminder",
 				false);
 
 		if (reminderEnabled) {
 			String intervalString = sharedPreferences.getString(
-					"calendarReminderInterval", "0");
+					"calendar_reminder_interval", "0");
 			if (intervalString == null)
 				throw new IllegalArgumentException(
 						"Invalid calendar reminder interval");
@@ -235,7 +235,7 @@ public class CalendarWrapper {
 		}
 		
 		this.calendarName = PreferenceManager.getDefaultSharedPreferences(
-				context).getString("calendarName", "");
+				context).getString("calendar_name", "");
 		this.calendarId = getCalendarID(calendarName);
 	}
 }

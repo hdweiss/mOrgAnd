@@ -1,15 +1,14 @@
 <resources>
-        <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
+    <!-- General settings -->
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_enable_sync">Enabled git sync</string>
 
+    <string name="pref_group_remote">Remote</string>
 
-    <!-- Example settings for Data & Sync -->
+    <!-- Settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
@@ -37,5 +36,33 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+
+    <!-- Calendar strings -->
+    <string name="preference_calendar">Calendar</string>
+    <string name="preference_calendar_display">Display</string>
+    <string name="preference_calendar_clear">Clear phone calendar</string>
+    <string name="preference_calendar_clear_summary">Clears the phones\' calendar of all entries inserted by MobileOrg</string>
+    <string name="preference_calendar_synch_summary">Synchronize scheduled items with the system calendar</string>
+    <string name="preference_calendar_synch">Synchronize with calendar</string>
+    <string name="preference_calendar_name_summary">Choose calendar MobileOrg will use</string>
+    <string name="preference_calendar_name">Calendar name</string>
+    <string name="preference_calendar_pull_summary">Assimilate calendar entries not inserted by MobileOrg and add them to capture file. EXPERIMENTAL!</string>
+    <string name="preference_calendar_pull">Assimilate calendar entries</string>
+    <string name="preference_calendar_pull_delete_summary">Delete entries that have been assimilated from the calendar</string>
+    <string name="preference_calendar_pull_delete">Delete on assimilation</string>
+    <string name="preference_clear_calendar_promt_title">Clear phone calendar</string>
+    <string name="preference_clear_calendar_promt_message">Are you sure you want to clear the phones\' calendar?</string>
+    <string name="preference_calendar_reminder_summary">Add reminders for scheduled items to calendar</string>
+    <string name="preference_calendar_reminder">Reminders</string>
+    <string name="preference_calendar_reminder_interval_summary">Sets the interval when an alarm is triggered</string>
+    <string name="preference_calendar_reminder_interval">Reminder interval</string>
+    <string name="preference_calendar_show_habits_summary">Shows habits in the calendar</string>
+    <string name="preference_calendar_show_habits">Show habits</string>
+    <string name="preference_calendar_show_done_summary">Show items with done TODO keywords the calendar</string>
+    <string name="preference_calendar_show_done">Show done events</string>
+    <string name="preference_calendar_show_past_summary">Show past items in the calendar</string>
+    <string name="preference_calendar_show_past">Show past events</string>
+    <string name="preference_general">General</string>
+    <string name="preference_advanced">Advanced</string>
 
 </resources>

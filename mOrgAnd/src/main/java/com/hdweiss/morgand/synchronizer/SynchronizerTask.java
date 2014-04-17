@@ -30,15 +30,15 @@ public class SynchronizerTask extends SafeAsyncTask<Void, String, Void> {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         try {
-            Log.i("sync", "starting jgit");
+            Log.i("Git", "Starting jgit");
             JGitWrapper jGitWrapper = new JGitWrapper(preferences);
             jGitWrapper.updateChanges();
 
-            Log.i("sync", "starting parsing");
+            Log.i("Parser", "Starting parsing");
             String localRepoPath = preferences.getString("git_local_path", "");
             OrgRepository repository = new OrgRepository(localRepoPath);
             repository.parse();
-            Log.i("sync", "ended parsing");
+            Log.i("Parser", "Ended parsing");
         } catch (IllegalArgumentException ex) {
             throw new ReportableException(ex.getMessage());
         }

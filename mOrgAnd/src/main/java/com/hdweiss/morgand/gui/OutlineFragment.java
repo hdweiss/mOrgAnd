@@ -1,9 +1,5 @@
 package com.hdweiss.morgand.gui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.outline.OutlineListView;
-import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 public class OutlineFragment extends Fragment {
@@ -74,6 +70,6 @@ public class OutlineFragment extends Fragment {
     }
 
     public void refreshView() {
-        listView.setData(OrgNode.getRootNodes());
+        listView.setData(OrgNodeRepository.getRootNodes());
     }
 }

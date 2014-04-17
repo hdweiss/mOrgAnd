@@ -17,8 +17,9 @@ import android.view.MenuItem;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.orgdata.OrgFile;
-import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
+import com.hdweiss.morgand.synchronizer.CalendarSynchronizerTask;
 import com.hdweiss.morgand.synchronizer.SynchronizerTask;
 
 import java.util.Locale;
@@ -179,8 +180,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 SynchronizerTask synchronizerTask = new SynchronizerTask(this);
                 synchronizerTask.execute();
                 break;
+
+            case R.id.action_calendar:
+                CalendarSynchronizerTask calendarTask = new CalendarSynchronizerTask(this);
+                calendarTask.execute("/sdcard/morg/GTD.org");
+                break;
+
             case R.id.action_clearDB:
-                OrgNode.deleteAll();
+                OrgNodeRepository.deleteAll();
                 OrgFile.deleteAll();
                 SynchronizerTask.announceUpdate(this);
                 break;

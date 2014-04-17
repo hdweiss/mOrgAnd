@@ -38,7 +38,7 @@ public class OrgAgenda {
 
     public List<OrgNode> getNodes() {
         try {
-            return OrgNode.getDao().queryBuilder().query();
+            return OrgNodeRepository.getDao().queryBuilder().query();
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<OrgNode>();

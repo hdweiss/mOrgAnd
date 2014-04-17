@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
 import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		
 		for(int i = 0; i < state.length; i++) {
             try {
-                OrgNode node = OrgNode.getDao().queryForId((int) state[i]);
+                OrgNode node = OrgNodeRepository.getDao().queryForId((int) state[i]);
                 add(node);
             } catch(Exception ex) {}
 		}

@@ -1,4 +1,6 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.synchronizer;
+
+import com.hdweiss.morgand.orgdata.OrgNodeDate;
 
 public class CalendarEntry {
 	public String title = "";

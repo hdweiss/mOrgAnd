@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/preference_general">
+        <CheckBoxPreference
+            android:key="calendar_enabled"
+            android:summary="@string/preference_calendar_synch_summary"
+            android:title="@string/preference_calendar_synch"/>
+
+        <ListPreference
+            android:defaultValue=""
+            android:dependency="calendar_enabled"
+            android:key="calendar_name"
+            android:summary="@string/preference_calendar_name_summary"
+            android:title="@string/preference_calendar_name"/>
+
+        <CheckBoxPreference
+            android:dependency="calendar_enabled"
+            android:key="calendar_reminder"
+            android:summary="@string/preference_calendar_reminder_summary"
+            android:title="@string/preference_calendar_reminder"/>
+
+        <EditTextPreference
+            android:dependency="calendar_reminder"
+            android:key="calendar_reminder_interval"
+            android:maxLength="3"
+            android:numeric="integer"
+            android:summary="@string/preference_calendar_reminder_interval_summary"
+            android:title="@string/preference_calendar_reminder_interval"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preference_calendar_display">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="calendar_enabled"
+            android:key="calendar_show_done"
+            android:summary="@string/preference_calendar_show_done_summary"
+            android:title="@string/preference_calendar_show_done"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="calendar_enabled"
+            android:key="calendar_show_past"
+            android:summary="@string/preference_calendar_show_past_summary"
+            android:title="@string/preference_calendar_show_past"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="calendar_enabled"
+            android:key="calendar_habits"
+            android:summary="@string/preference_calendar_show_habits_summary"
+            android:title="@string/preference_calendar_show_habits"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preference_advanced">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="calendar_enabled"
+            android:key="calendar_pull"
+            android:summary="@string/preference_calendar_pull_summary"
+            android:title="@string/preference_calendar_pull"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="calendar_pull"
+            android:key="calendar_pull_delete"
+            android:summary="@string/preference_calendar_pull_delete_summary"
+            android:title="@string/preference_calendar_pull_delete"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

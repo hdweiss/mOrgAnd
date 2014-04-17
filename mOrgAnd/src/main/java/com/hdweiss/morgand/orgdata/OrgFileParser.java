@@ -29,7 +29,7 @@ public class OrgFileParser {
 
 	public OrgFileParser() {
         this.excludedTags = PreferenceUtils.getExcludedTags();
-        this.nodeDao = OrgNode.getDao();
+        this.nodeDao = OrgNodeRepository.getDao();
 	}
 
     public void parse(File file, OrgFile orgFile, OrgNode parent) throws IOException {
@@ -76,7 +76,7 @@ public class OrgFileParser {
         OrgNode node;
         switch(determineType(line)) {
             case Headline:
-                node = getNodeFromHeading(line);
+                node = getNodeFromHeadline(line);
                 break;
 
             case Drawer:
@@ -149,7 +149,7 @@ public class OrgFileParser {
             "(?::([^\\s]+):)?\\s*" + // Tags
             "$"; // End of line
     private static final Pattern headingPattern = Pattern.compile(headingRegex);
-	private OrgNode getNodeFromHeading(final String line) {
+	private OrgNode getNodeFromHeadline(final String line) {
         int starCount = numberOfStars(line);
 		if (starCount == parseStack.getCurrentLevel()) { // Headline on same level
 			parseStack.pop();

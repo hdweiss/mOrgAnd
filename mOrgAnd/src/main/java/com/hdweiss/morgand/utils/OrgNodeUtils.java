@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 public class OrgNodeUtils {
 
     public static final Pattern urlPattern = Pattern.compile("\\[\\[[^\\]]*\\]\\[([^\\]]*)\\]\\]");
+    public static final Pattern dateMatcher = Pattern.compile("((?:SCHEDULED:|DEADLINE:)\\s?)?<([^>]+)>" + "(?:\\s*--\\s*<([^>]+)>)?");
 
     /**
      * Removes org urls ([[url][title]]) and replaces them with just the title.
@@ -23,7 +24,6 @@ public class OrgNodeUtils {
 
         return contentBuilder.toString();
     }
-
 
     public static String combineTags(String tags, String inheritedTags, HashSet<String> excludedTags) {
         String combinedTags = "";

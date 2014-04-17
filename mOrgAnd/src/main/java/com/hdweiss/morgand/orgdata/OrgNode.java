@@ -1,20 +1,15 @@
 package com.hdweiss.morgand.orgdata;
 
-import android.content.Context;
-
-import com.hdweiss.morgand.Application;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
 
 @DatabaseTable(tableName = "OrgNodes")
 public class OrgNode {
@@ -31,7 +26,7 @@ public class OrgNode {
     public int Id;
 
     public static final String PARENT_FIELD_NAME = "parent";
-    @DatabaseField(foreign = true, columnName = PARENT_FIELD_NAME)
+    @DatabaseField(foreign = true, columnName = PARENT_FIELD_NAME, foreignAutoRefresh=true, canBeNull=true, maxForeignAutoRefreshLevel=3)
     public OrgNode parent;
 
     @ForeignCollectionField(eager = false, foreignFieldName = PARENT_FIELD_NAME)
@@ -100,30 +95,39 @@ public class OrgNode {
         return true;
     }
 
+    public List<OrgNodeDate> getOrgNodeDates() {
+        ArrayList<OrgNodeDate> dates = new ArrayList<OrgNodeDate>();
 
-    public static List<OrgNode> getRootNodes() {
-        try {
-            List<OrgNode> children = getDao().queryBuilder().where().isNull(PARENT_FIELD_NAME).and().ne(STATE_FIELD_NAME, State.Deleted).query();
-            Collections.sort(children, new OrgNodeCompare());
-            return children;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        Matcher matcher = OrgNodeUtils.dateMatcher.matcher(title);
+        while(matcher.find()) {
+            String type = matcher.group(1);
+            String startDate = matcher.group(2);
+            String endDate = matcher.group(3);
+
+            try {
+                OrgNodeDate orgNodeDate = new OrgNodeDate(startDate);
+                orgNodeDate.type = type != null ? type : "";
+
+                orgNodeDate.setTitle(getTitle());
+                dates.add(orgNodeDate);
+            } catch (IllegalArgumentException ex) {}
         }
 
-        return new ArrayList<OrgNode>();
+        return dates;
     }
 
-    public static RuntimeExceptionDao<OrgNode, Integer> getDao() {
-        Context context = Application.getInstace();
-        return OpenHelperManager.getHelper(context, DatabaseHelper.class).getRuntimeExceptionDao(OrgNode.class);
-    }
+    public String getTitle() {
 
-    public static void deleteAll() {
-        try {
-            getDao().deleteBuilder().delete();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (type != Type.Headline) {
+            if (parent != null) {
+                return parent.getTitle();
+            }
+            else {
+                return "";
+            }
         }
+
+        return title.replaceAll("^\\** ", "");
     }
 
     public static class OrgNodeCompare implements Comparator<OrgNode> {

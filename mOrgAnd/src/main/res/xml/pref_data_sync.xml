@@ -1,8 +1,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <ListPreference
         android:key="sync_frequency"
         android:title="@string/pref_title_sync_frequency"
@@ -10,64 +7,74 @@
         android:entryValues="@array/pref_sync_frequency_values"
         android:defaultValue="180"
         android:negativeButtonText="@null"
-        android:positiveButtonText="@null" />
+        android:positiveButtonText="@null"/>
 
-    <Preference android:title="@string/pref_title_git_local_path" android:key="git_local_path">
-        <intent android:action=".settings.LocalPathSettingActivity" />
+    <Preference
+        android:title="@string/pref_title_git_local_path"
+        android:key="git_local_path">
+        <intent android:action=".settings.LocalPathSettingActivity"/>
     </Preference>
 
-    <EditTextPreference
-        android:key="git_url"
-        android:title="@string/pref_title_git_url"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="textUri"
-        android:capitalize="none"
-        android:singleLine="true"
-        android:maxLines="1" />
+    <PreferenceCategory android:title="@string/pref_group_remote">
 
-    <EditTextPreference
-        android:key="git_username"
-        android:title="@string/pref_title_git_username"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="text"
-        android:capitalize="none"
-        android:singleLine="true"
-        android:maxLines="1" />
+        <EditTextPreference
+            android:key="git_url"
+            android:title="@string/pref_title_git_url"
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="textUri"
+            android:capitalize="none"
+            android:singleLine="true"
+            android:maxLines="1"/>
 
-    <EditTextPreference
-        android:key="git_password"
-        android:title="@string/pref_title_git_password"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="textVisiblePassword"
-        android:capitalize="none"
-        android:singleLine="true"
-        android:maxLines="1" />
+        <EditTextPreference
+            android:key="git_username"
+            android:title="@string/pref_title_git_username"
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="text"
+            android:capitalize="none"
+            android:singleLine="true"
+            android:maxLines="1"/>
 
-    <Preference android:title="@string/pref_title_git_keyfile" android:key="git_key_info">
-        <intent android:action=".settings.KeySettingActivity" />
-    </Preference>
+        <EditTextPreference
+            android:key="git_password"
+            android:title="@string/pref_title_git_password"
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="textVisiblePassword"
+            android:capitalize="none"
+            android:singleLine="true"
+            android:maxLines="1"/>
 
-    <EditTextPreference
-        android:key="git_commit_author"
-        android:title="@string/pref_title_git_commit_author"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="textPersonName"
-        android:capitalize="words"
-        android:singleLine="true"
-        android:maxLines="1" />
+        <Preference
+            android:title="@string/pref_title_git_keyfile"
+            android:key="git_key_info">
+            <intent android:action=".settings.KeySettingActivity"/>
+        </Preference>
 
-    <EditTextPreference
-        android:key="git_commit_email"
-        android:title="@string/pref_title_git_commit_email"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="textEmailAddress"
-        android:capitalize="none"
-        android:singleLine="true"
-        android:maxLines="1" />
+    </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/preference_advanced">
+
+        <EditTextPreference
+            android:key="git_commit_author"
+            android:title="@string/pref_title_git_commit_author"
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="textPersonName"
+            android:capitalize="words"
+            android:singleLine="true"
+            android:maxLines="1"/>
+
+        <EditTextPreference
+            android:key="git_commit_email"
+            android:title="@string/pref_title_git_commit_email"
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="textEmailAddress"
+            android:capitalize="none"
+            android:singleLine="true"
+            android:maxLines="1"/>
+    </PreferenceCategory>
 </PreferenceScreen>

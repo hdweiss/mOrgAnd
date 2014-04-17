@@ -108,10 +108,15 @@ public class OutlineItem extends RelativeLayout implements Checkable {
     }
 
     private void setupHeadlineTitle() {
-        if (agendaMode == false)
+        SpannableStringBuilder titleSpan = new SpannableStringBuilder();
+        if (agendaMode) {
+            final String title = node.title.replaceFirst("^\\**", "*");
+            titleSpan.append(title);
+        } else {
+            titleSpan.append(node.title);
             titleView.setPadding(node.getLevel() * 5, titleView.getPaddingTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
+        }
 
-        SpannableStringBuilder titleSpan = new SpannableStringBuilder(node.title);
         setupChildIndicator(titleSpan);
         titleView.setText(titleSpan);
     }
