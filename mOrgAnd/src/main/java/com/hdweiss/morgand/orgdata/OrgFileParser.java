@@ -3,6 +3,7 @@ package com.hdweiss.morgand.orgdata;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
@@ -82,9 +83,12 @@ public class OrgFileParser {
                 node = getNodeFromDrawer(line);
                 break;
 
+            case Setting:
+                node  = getNodeFromSetting(line);
+                break;
+
             case Checkbox:
             case Date:
-            case Setting:
                 node = getNodeFromLine(type, line);
                 break;
 
@@ -117,7 +121,7 @@ public class OrgFileParser {
         return OrgNode.Type.Body;
     }
 
-    private OrgNode getNodeFromLine(OrgNode.Type type, String line) {
+    private OrgNode getNodeFromLine(OrgNode.Type type, final String line) {
         OrgNode node = new OrgNode();
         node.file = orgFile;
         node.parent = parseStack.getCurrentNode();
@@ -129,6 +133,16 @@ public class OrgFileParser {
         return node;
     }
 
+    private OrgNode getNodeFromSetting(final String line) {
+        if (line.startsWith("#+FILETAGS:")) {
+            String tags = line.substring("#+FILETAGS:".length());
+            orgFile.node.tags = OrgNodeUtils.combineTags(tags, "", new HashSet<String>());
+            nodeDao.update(orgFile.node);
+        }
+
+        OrgNode node = getNodeFromLine(OrgNode.Type.Setting, line);
+        return node;
+    }
 
     private static final String headingRegex = "(.*?)" + // Title
             "\\s*" + // Whitespaces
@@ -146,7 +160,7 @@ public class OrgFileParser {
 
         Matcher matcher = headingPattern.matcher(line);
         matcher.find();
-        final String heading = matcher.group(1);
+        final String heading = matcher.group(1) == null ? "" : matcher.group(1).trim();
         OrgNode node = getNodeFromLine(OrgNode.Type.Headline, heading);
         if (matcher.group(2) != null)
             node.tags = matcher.group(2);
@@ -230,32 +244,8 @@ public class OrgFileParser {
 
 		public void add(int level, OrgNode node) {
 			parseStack.push(new Pair<Integer, OrgNode>(level, node));
-			tagStack.push(stripTags(node));
-		}
-
-		private String stripTags(OrgNode node) {
-            String tags = "";
-            if (TextUtils.isEmpty(node.tags) == false)
-                tags += node.tags;
-
-            if (TextUtils.isEmpty(node.inheritedTags) == false)
-                tags += node.inheritedTags;
-
-			if (excludedTags == null || TextUtils.isEmpty(tags))
-				return tags;
-
-			StringBuilder result = new StringBuilder();
-			for (String tag: tags.split(":")) {
-				if (excludedTags.contains(tag) == false && TextUtils.isEmpty(tag) == false) {
-					result.append(tag);
-					result.append(":");
-				}
-			}
-
-			if(!TextUtils.isEmpty(result))
-				result.deleteCharAt(result.lastIndexOf(":"));
-
-			return result.toString();
+            final String combinedTags = OrgNodeUtils.combineTags(node.tags, node.inheritedTags, excludedTags);
+			tagStack.push(combinedTags);
 		}
 
 		public void pop() {

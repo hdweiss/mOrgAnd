@@ -3,7 +3,6 @@ package com.hdweiss.morgand.orgdata;
 import android.content.Context;
 
 import com.hdweiss.morgand.Application;
-import com.hdweiss.morgand.gui.outline.OutlineItem;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
 
 @DatabaseTable(tableName = "OrgNodes")
 public class OrgNode {
@@ -100,19 +98,6 @@ public class OrgNode {
             return false;
 
         return true;
-    }
-
-    public String getCleanedName() {
-        StringBuilder nameBuilder = new StringBuilder(this.title);
-
-        Matcher matcher = OutlineItem.urlPattern.matcher(nameBuilder);
-        while (matcher.find()) {
-            nameBuilder.delete(matcher.start(), matcher.end());
-            nameBuilder.insert(matcher.start(), matcher.group(1));
-            matcher = OutlineItem.urlPattern.matcher(nameBuilder);
-        }
-
-        return nameBuilder.toString();
     }
 
 

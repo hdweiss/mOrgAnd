@@ -13,8 +13,6 @@ import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
 import com.hdweiss.morgand.orgdata.OrgNode;
 
-import java.util.regex.Pattern;
-
 public class OutlineItem extends RelativeLayout implements Checkable {
 
     private TextView titleView;
@@ -58,51 +56,67 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
         switch (node.type) {
             case Setting:
-                setupSettingTitle();
+                setupTitle(theme.settingsForeground);
                 tagsView.setText("");
                 break;
 
             case Drawer:
-                setupDrawerTitle();
+                setupDrawerTitle(expanded);
+                tagsView.setText("");
+                break;
+
+            case Directory:
+                setupTitle(theme.directoryForeground);
                 tagsView.setText("");
                 break;
 
             case File:
-            case Directory:
+            case Headline:
+                setupHeadlineTitle();
+                setupTags();
+                break;
+
             case Date:
             case Body:
             case Checkbox:
             default:
-                setupHeadline();
-                setupTags();
+                setupTitle(theme.defaultForeground);
+                tagsView.setText("");
+                break;
         }
     }
 
-    private void setupDrawerTitle() {
+    private void setupTitle(int color) {
+        setupTitle(color, node.title);
+    }
+
+    private void setupTitle(int color, String title) {
+        SpannableStringBuilder titleSpan = new SpannableStringBuilder(title);
+        titleSpan.setSpan(new ForegroundColorSpan(color), 0, titleSpan.length(), 0);
+        titleView.setText(titleSpan);
+    }
+
+    private void setupDrawerTitle(boolean expanded) {
         int firstNewlineIndex = node.title.indexOf('\n');
-        String drawerTitle = firstNewlineIndex > 0 ? node.title.substring(0, firstNewlineIndex) : node.title;
-        SpannableStringBuilder titleSpan = new SpannableStringBuilder(drawerTitle.trim());
-        titleSpan.setSpan(new ForegroundColorSpan(theme.drawerForeground), 0, titleSpan.length(), 0);
-        titleView.setText(titleSpan);
+
+        String drawerTitle;
+        if (expanded)
+            drawerTitle = node.title;
+        else
+            drawerTitle = firstNewlineIndex > 0 ? node.title.substring(0, firstNewlineIndex) : node.title;
+        setupTitle(theme.drawerForeground, drawerTitle);
     }
 
-    private void setupSettingTitle() {
-        SpannableStringBuilder titleSpan = new SpannableStringBuilder(node.title.trim());
-        titleSpan.setSpan(new ForegroundColorSpan(theme.settingsForeground), 0, titleSpan.length(), 0);
-        titleView.setText(titleSpan);
-    }
-
-    private void setupHeadline() {
-        SpannableStringBuilder titleSpan = new SpannableStringBuilder(node.title);
-
+    private void setupHeadlineTitle() {
         if (agendaMode == false)
             titleView.setPadding(node.getLevel() * 5, titleView.getPaddingTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
 
-        setupChildrenIndicator(node, theme, titleSpan);
+        SpannableStringBuilder titleSpan = new SpannableStringBuilder(node.title);
+        setupChildIndicator(titleSpan);
         titleView.setText(titleSpan);
     }
 
-    private void setupChildrenIndicator(OrgNode node, DefaultTheme theme, SpannableStringBuilder titleSpan) {
+    private void setupChildIndicator(SpannableStringBuilder titleSpan) {
         if (node.children.isEmpty() == false) {
             titleSpan.append("...");
             titleSpan.setSpan(new ForegroundColorSpan(theme.defaultForeground),
@@ -122,6 +136,4 @@ public class OutlineItem extends RelativeLayout implements Checkable {
             tagsSpan.setSpan(new ForegroundColorSpan(theme.gray), 0, tagsSpan.length(), 0);
         tagsView.setText(tagsSpan);
     }
-
-    public static final Pattern urlPattern = Pattern.compile("\\[\\[[^\\]]*\\]\\[([^\\]]*)\\]\\]");
 }
