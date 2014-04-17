@@ -39,7 +39,7 @@ public class OrgFile {
     }
 
     public boolean isEditable() {
-        if (node.title == AGENDA_FILE_ALIAS)
+        if (node.title.equals(AGENDA_FILE_ALIAS))
             return false;
 
         return true;

@@ -74,7 +74,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         removeCalendarEntries(entries);
 
         Log.d("Calendar", "Calendar (" + filename + ") Inserted: " + inserted
-                + " and deleted: " + deleted + " unchanged: " + unchanged);
+                + " and deleted: " + deleted + ", unchanged: " + unchanged);
     }
 
     private void createOrUpdateEntry(MultiMap<CalendarEntry> entries,
