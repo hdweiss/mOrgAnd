@@ -10,6 +10,11 @@
         />
 
     <header
+        android:fragment="com.hdweiss.morgand.settings.SettingsActivity$GitPreferenceFragment"
+        android:title="@string/pref_header_git"
+        />
+
+    <header
         android:fragment="com.hdweiss.morgand.settings.SettingsActivity$CalendarPreferenceFragment"
         android:title="@string/preference_calendar" />
 

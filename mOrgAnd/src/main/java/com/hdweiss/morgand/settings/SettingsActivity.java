@@ -40,7 +40,6 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
-
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,18 @@ public class SettingsActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.pref_data_sync);
 
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("todo_active"));
+            bindPreferenceSummaryToValue(findPreference("todo_inactive"));
+        }
+    }
+
+
+    public static class GitPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_git);
+
             bindPreferenceSummaryToValue(findPreference("git_url"));
             bindPreferenceSummaryToValue(findPreference("git_commit_author"));
             bindPreferenceSummaryToValue(findPreference("git_commit_email"));
@@ -137,6 +148,9 @@ public class SettingsActivity extends PreferenceActivity {
      * @see #sBindPreferenceSummaryToValueListener
      */
     private static void bindPreferenceSummaryToValue(Preference preference) {
+        if (preference == null)
+            return;
+
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 

@@ -11,6 +11,7 @@ import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeDate;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.utils.MultiMap;
+import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 
 import java.util.HashSet;
@@ -20,12 +21,11 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
 
     private CalendarWrapper calendarWrapper;
 
-    private HashSet<String> activeTodos = new HashSet<String>();
-    private HashSet<String> allTodos = new HashSet<String>();
+    private HashSet<String> inactiveTodoKeywords = new HashSet<String>();
     private boolean showDone = true;
     private boolean showPast = true;
     private boolean showHabits = true;
-    private boolean pullEnabled = false; // TODO
+    private boolean pullEnabled = false;
     private boolean pullDelete = false;
 
     private int inserted = 0;
@@ -49,6 +49,9 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
             syncFileSchedule(file);
         }
 
+        if (pullEnabled) // TODO complete assimilate Calendar (implement function that delivers default capture node)
+            //assimilateCalendar();
+
         Log.d("Calendar", "Ended synchronization");
         return null;
     }
@@ -66,7 +69,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
 
         for(OrgNode node: nodes) {
             for(OrgNodeDate date: node.getOrgNodeDates()) {
-                if (shouldInsertEntry("", date)) // TODO
+                if (shouldInsertEntry(date, node))
                     createOrUpdateEntry(entries, date, filename, node);
             }
         }
@@ -85,21 +88,21 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
             entries.remove(date.beginTime, insertedEntry);
             unchanged++;
         } else {
-            calendarWrapper.insertEntry(date, "Payload", filename,
-                    "", ""); // TODO
+            calendarWrapper.insertEntry(date, node.getBody(), filename,
+                    node.getProperty("LOCATION"), node.getProperty("BUSY"));
             inserted++;
         }
     }
 
-    private boolean shouldInsertEntry(String todo, OrgNodeDate date) {
-        boolean isTodoActive = true;
-        if (TextUtils.isEmpty(todo) == false && allTodos.contains(todo))
-            isTodoActive = this.activeTodos.contains(todo);
-
-        if (this.showDone == false && isTodoActive == false)
+    private boolean shouldInsertEntry(OrgNodeDate date, OrgNode node) {
+        String todo = node.getTodo();
+        if (this.showDone == false && TextUtils.isEmpty(todo) == false && inactiveTodoKeywords.contains(todo))
             return false;
 
         if (this.showPast == false && date.isInPast())
+            return false;
+
+        if (this.showHabits == false && "habit".equals(node.getProperty("STYLE")))
             return false;
 
         return true;
@@ -129,6 +132,27 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         }
     }
 
+    private void assimilateCalendar() {
+        Cursor query = calendarWrapper.getUnassimilatedCalendarCursor();
+
+        CalendarEntriesParser entriesParser = new CalendarEntriesParser(query);
+
+        while(query.isAfterLast() == false) {
+            CalendarEntry entry = entriesParser.getEntryFromCursor(query);
+
+            OrgNode captureNode = OrgNodeRepository.getDefaultCaptureNode();
+            entry.writeToOrgNodes(captureNode);
+
+            if (this.pullDelete)
+                calendarWrapper.deleteEntry(entry);
+
+            query.moveToNext();
+        }
+
+        query.close();
+        // OrgUtils.announceSyncDone(this);
+    }
+
     private void refreshPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.pullEnabled = sharedPreferences.getBoolean("calendar_pull", false);
@@ -136,9 +160,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         this.showDone = sharedPreferences.getBoolean("calendar_show_done", true);
         this.showPast = sharedPreferences.getBoolean("calendar_show_past", true);
         this.showHabits = sharedPreferences.getBoolean("calendar_habits", true);
-//        this.activeTodos = new HashSet<String>(
-//                OrgProviderUtils.getActiveTodos(resolver));
-//        this.allTodos = new HashSet<String>(OrgProviderUtils.getTodos(resolver));
+        this.inactiveTodoKeywords = PreferenceUtils.getInactiveTodoKeywords();
         this.calendarWrapper.refreshPreferences();
     }
 }

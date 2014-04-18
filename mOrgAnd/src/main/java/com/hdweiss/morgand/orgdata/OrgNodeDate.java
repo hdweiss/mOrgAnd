@@ -110,6 +110,11 @@ public class OrgNodeDate {
 	}
 	
 	public String getTitle() {
-		return this.type + this.title;
+        String formatedType = this.type;
+        if (type.startsWith("SCHEDULED"))
+            formatedType = "SC";
+        else if (type.startsWith("DEADLINE"))
+            formatedType = "DL";
+		return formatedType + ": " + this.title;
 	}
 }

@@ -20,6 +20,7 @@ import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.CalendarSynchronizerTask;
+import com.hdweiss.morgand.synchronizer.CalendarWrapper;
 import com.hdweiss.morgand.synchronizer.SynchronizerTask;
 
 import java.util.Locale;
@@ -189,6 +190,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.action_clearDB:
                 OrgNodeRepository.deleteAll();
                 OrgFile.deleteAll();
+                new CalendarWrapper(this).deleteEntries();
                 SynchronizerTask.announceUpdate(this);
                 break;
         }

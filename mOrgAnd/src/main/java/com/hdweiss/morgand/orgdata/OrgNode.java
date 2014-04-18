@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @DatabaseTable(tableName = "OrgNodes")
 public class OrgNode {
@@ -95,6 +96,74 @@ public class OrgNode {
         return true;
     }
 
+    public String getProperty(String propertyName) {
+        if (type == Type.Headline) {
+            Pattern propertyPattern = Pattern.compile(":" + propertyName + ":\\s+(.+)");
+            for(OrgNode child: children) {
+                if (child.type == Type.Drawer) {
+                    Matcher matcher = propertyPattern.matcher(child.title);
+                    if (matcher.find()) {
+                        return matcher.group(1).trim();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        if (parent != null)
+            return parent.getProperty(propertyName);
+        return null;
+    }
+
+    public String getTitle() {
+        if (type != Type.Headline) {
+            if (parent != null) {
+                return parent.getTitle();
+            }
+            else {
+                return "";
+            }
+        }
+
+        return title.replaceAll("^\\** ", "");
+    }
+
+    public String getTodo() {
+        if (type == Type.Headline) {
+
+            Matcher matcher = OrgNodeUtils.todoPattern.matcher(title);
+            if (matcher.find())
+                return matcher.group(1);
+        }
+        return "";
+    }
+
+    public String getBody() {
+        if (type == Type.Headline) {
+            StringBuilder body = new StringBuilder();
+            for(OrgNode child: children) {
+                if (child.type == Type.Body)
+                    body.append(child.title);
+            }
+            return body.toString();
+        } else if (parent != null)
+            return  parent.getBody();
+
+        return title;
+    }
+
+    public OrgNode addChild(Type type, String title) {
+        OrgNode node = new OrgNode();
+        node.parent = this;
+        node.file = this.file;
+        node.type = type;
+        node.title = title;
+
+        OrgNodeRepository.getDao().create(node);
+        return node;
+    }
+
     public List<OrgNodeDate> getOrgNodeDates() {
         ArrayList<OrgNodeDate> dates = new ArrayList<OrgNodeDate>();
 
@@ -116,19 +185,6 @@ public class OrgNode {
         return dates;
     }
 
-    public String getTitle() {
-
-        if (type != Type.Headline) {
-            if (parent != null) {
-                return parent.getTitle();
-            }
-            else {
-                return "";
-            }
-        }
-
-        return title.replaceAll("^\\** ", "");
-    }
 
     public static class OrgNodeCompare implements Comparator<OrgNode> {
         @Override

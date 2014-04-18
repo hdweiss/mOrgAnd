@@ -10,6 +10,7 @@ public class OrgNodeUtils {
 
     public static final Pattern urlPattern = Pattern.compile("\\[\\[[^\\]]*\\]\\[([^\\]]*)\\]\\]");
     public static final Pattern dateMatcher = Pattern.compile("((?:SCHEDULED:|DEADLINE:)\\s?)?<([^>]+)>" + "(?:\\s*--\\s*<([^>]+)>)?");
+    public static final Pattern todoPattern = Pattern.compile("\\*+\\s([A-Z]+)");
 
     /**
      * Removes org urls ([[url][title]]) and replaces them with just the title.

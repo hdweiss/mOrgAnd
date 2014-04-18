@@ -54,4 +54,8 @@ public class OrgNodeRepository {
 
         return new ArrayList<OrgNode>();
     }
+
+    public static OrgNode getDefaultCaptureNode() {
+        return new OrgNode(); // TODO
+    }
 }

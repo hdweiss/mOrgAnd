@@ -1,24 +1,20 @@
 <resources>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="preference_general">General</string>
+    <string name="preference_advanced">Advanced</string>
+
     <!-- General settings -->
     <string name="pref_header_general">General</string>
+    <string name="pref_title_version">Version</string>
 
-    <string name="pref_title_enable_sync">Enabled git sync</string>
-
-    <string name="pref_group_remote">Remote</string>
 
     <!-- Settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
-
     <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string name="pref_title_git_url">Git Url</string>
-    <string name="pref_title_git_commit_author">Git commit author</string>
-    <string name="pref_title_git_commit_email">Git commit email</string>
-    <string name="pref_title_git_keyfile">Private ssh key file</string>
-    <string name="pref_title_git_password">Git password</string>
-    <string name="pref_title_git_username">Git Username</string>
-    <string name="pref_title_git_local_path">Git local repository path</string>
+
+    <string name="pref_title_todo_active">Active todos</string>
+    <string name="pref_title_todo_inactive">Inactive todos</string>
 
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
@@ -36,6 +32,19 @@
         <item>360</item>
         <item>-1</item>
     </string-array>
+
+
+    <!-- Settings for Git -->
+    <string name="pref_header_git">Git</string>
+    <string name="pref_group_remote">Remote</string>
+    <string name="pref_title_git_url">Git Url</string>
+    <string name="pref_title_git_commit_author">Git commit author</string>
+    <string name="pref_title_git_commit_email">Git commit email</string>
+    <string name="pref_title_git_keyfile">Private ssh key file</string>
+    <string name="pref_title_git_password">Git password</string>
+    <string name="pref_title_git_username">Git Username</string>
+    <string name="pref_title_git_local_path">Git local repository path</string>
+
 
     <!-- Calendar strings -->
     <string name="preference_calendar">Calendar</string>
@@ -62,7 +71,5 @@
     <string name="preference_calendar_show_done">Show done events</string>
     <string name="preference_calendar_show_past_summary">Show past items in the calendar</string>
     <string name="preference_calendar_show_past">Show past events</string>
-    <string name="preference_general">General</string>
-    <string name="preference_advanced">Advanced</string>
 
 </resources>

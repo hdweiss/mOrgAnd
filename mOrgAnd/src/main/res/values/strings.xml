@@ -34,7 +34,6 @@
     <string name="action_delete">Delete</string>
     <string name="action_clockin">Clock in</string>
     <string name="action_archive">Archive</string>
-    <string name="pref_title_version">Version</string>
     <string name="error_setting_no_calendar">No calendar</string>
 
 </resources>
