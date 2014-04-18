@@ -1,5 +1,6 @@
 package com.hdweiss.morgand.orgdata;
 
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -115,6 +116,10 @@ public class OrgNodeDate {
             formatedType = "SC";
         else if (type.startsWith("DEADLINE"))
             formatedType = "DL";
-		return formatedType + ": " + this.title;
+
+        if (TextUtils.isEmpty(formatedType))
+            return this.title;
+        else
+		    return formatedType + ": " + this.title;
 	}
 }
