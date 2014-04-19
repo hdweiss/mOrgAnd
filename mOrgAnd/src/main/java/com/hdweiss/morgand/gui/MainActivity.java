@@ -1,9 +1,6 @@
 package com.hdweiss.morgand.gui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,20 +11,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
+import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.CalendarSynchronizerTask;
 import com.hdweiss.morgand.synchronizer.CalendarWrapper;
-import com.hdweiss.morgand.synchronizer.SynchronizerTask;
+import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
+import com.hdweiss.morgand.synchronizer.JGitSynchronizerTask;
+import com.hdweiss.morgand.synchronizer.SynchronizerEvent;
+import com.squareup.otto.Subscribe;
 
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
-
-    private OutlineFragment outlineFragment;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,18 +44,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      */
     ViewPager mViewPager;
 
-    private SynchServiceReceiver syncReceiver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+        //actionBar.setDisplayShowHomeEnabled(false);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -87,16 +86,20 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setTabListener(this));
         }
 
-
-        this.syncReceiver = new SynchServiceReceiver();
-        registerReceiver(this.syncReceiver, new IntentFilter(SynchronizerTask.SYNC_UPDATE));
     }
 
     @Override
-    protected void onDestroy() {
-        unregisterReceiver(syncReceiver);
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        Application.getBus().register(this);
     }
+
+    @Override
+    protected void onPause() {
+        Application.getBus().unregister(this);
+        super.onPause();
+    }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -129,9 +132,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    OutlineFragment fragment = new OutlineFragment();
-                    outlineFragment = fragment;
-                    return fragment;
+                    return new OutlineFragment();
                 case 1:
                     return new AgendaFragment();
 
@@ -170,15 +171,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.action_sync:
-                SynchronizerTask synchronizerTask = new SynchronizerTask(this);
+                JGitSynchronizerTask synchronizerTask = new JGitSynchronizerTask(this);
                 synchronizerTask.execute();
                 break;
 
@@ -190,23 +190,37 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.action_clearDB:
                 OrgNodeRepository.deleteAll();
                 OrgFile.deleteAll();
+                Application.getBus().post(new DataUpdatedEvent());
                 new CalendarWrapper(this).deleteEntries();
-                SynchronizerTask.announceUpdate(this);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    private void refreshView() {
-        if (outlineFragment != null)
-            outlineFragment.refreshView();
-    }
+    @Subscribe
+    public void updateSyncProgress(SynchronizerEvent event) {
+        if (event.state == SynchronizerEvent.State.Done) {
+            setProgressBarVisibility(false);
+            return;
+        }
 
-    private class SynchServiceReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshView();
+        switch (event.state) {
+            case Intermediate:
+                setProgressBarIndeterminate(true);
+                break;
+
+            case Progress:
+                setProgressBarIndeterminate(false);
+                int progress = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * event.progress;
+                setProgress(progress);
+                break;
+
+            case SecondaryProgress:
+                setProgressBarIndeterminate(false);
+                int secondaryProgress = (Window.PROGRESS_END - Window.PROGRESS_START) / 100 * event.progress;
+                setSecondaryProgress(secondaryProgress);
+                break;
         }
     }
 }

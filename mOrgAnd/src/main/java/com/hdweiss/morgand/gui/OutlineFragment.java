@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.outline.OutlineListView;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.squareup.otto.Subscribe;
 
 public class OutlineFragment extends Fragment {
 
@@ -21,6 +24,7 @@ public class OutlineFragment extends Fragment {
 
     @Override
     public void onDestroy() {
+        Application.getBus().unregister(this);
         super.onDestroy();
         OpenHelperManager.releaseHelper();
     }
@@ -40,6 +44,7 @@ public class OutlineFragment extends Fragment {
 
         listView.setActivity(getActivity());
         refreshView();
+        Application.getBus().register(this);
     }
 
 
@@ -69,7 +74,12 @@ public class OutlineFragment extends Fragment {
         outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
     }
 
-    public void refreshView() {
+
+    @Subscribe
+    public void refreshView(DataUpdatedEvent event) {
+        refreshView();
+    }
+    protected void refreshView() {
         listView.setData(OrgNodeRepository.getRootNodes());
     }
 }
