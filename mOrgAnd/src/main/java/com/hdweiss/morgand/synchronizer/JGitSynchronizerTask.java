@@ -40,6 +40,7 @@ public class JGitSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEvent,
     @Override
     protected void onSuccess(Void aVoid) {
         Application.getBus().post(new SynchronizerEvent(SynchronizerEvent.State.SecondaryProgress, 100));
+        new ParserSynchronizerTask(context).execute();
     }
 
     @Override

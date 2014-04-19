@@ -45,12 +45,11 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         if (files.length == 0)
             return null;
 
-        for(String file: files) {
+        for(String file: files)
             syncFileSchedule(file);
-        }
 
         if (pullEnabled) // TODO complete assimilate Calendar (implement function that delivers default capture node)
-            //assimilateCalendar();
+            ;//assimilateCalendar();
 
         Log.d("Calendar", "Ended synchronization");
         return null;

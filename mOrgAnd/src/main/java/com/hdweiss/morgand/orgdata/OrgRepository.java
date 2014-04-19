@@ -8,8 +8,8 @@ import com.j256.ormlite.stmt.Where;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrgRepository {
 
@@ -26,7 +26,10 @@ public class OrgRepository {
         this.fileDao = OrgFile.getDao();
     }
 
-    public void parse() {
+    /**
+     * @return List of OrgFiles that have been modified. Both file and file.node need to be updated/created.
+     */
+    public ArrayList<OrgFile> getModifiedFiles() {
         File rootFolder = new File(path);
 
         if (rootFolder.exists() == false)
@@ -35,19 +38,24 @@ public class OrgRepository {
         if (rootFolder.canRead() == false)
             throw new IllegalArgumentException("Can't parse " + path);
 
-        parse(rootFolder, null);
+        ArrayList<OrgFile> modifiedOrgFiles = new ArrayList<OrgFile>();
+        getModifiedFiles(rootFolder, null, modifiedOrgFiles);
+        return modifiedOrgFiles;
     }
 
-    private void parse(File parentFile, OrgNode parent) {
+    private void getModifiedFiles(File parentFile, OrgNode parent, ArrayList<OrgFile> modifiedOrgFiles) {
         for (File file : parentFile.listFiles()) {
             if (file.isDirectory() && file.isHidden() == false && hasOrgFiles(file)) {
                 OrgNode directoryNode = findOrCreateDirectoryNode(file, parent);
-                parse(file, directoryNode);
+                getModifiedFiles(file, directoryNode, modifiedOrgFiles);
             } else if (file.isFile() && file.getName().endsWith(".org")) {
-                parseOrgFile(file, parent);
+                OrgFile orgFile = getOrCreateOrgFile(file, parent);
+                if (orgFile != null)
+                    modifiedOrgFiles.add(orgFile);
             }
         }
     }
+
 
     private boolean hasOrgFiles(File file) {
         if (file.listFiles() == null)
@@ -94,7 +102,7 @@ public class OrgRepository {
         return node;
     }
 
-    private void parseOrgFile(File file, OrgNode parent) {
+    private OrgFile getOrCreateOrgFile(File file, OrgNode parent) {
         OrgFile orgFile = fileDao.queryForId(file.getAbsolutePath());
 
         if (orgFile == null) {
@@ -102,7 +110,7 @@ public class OrgRepository {
             orgFile.path = file.getAbsolutePath();
         } else {
             if (file.lastModified() <= orgFile.lastModified)
-                return;
+                return null;
 
             try {
                 DeleteBuilder<OrgNode, Integer> deleteBuilder = nodeDao.deleteBuilder();
@@ -113,12 +121,16 @@ public class OrgRepository {
             }
         }
 
-        try {
-            new OrgFileParser().parse(file, orgFile, parent);
-            orgFile.lastModified = file.lastModified();
-            fileDao.createOrUpdate(orgFile);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        orgFile.node = getRootNode(file, orgFile, parent);
+        return orgFile;
+    }
+
+    private OrgNode getRootNode(File file, OrgFile orgFile, OrgNode parent) {
+        OrgNode rootNode = new OrgNode();
+        rootNode.type = OrgNode.Type.Headline;
+        rootNode.title = file.getName();
+        rootNode.file = orgFile;
+        rootNode.parent = parent;
+        return rootNode;
     }
 }

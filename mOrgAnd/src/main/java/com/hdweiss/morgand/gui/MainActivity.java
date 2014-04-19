@@ -207,6 +207,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         switch (event.state) {
             case Intermediate:
+                setProgressBarVisibility(true);
                 setProgressBarIndeterminate(true);
                 break;
 

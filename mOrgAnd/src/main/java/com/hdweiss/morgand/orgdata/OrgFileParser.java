@@ -32,28 +32,24 @@ public class OrgFileParser {
         this.nodeDao = OrgNodeRepository.getDao();
 	}
 
-    public void parse(File file, OrgFile orgFile, OrgNode parent) throws IOException {
-        init(file, orgFile, parent);
+    public void parse(OrgFile orgFile) throws IOException {
+        if (orgFile.node == null)
+            throw new IllegalArgumentException("Received " + orgFile.path + " with null node");
+
+        File file = new File(orgFile.path);
         LineNumberReader reader = new LineNumberReader(new FileReader(file));
-        parse(reader);
-    }
 
-    private void init(File file, OrgFile orgFile, OrgNode parent) {
-        OrgNode rootNode = new OrgNode();
-        rootNode.type = OrgNode.Type.Headline;
-        rootNode.title = file.getName();
-        rootNode.file = orgFile;
-        rootNode.parent = parent;
-        nodeDao.create(rootNode);
-
-        orgFile.node = rootNode;
-        OrgFile.getDao().update(orgFile);
+        OrgFile.getDao().createOrUpdate(orgFile);
+        this.nodeDao.createOrUpdate(orgFile.node);
         this.orgFile = orgFile;
-
         this.parseStack = new ParseStack(excludedTags);
-        this.parseStack.add(0, rootNode);
-    }
+        this.parseStack.add(0, orgFile.node);
 
+        parse(reader);
+
+        orgFile.lastModified = file.lastModified();
+        OrgFile.getDao().update(orgFile);
+    }
 
     public void parse(final LineNumberReader reader) throws IOException {
         this.reader = reader;
