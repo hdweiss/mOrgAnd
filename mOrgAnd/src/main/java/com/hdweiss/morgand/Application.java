@@ -16,11 +16,11 @@ public class Application extends android.app.Application {
         return bus;
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();
         instace = this;
+        //SyncService.startAlarm(this);
     }
 
     @Override

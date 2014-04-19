@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeDate;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
@@ -17,7 +18,7 @@ import com.hdweiss.morgand.utils.SafeAsyncTask;
 import java.util.HashSet;
 import java.util.List;
 
-public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> {
+public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Void> {
 
     private CalendarWrapper calendarWrapper;
 
@@ -32,7 +33,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
     private int deleted = 0;
     private int unchanged = 0;
 
-    public CalendarSynchronizerTask(Context context) {
+    public SyncCalendarTask(Context context) {
         super(context, ReportMode.Log);
 
         this.calendarWrapper = new CalendarWrapper(context);
@@ -55,6 +56,11 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         return null;
     }
 
+    @Override
+    protected void onProgressUpdate(DataUpdatedEvent... events) {
+        for(DataUpdatedEvent event: events)
+            Application.getBus().post(event);
+    }
 
     private void syncFileSchedule(String filename) {
         inserted = 0;
@@ -119,6 +125,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
             query.moveToNext();
         }
 
+        query.close();
         return map;
     }
 
@@ -149,7 +156,7 @@ public class CalendarSynchronizerTask extends SafeAsyncTask<String, Void, Void> 
         }
 
         query.close();
-        // OrgUtils.announceSyncDone(this);
+        publishProgress(new DataUpdatedEvent());
     }
 
     private void refreshPreferences() {

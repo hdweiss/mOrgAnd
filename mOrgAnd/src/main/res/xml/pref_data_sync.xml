@@ -1,13 +1,26 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:key="sync_auto"
+        android:defaultValue="false"
+        android:summary="@string/preference_autosync_summary"
+        android:title="@string/preference_autosync"/>
+
     <ListPreference
         android:key="sync_frequency"
+        android:dependency="sync_auto"
         android:title="@string/pref_title_sync_frequency"
         android:entries="@array/pref_sync_frequency_titles"
         android:entryValues="@array/pref_sync_frequency_values"
         android:defaultValue="180"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"/>
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="sync_wifi_only"
+        android:summary="@string/preference_sync_wifi_only_summary"
+        android:title="@string/preference_sync_wifi_only" />
 
     <PreferenceCategory android:title="@string/pref_header_general">
 

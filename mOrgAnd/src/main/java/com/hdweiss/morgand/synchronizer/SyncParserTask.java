@@ -9,16 +9,17 @@ import com.hdweiss.morgand.gui.SynchronizerNotification;
 import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgFileParser;
 import com.hdweiss.morgand.orgdata.OrgRepository;
+import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
 
 import java.util.ArrayList;
 
-public class ParserSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEvent, Void> {
+public class SyncParserTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
     private ArrayList<OrgFile> modifiedFiles;
 
-    public ParserSynchronizerTask(Context context) {
+    public SyncParserTask(Context context) {
         super(context, ReportMode.Log);
     }
 
@@ -27,7 +28,7 @@ public class ParserSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEven
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String localRepoPath = preferences.getString("git_local_path", "");
 
-        publishProgress(new SynchronizerEvent(SynchronizerEvent.State.Progress, 0));
+        publishProgress(new SyncEvent(SyncEvent.State.Progress, 0));
 
         OrgRepository repository = new OrgRepository(localRepoPath);
         modifiedFiles = repository.getModifiedFiles();
@@ -39,17 +40,17 @@ public class ParserSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEven
             new OrgFileParser().parse(orgFile);
 
             int progress = (100 / modifiedFiles.size()) * fileIndex;
-            publishProgress(new SynchronizerEvent(SynchronizerEvent.State.Progress, progress, orgFile.path));
+            publishProgress(new SyncEvent(SyncEvent.State.Progress, progress, orgFile.path));
         }
 
         return null;
     }
 
     @Override
-    protected void onProgressUpdate(SynchronizerEvent... events) {
+    protected void onProgressUpdate(SyncEvent... events) {
         super.onProgressUpdate(events);
 
-        for(SynchronizerEvent event: events)
+        for(SyncEvent event: events)
             Application.getBus().post(event);
 
         Application.getBus().post(new DataUpdatedEvent());
@@ -61,12 +62,14 @@ public class ParserSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEven
         for(int i = 0; i < modifiedFiles.size(); i++) {
             filenames[i] = modifiedFiles.get(i).path;
         }
-        new CalendarSynchronizerTask(context).execute(filenames);
+
+        if (PreferenceUtils.syncCalendar())
+            new SyncCalendarTask(context).execute(filenames);
     }
 
     @Override
     protected void onCleanup() {
-        Application.getBus().post(new SynchronizerEvent(SynchronizerEvent.State.Done));
+        Application.getBus().post(new SyncEvent(SyncEvent.State.Done));
     }
 
     @Override

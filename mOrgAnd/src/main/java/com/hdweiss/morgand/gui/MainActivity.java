@@ -18,11 +18,11 @@ import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
-import com.hdweiss.morgand.synchronizer.CalendarSynchronizerTask;
 import com.hdweiss.morgand.synchronizer.CalendarWrapper;
 import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
-import com.hdweiss.morgand.synchronizer.JGitSynchronizerTask;
-import com.hdweiss.morgand.synchronizer.SynchronizerEvent;
+import com.hdweiss.morgand.synchronizer.SyncCalendarTask;
+import com.hdweiss.morgand.synchronizer.SyncEvent;
+import com.hdweiss.morgand.synchronizer.SyncGitTask;
 import com.squareup.otto.Subscribe;
 
 import java.util.Locale;
@@ -178,12 +178,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 startActivity(intent);
                 break;
             case R.id.action_sync:
-                JGitSynchronizerTask synchronizerTask = new JGitSynchronizerTask(this);
+                SyncGitTask synchronizerTask = new SyncGitTask(this);
                 synchronizerTask.execute();
                 break;
 
             case R.id.action_calendar:
-                CalendarSynchronizerTask calendarTask = new CalendarSynchronizerTask(this);
+                SyncCalendarTask calendarTask = new SyncCalendarTask(this);
                 calendarTask.execute("/sdcard/morg/GTD.org");
                 break;
 
@@ -199,8 +199,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 
     @Subscribe
-    public void updateSyncProgress(SynchronizerEvent event) {
-        if (event.state == SynchronizerEvent.State.Done) {
+    public void updateSyncProgress(SyncEvent event) {
+        if (event.state == SyncEvent.State.Done) {
             setProgressBarVisibility(false);
             return;
         }

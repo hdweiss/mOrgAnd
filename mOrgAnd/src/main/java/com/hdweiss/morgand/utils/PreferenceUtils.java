@@ -42,4 +42,8 @@ public class PreferenceUtils {
         }
         return keywordHashset;
     }
+
+    public static boolean syncCalendar() {
+        return getPrefs().getBoolean("calendar_enabled", false);
+    }
 }

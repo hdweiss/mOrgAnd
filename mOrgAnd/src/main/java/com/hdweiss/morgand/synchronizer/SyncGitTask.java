@@ -9,15 +9,18 @@ import com.hdweiss.morgand.gui.SynchronizerNotification;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
 
-public class JGitSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEvent, Void> {
+public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
-    public JGitSynchronizerTask(Context context) {
+    public SyncGitTask(Context context) {
         super(context, ReportMode.Toast);
     }
 
     @Override
     protected Void safeDoInBackground(Void... params) throws Exception {
-        publishProgress(new SynchronizerEvent(SynchronizerEvent.State.Intermediate));
+        if (Utils.isNetworkOnline(context) == false)
+            return null;
+
+        publishProgress(new SyncEvent(SyncEvent.State.Intermediate));
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         try {
@@ -31,21 +34,21 @@ public class JGitSynchronizerTask extends SafeAsyncTask<Void, SynchronizerEvent,
     }
 
     @Override
-    protected void onProgressUpdate(SynchronizerEvent... events) {
+    protected void onProgressUpdate(SyncEvent... events) {
         super.onProgressUpdate(events);
-        for(SynchronizerEvent event: events)
+        for(SyncEvent event: events)
             Application.getBus().post(event);
     }
 
     @Override
     protected void onSuccess(Void aVoid) {
-        Application.getBus().post(new SynchronizerEvent(SynchronizerEvent.State.SecondaryProgress, 100));
-        new ParserSynchronizerTask(context).execute();
+        Application.getBus().post(new SyncEvent(SyncEvent.State.SecondaryProgress, 100));
+        new SyncParserTask(context).execute();
     }
 
     @Override
     protected void onError() {
-        Application.getBus().post(new SynchronizerEvent(SynchronizerEvent.State.Done));
+        Application.getBus().post(new SyncEvent(SyncEvent.State.Done));
         SynchronizerNotification notification = new SynchronizerNotification(context);
         notification.errorNotification(exception.getMessage() + "\n" + Utils.ExceptionTraceToString(exception));
     }
