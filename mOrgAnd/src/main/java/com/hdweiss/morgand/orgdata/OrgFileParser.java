@@ -84,6 +84,9 @@ public class OrgFileParser {
                 break;
 
             case Checkbox:
+                node = getNodeFromCheckbox(line);
+                break;
+
             case Date:
                 node = getNodeFromLine(type, line);
                 break;
@@ -165,11 +168,10 @@ public class OrgFileParser {
     }
 
     private OrgNode getNodeFromBody(final String line) throws IOException {
-        OrgNode node = getNodeFromLine(OrgNode.Type.Drawer, line);
+        OrgNode node = getNodeFromLine(OrgNode.Type.Body, line);
 
         StringBuilder builder = new StringBuilder();
         builder.append(line);
-        builder.append("\n");
 
         final ArrayList<OrgNode.Type> allowedTypes = new ArrayList<OrgNode.Type>();
         allowedTypes.add(OrgNode.Type.Body);
@@ -183,7 +185,6 @@ public class OrgFileParser {
 
         StringBuilder builder = new StringBuilder();
         builder.append(line);
-        builder.append("\n");
 
         final ArrayList<OrgNode.Type> allowedTypes = new ArrayList<OrgNode.Type>();
         allowedTypes.add(OrgNode.Type.Drawer);
@@ -193,6 +194,17 @@ public class OrgFileParser {
         return node;
     }
 
+    private OrgNode getNodeFromCheckbox(final String line) throws IOException {
+        OrgNode node = getNodeFromLine(OrgNode.Type.Checkbox, line);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(line);
+
+        final ArrayList<OrgNode.Type> allowedTypes = new ArrayList<OrgNode.Type>();
+        allowedTypes.add(OrgNode.Type.Body);
+        node.title = readSection(builder, allowedTypes, "");
+        return node;
+    }
 
     private static final Pattern starPattern = Pattern.compile("^(\\**)\\s");
     public static int numberOfStars(final String thisLine) {
@@ -217,9 +229,8 @@ public class OrgFileParser {
                 break;
             }
 
-            builder.append(currentLine);
-            builder.append("\n");
-            if (TextUtils.isEmpty(endMarker) == false && currentLine.trim().equals(endMarker))
+            builder.append("\n").append(currentLine);
+            if (endMarker != null && currentLine.trim().equals(endMarker))
                 break;
         }
 
