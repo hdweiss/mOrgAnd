@@ -31,8 +31,7 @@
             android:selectAllOnFocus="true"
             android:inputType="text"
             android:textAllCaps="true"
-            android:singleLine="false"
-            android:maxLines="3"/>
+            android:singleLine="false"/>
 
         <EditTextPreference
             android:key="todo_inactive"
@@ -41,7 +40,16 @@
             android:selectAllOnFocus="true"
             android:inputType="text"
             android:textAllCaps="true"
-            android:singleLine="false"
+            android:singleLine="false"/>
+
+        <EditTextPreference
+            android:key="priorities"
+            android:title="@string/pref_title_priority"
+            android:defaultValue="A:B:C"
+            android:selectAllOnFocus="true"
+            android:inputType="text"
+            android:singleLine="true"
             android:maxLines="3"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

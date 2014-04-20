@@ -24,18 +24,22 @@ public class PreferenceUtils {
 
 
     public static HashSet<String> getInactiveTodoKeywords() {
-        return getHashSetFromPreferenceString("todo_inactive", "DONE",":");
+        return getHashSetFromPreferenceString("todo_inactive", "DONE", ":");
     }
 
     public static HashSet<String> getActiveTodoKeywords() {
-        return getHashSetFromPreferenceString("todo_active", "TODO:NEXT",":");
+        return getHashSetFromPreferenceString("todo_active", "TODO:NEXT", ":");
+    }
+
+    public static HashSet<String> getPriorties() {
+        return getHashSetFromPreferenceString("priorities", "A:B:C", ":");
     }
 
     private static HashSet<String> getHashSetFromPreferenceString(final String key, final String defaultValue, final String delimiter) {
         HashSet<String> keywordHashset = new HashSet<String>();
 
-        String activeKeywords = getPrefs().getString("", defaultValue);
-        String[] keywords = activeKeywords.split(":");
+        String activeKeywords = getPrefs().getString(key, defaultValue);
+        String[] keywords = activeKeywords.split(delimiter);
         for(String keyword: keywords) {
             if (TextUtils.isEmpty(keyword) == false)
                 keywordHashset.add(keyword);

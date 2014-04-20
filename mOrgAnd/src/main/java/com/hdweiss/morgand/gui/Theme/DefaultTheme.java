@@ -29,9 +29,15 @@ public class DefaultTheme {
 	public int defaultForeground = Color.rgb(0xc0, 0xc0, 0xc0);
 	public int defaultBackground = Color.rgb(0x00, 0x00, 0x00);
     public int settingsForeground = Color.rgb(0x69, 0x6e, 0x52);
-    public int drawerForeground = Color.rgb(0x5a, 0x5a, 0x4b);
+
     public int directoryForeground = Color.rgb(0x3f, 0x2a, 0xdd);
-	
+
+    public int todoKeyword = Color.rgb(0xd0, 0x00, 0x00);
+    public int inactiveTodoKeyword = Color.rgb(0x00, 0xa0, 0x00);
+    public int priority = Color.rgb(0xc0, 0x80, 0x00);
+
+    public int drawer = Color.rgb(0x5a, 0x5a, 0x4b);
+
 	public int[] levelColors;
 	
 	public String defaultFontColor = "white";

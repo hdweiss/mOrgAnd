@@ -57,6 +57,7 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
             bindPreferenceSummaryToValue(findPreference("todo_active"));
             bindPreferenceSummaryToValue(findPreference("todo_inactive"));
+            bindPreferenceSummaryToValue(findPreference("priorities"));
         }
     }
 

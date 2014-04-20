@@ -27,8 +27,9 @@
     <string name="preference_sync_wifi_only">Sync with Wifi only</string>
     <string name="preference_sync_wifi_only_summary">Only try to synchronize when Wireless is up</string>
 
-    <string name="pref_title_todo_active">Active todos</string>
-    <string name="pref_title_todo_inactive">Inactive todos</string>
+    <string name="pref_title_todo_active">Active todo keywords</string>
+    <string name="pref_title_todo_inactive">Inactive todo keywords</string>
+    <string name="pref_title_priority">Priorities</string>
 
     <string-array name="pref_sync_frequency_titles">
         <item>5 min</item>
