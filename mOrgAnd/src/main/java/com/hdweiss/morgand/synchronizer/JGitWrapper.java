@@ -6,12 +6,15 @@ import android.util.Log;
 
 import com.hdweiss.morgand.utils.FileUtils;
 
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -22,7 +25,7 @@ import java.util.Iterator;
 
 public class JGitWrapper {
 
-    private final Git git;
+    private Git git;
 
     private final String localPath;
     private final String remotePath;
@@ -46,7 +49,6 @@ public class JGitWrapper {
         commitEmail = preferences.getString("git_commit_email", "");
 
         setupJGitAuthentication(preferences);
-        this.git = initGitRepo();
     }
 
     private void setupJGitAuthentication(SharedPreferences preferences) {
@@ -63,25 +65,27 @@ public class JGitWrapper {
         SshSessionFactory.setInstance(session);
     }
 
-    private Git initGitRepo() throws Exception {
+    private Git initGitRepo(ProgressMonitor monitor) throws Exception {
         if (new File(localPath).exists() == false)
-            createNewRepo();
+            createNewRepo(monitor);
 
         FileRepository fileRepository = new FileRepository(localPath + "/.git");
         return new Git(fileRepository);
     }
 
-    private void createNewRepo() throws Exception {
+    private void createNewRepo(ProgressMonitor monitor) throws Exception {
         File localRepo = new File(localPath);
         if (localRepo.exists()) // Safety check so we don't accidentally delete directory
             throw new Exception("Directory already exists");
 
         try {
-            Git.cloneRepository()
+            CloneCommand cloneCommand = Git.cloneRepository()
                     .setURI(remotePath)
                     .setDirectory(localRepo)
-                    .setBare(false)
-                    .call();
+                    .setBare(false);
+            if (monitor != null)
+                cloneCommand.setProgressMonitor(monitor);
+            cloneCommand.call();
         } catch (GitAPIException e) {
             FileUtils.deleteDirectory(localRepo);
             throw e;
@@ -89,19 +93,28 @@ public class JGitWrapper {
     }
 
 
-    public Git getGit() {
+    public Git getGit(ProgressMonitor monitor) throws Exception {
+        if (this.git == null)
+            this.git = initGitRepo(monitor);
+
         return this.git;
     }
 
-    public void commitAllChanges(String commitMessage) throws GitAPIException {
+    public void commitAllChanges(String commitMessage) throws Exception {
+        Git git = getGit(null);
         git.add().addFilepattern(".").call();
         git.commit().setMessage(commitMessage).setAuthor(commitAuthor, commitEmail).call();
     }
 
-    public void updateChanges() throws Exception {
-        git.fetch().call();
+    public void updateChanges(ProgressMonitor monitor) throws Exception {
+        Git git = getGit(monitor);
 
-        SyncState state = getSyncState();
+        FetchCommand fetch = git.fetch();
+        if (monitor != null)
+            fetch.setProgressMonitor(monitor);
+        fetch.call();
+
+        SyncState state = getSyncState(git);
         Log.d("JGitWrapper", "Got sync state: " + state.name());
         Ref fetchHead = git.getRepository().getRef("FETCH_HEAD");
         switch (state) {
@@ -137,7 +150,7 @@ public class JGitWrapper {
         Equal, Ahead, Behind, Diverged
     }
 
-    private SyncState getSyncState() throws Exception {
+    private SyncState getSyncState(Git git) throws Exception {
         Ref fetchHead = git.getRepository().getRef("FETCH_HEAD");
         Ref head = git.getRepository().getRef("HEAD");
 
