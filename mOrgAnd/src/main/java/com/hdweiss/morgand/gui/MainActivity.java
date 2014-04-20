@@ -201,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     @Subscribe
     public void updateSyncProgress(SyncEvent event) {
         if (event.state == SyncEvent.State.Done) {
-            setProgressBarVisibility(false);
+            setProgress(Window.PROGRESS_END);
             return;
         }
 
