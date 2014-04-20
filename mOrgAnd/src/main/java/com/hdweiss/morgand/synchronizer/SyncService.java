@@ -23,7 +23,7 @@ public class SyncService extends Service implements
     private AlarmManager alarmManager;
     private PendingIntent alarmIntent;
     private boolean alarmScheduled = false;
-    private Thread syncThread;
+    private AsyncTask syncTask;
 
     @Override
     public void onCreate() {
@@ -62,46 +62,29 @@ public class SyncService extends Service implements
             setAlarm();
         else if (action != null && action.equals(STOP_ALARM))
             unsetAlarm();
-//        else if (syncThread == null || syncThread.isAlive())
-//            runSynchronizer();
+        else if (syncTask == null || syncTask.getStatus() == AsyncTask.Status.FINISHED)
+            runSynchronizerAsync();
         return 0;
     }
 
-    private void runSynchronizer() {
+    private void runSynchronizerAsync() {
         unsetAlarm();
-
-        syncThread = new Thread() {
-            public void run() {
-
-                AsyncTask syncTask = new SyncGitTask(getBaseContext()).execute();
-
-                synchronized (syncTask) {
-                    try {
-                        syncTask.wait();
-                        setAlarm();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
-        syncThread.run();
+        syncTask = new SyncGitTask(getBaseContext()).execute();
+        setAlarm();
     }
+
 
     private void setAlarm() {
         boolean doAutoSync = this.appSettings.getBoolean("sync_auto", false);
         if (!this.alarmScheduled && doAutoSync) {
 
-//            int interval = Integer.parseInt(
-//                    this.appSettings.getString("sync_frequency", "1800000"),
-//                    10);
-            // TODO Renable
-            int interval = 20000;
+            int interval = Integer.parseInt(
+                    this.appSettings.getString("sync_frequency", "1800000"),
+                    10);
 
             this.alarmIntent = PendingIntent.getService(Application.getInstace(), 0, new Intent(
                     this, SyncService.class), 0);
-            alarmManager.setRepeating(AlarmManager.RTC,
+            alarmManager.setInexactRepeating(AlarmManager.RTC,
                     System.currentTimeMillis() + interval, interval,
                     alarmIntent);
 

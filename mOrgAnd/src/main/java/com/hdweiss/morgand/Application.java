@@ -1,5 +1,6 @@
 package com.hdweiss.morgand;
 
+import com.hdweiss.morgand.synchronizer.SyncService;
 import com.squareup.otto.Bus;
 
 public class Application extends android.app.Application {
@@ -20,7 +21,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         instace = this;
-        //SyncService.startAlarm(this);
+        SyncService.startAlarm(this);
     }
 
     @Override
