@@ -1,5 +1,6 @@
 package com.hdweiss.morgand.gui.outline;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -204,7 +205,11 @@ public class OutlineItem extends RelativeLayout implements Checkable {
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    Application.getInstace().getApplicationContext().startActivity(intent);
+                    try {
+                        Application.getInstace().getApplicationContext().startActivity(intent);
+                    } catch (ActivityNotFoundException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             };
 
