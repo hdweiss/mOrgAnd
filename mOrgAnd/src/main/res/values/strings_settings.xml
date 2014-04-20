@@ -8,6 +8,16 @@
     <string name="pref_header_general">General</string>
     <string name="pref_title_version">Version</string>
 
+    <!-- Interface settings -->
+    <string name="pref_header_interface">Interface</string>
+    <string name="pref_group_outline">Outline</string>
+
+    <string name="preference_show_drawers">Show drawers</string>
+    <string name="preference_show_drawers_summary">Show drawers in outline</string>
+
+    <string name="preference_show_settings">Show settings</string>
+    <string name="preference_show_settings_summary">Show file settings in outline</string>
+
 
     <!-- Settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

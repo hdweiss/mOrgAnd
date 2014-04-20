@@ -2,7 +2,11 @@
 
     <header
         android:fragment="com.hdweiss.morgand.settings.SettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general" />
+        android:title="@string/pref_header_general"/>
+
+    <header
+        android:fragment="com.hdweiss.morgand.settings.SettingsActivity$InterfacePreferenceFragment"
+        android:title="@string/pref_header_interface"/>
 
     <header
         android:fragment="com.hdweiss.morgand.settings.SettingsActivity$DataSyncPreferenceFragment"
@@ -16,6 +20,6 @@
 
     <header
         android:fragment="com.hdweiss.morgand.settings.SettingsActivity$CalendarPreferenceFragment"
-        android:title="@string/preference_calendar" />
+        android:title="@string/preference_calendar"/>
 
 </preference-headers>

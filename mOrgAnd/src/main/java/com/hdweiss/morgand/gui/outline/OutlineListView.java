@@ -80,7 +80,7 @@ public class OutlineListView extends ListView {
 				activeActionMode.finish();
 			
 			OrgNode node = adapter.getItem(position);
-			if(node.children.size() > 0) {
+			if(node.getDisplayChildren().size() > 0) {
 				adapter.collapseExpand(position);
 			}
 			else {

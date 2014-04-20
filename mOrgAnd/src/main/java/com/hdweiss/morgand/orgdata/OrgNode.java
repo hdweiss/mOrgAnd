@@ -1,6 +1,7 @@
 package com.hdweiss.morgand.orgdata;
 
 import com.hdweiss.morgand.utils.OrgNodeUtils;
+import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -35,6 +36,7 @@ public class OrgNode {
 
     @DatabaseField
     public Type type;
+
 
     @DatabaseField
     public int lineNumber;
@@ -151,6 +153,29 @@ public class OrgNode {
             return  parent.getBody();
 
         return title;
+    }
+
+    public ArrayList<OrgNode> getDisplayChildren() {
+        ArrayList<OrgNode> nodes = new ArrayList<OrgNode>();
+        boolean showSettings = PreferenceUtils.showSettings();
+        boolean showDrawers = PreferenceUtils.showDrawers();
+        for(OrgNode node: children) {
+            switch (node.type) {
+                case Drawer:
+                    if (showDrawers)
+                        nodes.add(node);
+                    break;
+
+                case Setting:
+                    if (showSettings)
+                        nodes.add(node);
+                    break;
+
+                default:
+                    nodes.add(node);
+            }
+        }
+        return nodes;
     }
 
     public OrgNode addChild(Type type, String title) {

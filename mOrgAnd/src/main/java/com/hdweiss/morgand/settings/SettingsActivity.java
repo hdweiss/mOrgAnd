@@ -40,6 +40,14 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
+    public static class InterfacePreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_interface);
+        }
+    }
+
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {

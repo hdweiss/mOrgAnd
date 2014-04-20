@@ -46,4 +46,12 @@ public class PreferenceUtils {
     public static boolean syncCalendar() {
         return getPrefs().getBoolean("calendar_enabled", false);
     }
+
+    public static boolean showDrawers() {
+        return getPrefs().getBoolean("show_drawers", true);
+    }
+
+    public static boolean showSettings() {
+        return getPrefs().getBoolean("show_settings", true);
+    }
 }

@@ -122,7 +122,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
     }
 
     private void setupChildIndicator(SpannableStringBuilder titleSpan) {
-        if (node.children.isEmpty() == false) {
+        if (node.getDisplayChildren().isEmpty() == false) {
             titleSpan.append("...");
             titleSpan.setSpan(new ForegroundColorSpan(theme.defaultForeground),
                     titleSpan.length() - "...".length(), titleSpan.length(), 0);

@@ -166,7 +166,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	
 	public void expand(int position) {
 		OrgNode node = getItem(position);
-        ArrayList<OrgNode> children = new ArrayList<OrgNode>(node.children);
+        ArrayList<OrgNode> children = node.getDisplayChildren();
         if (node.type == OrgNode.Type.Directory)
             Collections.sort(children, new OrgNode.OrgNodeCompare());
 		insertAll(children, position + 1);
