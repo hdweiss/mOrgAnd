@@ -172,7 +172,15 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		insertAll(children, position + 1);
 		this.expanded.set(position, true);
 	}
-	
+
+    public void collapseAll() {
+        for(int activePos = 0; activePos < expanded.size(); activePos++) {
+            if (expanded.get(activePos)) {
+                collapse(getItem(activePos), activePos);
+            }
+        }
+    }
+
 	@Override
 	public long getItemId(int position) {
 		return getItem(position).Id;

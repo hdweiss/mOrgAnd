@@ -3,6 +3,7 @@ package com.hdweiss.morgand.gui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,6 +22,13 @@ public class OutlineFragment extends Fragment {
     private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
     protected OutlineListView listView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Application.getBus().register(this);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public void onDestroy() {
@@ -44,7 +52,6 @@ public class OutlineFragment extends Fragment {
 
         listView.setActivity(getActivity());
         refreshView();
-        Application.getBus().register(this);
     }
 
 
@@ -74,6 +81,20 @@ public class OutlineFragment extends Fragment {
         outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                if (listView != null)
+                    listView.collapseCurrent();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
 
     @Subscribe
     public void refreshView(DataUpdatedEvent event) {
