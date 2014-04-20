@@ -86,10 +86,15 @@ public class OutlineItem extends RelativeLayout implements Checkable {
                 break;
 
             case Date:
+                setupTitle(theme.drawer);
+                tagsView.setText("");
+                break;
+
             case Body:
             case Checkbox:
             default:
-                SpannableStringBuilder titleSpan = setupTitle(theme.defaultForeground);
+                String formattedTitle = formatText(node.title);
+                SpannableStringBuilder titleSpan = setupTitle(theme.defaultForeground, formattedTitle);
                 setupUrls(titleSpan);
                 titleView.setText(titleSpan);
                 tagsView.setText("");
@@ -154,6 +159,23 @@ public class OutlineItem extends RelativeLayout implements Checkable {
             titleSpan.setSpan(new ForegroundColorSpan(theme.defaultForeground),
                     titleSpan.length() - "...".length(), titleSpan.length(), 0);
         }
+    }
+
+    private String formatText(String text) {
+        StringBuilder builder = new StringBuilder();
+
+        for(String line: text.trim().split("\n")) {
+            if (TextUtils.isEmpty(line))
+                builder.append("\n");
+            else if (line.startsWith("- ") || line.startsWith("+ "))
+                builder.append("\n").append(line);
+            else if (line.matches("^\\d+(\\.|\\)).*"))
+                builder.append("\n").append(line);
+            else
+                builder.append(line);
+        }
+
+        return builder.toString();
     }
 
     private void setupUrls(SpannableStringBuilder stringBuilder) {
