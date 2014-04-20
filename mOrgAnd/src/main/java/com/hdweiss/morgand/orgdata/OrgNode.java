@@ -73,7 +73,7 @@ public class OrgNode {
     }
 
     public String toString() {
-        return title + " (" + children.size() + ")";
+        return title + "\t" + tags;
     }
 
     public String toStringRecursively() {
