@@ -58,4 +58,8 @@ public class PreferenceUtils {
     public static boolean showSettings() {
         return getPrefs().getBoolean("show_settings", true);
     }
+
+    public static boolean outlineExpandAll() {
+        return getPrefs().getBoolean("outline_expandall", true);
+    }
 }

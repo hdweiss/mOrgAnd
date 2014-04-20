@@ -18,6 +18,9 @@
     <string name="preference_show_settings">Show settings</string>
     <string name="preference_show_settings_summary">Show file settings in outline</string>
 
+    <string name="preference_outline_expandall">Allow subtree expansion</string>
+    <string name="preference_outline_expandall_summary">Allow outline to mimic org-mode\'s visibility cycling of headlines</string>
+
 
     <!-- Settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>

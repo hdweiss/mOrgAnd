@@ -142,7 +142,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		
 		return this.expanded.get(position);
 	}
-	
+
 	public void collapseExpand(int position) {
 		if(position >= getCount() || position >= this.expanded.size() || position < 0)
 			return;
@@ -152,6 +152,29 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		else
 			expand(position);
 	}
+
+    /**
+     * @param doubleClicked Whether user clicked node the second time
+     * @return true expandAll was called
+     */
+    public boolean collapseExpandExpandAll(int position, boolean doubleClicked) {
+        if(position >= getCount() || position >= this.expanded.size() || position < 0)
+            return false;
+
+        if(this.expanded.get(position)) {
+            if (doubleClicked) {
+                expandAll(position);
+                return true;
+            } else {
+                collapse(getItem(position), position);
+                return false;
+            }
+        }
+        else {
+            expand(position);
+            return false;
+        }
+    }
 	
 	public void collapse(OrgNode node, int position) {
 		int activePos = position + 1;
@@ -163,21 +186,30 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		}
 		this.expanded.set(position, false);
 	}
-	
-	public void expand(int position) {
+
+    public void collapseAll() {
+        for(int activePos = 0; activePos < expanded.size(); activePos++) {
+            if (expanded.get(activePos))
+                collapse(getItem(activePos), activePos);
+        }
+    }
+
+
+	public ArrayList<OrgNode> expand(int position) {
 		OrgNode node = getItem(position);
         ArrayList<OrgNode> children = node.getDisplayChildren();
         if (node.type == OrgNode.Type.Directory)
             Collections.sort(children, new OrgNode.OrgNodeCompare());
 		insertAll(children, position + 1);
 		this.expanded.set(position, true);
+        return children;
 	}
 
-    public void collapseAll() {
-        for(int activePos = 0; activePos < expanded.size(); activePos++) {
-            if (expanded.get(activePos)) {
-                collapse(getItem(activePos), activePos);
-            }
+    public void expandAll(int position) {
+        ArrayList<OrgNode> expanded = expand(position);
+        for(OrgNode node: expanded) {
+            int nodePosition = getPosition(node);
+            expandAll(nodePosition);
         }
     }
 

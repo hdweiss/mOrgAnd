@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -21,7 +22,9 @@ public class OutlineListView extends ListView {
 	private OutlineAdapter adapter;
 	private OutlineActionMode actionMode;
 	private ActionMode activeActionMode = null;
-	
+
+    private int lastPositionClicked = -1;
+
 	public OutlineListView(Context context, AttributeSet atts) {
 		super(context, atts);
 		this.context = activity;
@@ -81,7 +84,16 @@ public class OutlineListView extends ListView {
 			
 			OrgNode node = adapter.getItem(position);
 			if(node.getDisplayChildren().size() > 0) {
-				adapter.collapseExpand(position);
+                if (PreferenceUtils.outlineExpandAll()) {
+                    boolean doubleClicked = lastPositionClicked == position;
+                    boolean collapsed = adapter.collapseExpandExpandAll(position, doubleClicked);
+                    if (collapsed) {
+                        lastPositionClicked = -1;
+                        return;
+                    }
+                }
+                else
+				    adapter.collapseExpand(position);
 			}
 			else {
 				boolean viewOnClick = PreferenceManager
@@ -94,6 +106,8 @@ public class OutlineListView extends ListView {
 					OutlineActionMode.runEditNodeActivity(node.Id, context);
 				//setParentChecked(position);
 			}
+
+            lastPositionClicked = position;
 		}
 	};
 	

@@ -201,5 +201,4 @@ public class OutlineItem extends RelativeLayout implements Checkable {
             tagsSpan.setSpan(new ForegroundColorSpan(theme.gray), 0, tagsSpan.length(), 0);
         tagsView.setText(tagsSpan);
     }
-
 }
