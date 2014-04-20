@@ -206,8 +206,12 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	}
 
     public void expandAll(int position) {
-        ArrayList<OrgNode> expanded = expand(position);
-        for(OrgNode node: expanded) {
+        if (expanded.get(position)) // TODO Hack
+            collapse(getItem(position), position);
+
+        ArrayList<OrgNode> expandedChildren = expand(position);
+
+        for(OrgNode node: expandedChildren) {
             int nodePosition = getPosition(node);
             expandAll(nodePosition);
         }
