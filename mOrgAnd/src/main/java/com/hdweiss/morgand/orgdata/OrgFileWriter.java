@@ -27,32 +27,39 @@ public class OrgFileWriter {
 
 
     public void write() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(orgFile.path));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(orgFile.path, false));
         for(String line: fileContent)
             writer.write(line);
         writer.close();
     }
 
+
     public void add(OrgNode node) {
+        addRange(node.parent.lineNumber, node.toStringRecursively());
+    }
+
+    public void delete(OrgNode node) {
+        if (node.lineNumber < 0)
+            return;
+        int nextNodeLineNumber = node.getNextNodeLineNumber();
+        removeRange(node.lineNumber, nextNodeLineNumber - 1);
+    }
+
+    public void overwrite(OrgNode node) {
+        delete(node);
+        add(node);
+    }
+
+    private void addRange(final int from, String content) {
 
     }
 
-    public void replace(OrgNode node) {
-        OrgNode nextNode = node.getNextNode();
-        int endLineNumber = nextNode != null ? nextNode.lineNumber : fileContent.size() - 1;
-        removeRange(node.lineNumber, endLineNumber);
-        fileContent.add(node.lineNumber, node.toString());
-    }
+    private void removeRange(final int from, final int to) {
+        if (from < 0 || from > to)
+            throw new IllegalArgumentException("Can't remove range from=" + from + " to=" + to + " fileContent.size()=" + fileContent.size());
 
-
-    private int removeRange(final int lineNumber, final int linesToDelete) {
-        if (lineNumber < 0 || fileContent.size() < lineNumber + linesToDelete)
-            throw new IllegalArgumentException("removeRange called with invalid arguments: lineNumber=" + lineNumber
-            + " linesToDelete=" + linesToDelete);
-
-        for (int i = 0; i < linesToDelete; i++)
-            fileContent.remove(lineNumber + i);
-        return linesToDelete;
+        for (int i = from; i < to && i < fileContent.size(); i++)
+            fileContent.remove(from + i);
     }
 
     public String toString() {

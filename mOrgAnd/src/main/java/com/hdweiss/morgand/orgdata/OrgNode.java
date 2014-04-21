@@ -45,7 +45,7 @@ public class OrgNode {
 
     public static final String LINENUMBER_FIELD_NAME = "lineNumber";
     @DatabaseField(columnName =  LINENUMBER_FIELD_NAME)
-    public int lineNumber;
+    public int lineNumber = -1;
 
     public static final String STATE_FIELD_NAME = "state";
     @DatabaseField(columnName = STATE_FIELD_NAME)
@@ -76,13 +76,10 @@ public class OrgNode {
     }
 
     public String toStringRecursively() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder(toString());
 
-        builder.append(toString()).append("\n");
-
-        for(OrgNode child : children) {
-            builder.append(child.toString()).append("\n");
-        }
+        for(OrgNode child : children)
+            builder.append("\n").append(child.toString());
 
         return builder.toString();
     }
@@ -189,18 +186,22 @@ public class OrgNode {
     }
 
     /**
-     * @return Node that is next in the org file.
+     * @return line number of next node on same or higher level than current node.
      */
-    public OrgNode getNextNode() {
+    public int getNextNodeLineNumber() {
         try {
             Where<OrgNode, Integer> where = OrgNodeRepository.getDao().queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
             where.eq(FILE_FIELD_NAME, file).and().gt(LINENUMBER_FIELD_NAME, lineNumber).and().le(LEVEL_FIELD_NAME, level);
-            return where.queryForFirst();
+            OrgNode node = where.queryForFirst();
+            if (node != null)
+                return node.lineNumber;
+            else
+                return Integer.MAX_VALUE; // Current node seems to be last in file
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return -1;
     }
 
     public List<OrgNodeDate> getOrgNodeDates() {
