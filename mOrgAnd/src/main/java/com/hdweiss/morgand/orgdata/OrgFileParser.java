@@ -124,6 +124,7 @@ public class OrgFileParser {
         OrgNode node = new OrgNode();
         node.file = orgFile;
         node.parent = parseStack.getCurrentNode();
+        node.level = parseStack.getCurrentLevel() + 1;
         node.title = line;
         node.type = type;
         node.lineNumber = reader.getLineNumber();

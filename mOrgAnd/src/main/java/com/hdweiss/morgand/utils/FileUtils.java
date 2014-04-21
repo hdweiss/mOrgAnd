@@ -1,6 +1,10 @@
 package com.hdweiss.morgand.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileUtils {
 
@@ -20,5 +24,16 @@ public class FileUtils {
             }
         }
         return( path.delete() );
+    }
+
+
+    public static ArrayList<String> fileToArrayList(String fileName) throws IOException {
+        String line;
+        BufferedReader in = new BufferedReader(new FileReader(new File(fileName)));
+        ArrayList<String> fileContent = new ArrayList<String>();
+        while ((line = in.readLine()) != null)
+            fileContent.add(line);
+
+        return fileContent;
     }
 }

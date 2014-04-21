@@ -98,6 +98,8 @@ public class OrgRepository {
         node.type = OrgNode.Type.Directory;
         node.parent = parent;
         node.title = file.getName();
+        if (parent != null)
+            node.level = parent.level + 1;
         nodeDao.create(node);
         return node;
     }
@@ -131,6 +133,8 @@ public class OrgRepository {
         rootNode.title = file.getName();
         rootNode.file = orgFile;
         rootNode.parent = parent;
+        if (parent != null)
+            rootNode.level = parent.level + 1;
         return rootNode;
     }
 }

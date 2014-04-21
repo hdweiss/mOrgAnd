@@ -5,8 +5,10 @@ import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -37,8 +39,12 @@ public class OrgNode {
     @DatabaseField
     public Type type;
 
+    public static final String LEVEL_FIELD_NAME = "level";
+    @DatabaseField(columnName = LEVEL_FIELD_NAME)
+    public int level = 0;
 
-    @DatabaseField
+    public static final String LINENUMBER_FIELD_NAME = "lineNumber";
+    @DatabaseField(columnName =  LINENUMBER_FIELD_NAME)
     public int lineNumber;
 
     public static final String STATE_FIELD_NAME = "state";
@@ -62,13 +68,6 @@ public class OrgNode {
 
 
     public int getLevel() {
-        int level = 0;
-        OrgNode currentParent = parent;
-        while(currentParent != null) {
-            level++;
-            currentParent = currentParent.parent;
-        }
-
         return level;
     }
 
@@ -187,6 +186,21 @@ public class OrgNode {
 
         OrgNodeRepository.getDao().create(node);
         return node;
+    }
+
+    /**
+     * @return Node that is next in the org file.
+     */
+    public OrgNode getNextNode() {
+        try {
+            Where<OrgNode, Integer> where = OrgNodeRepository.getDao().queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
+            where.eq(FILE_FIELD_NAME, file).and().gt(LINENUMBER_FIELD_NAME, lineNumber).and().le(LEVEL_FIELD_NAME, level);
+            return where.queryForFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public List<OrgNodeDate> getOrgNodeDates() {

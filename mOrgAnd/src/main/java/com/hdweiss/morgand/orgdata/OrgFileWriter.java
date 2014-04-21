@@ -1,11 +1,8 @@
 package com.hdweiss.morgand.orgdata;
 
-import android.util.Log;
+import com.hdweiss.morgand.utils.FileUtils;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,74 +10,48 @@ import java.util.ArrayList;
 public class OrgFileWriter {
 
     private final OrgFile orgFile;
+    private ArrayList<String> fileContent;
 
-    private ArrayList<String> fileContent = new ArrayList<String>();
+    public OrgFileWriter(OrgFile orgFile) throws IOException {
+        this.orgFile = orgFile;
+        fileContent = FileUtils.fileToArrayList(orgFile.path);
+    }
 
+    /**
+     * Constructor for unit testing.
+     */
     public OrgFileWriter(OrgFile orgFile, ArrayList<String> fileContent) {
         this.orgFile = orgFile;
         this.fileContent = fileContent;
     }
 
-    public OrgFileWriter(OrgFile orgFile) {
-        this.orgFile = orgFile;
-        read();
+
+    public void write() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(orgFile.path));
+        for(String line: fileContent)
+            writer.write(line);
+        writer.close();
     }
 
-    private void read() {
-        String fileName = orgFile.path;
-        try {
-            String line;
-            BufferedReader in = new BufferedReader(new FileReader(new File(fileName)));
-            while ((line = in.readLine()) != null)
-                fileContent.add(line);
-        } catch (IOException e) {
-            Log.e("OrgFileWriter", "Failed to read file", e);
-        }
+    public void add(OrgNode node) {
+
     }
 
-    public void write() {
-        String fileName = orgFile.path;
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-            writer.write(fileContent.toString()); // TODO This might be slow
-            writer.close();
-        } catch (IOException e) {
-            Log.e("OrgFileWriter", "Failed to write file", e);
-        }
+    public void replace(OrgNode node) {
+        OrgNode nextNode = node.getNextNode();
+        int endLineNumber = nextNode != null ? nextNode.lineNumber : fileContent.size() - 1;
+        removeRange(node.lineNumber, endLineNumber);
+        fileContent.add(node.lineNumber, node.toString());
     }
 
 
-    public void replaceHeading(int linenumber, OrgNode node) {
-        if (OrgFileParser.numberOfStars(fileContent.get(linenumber)) <= 0)
-            throw new IllegalArgumentException("Heading not found on line number");
-        fileContent.remove(linenumber);
-        fileContent.add(linenumber, node.toString());
-    }
+    private int removeRange(final int lineNumber, final int linesToDelete) {
+        if (lineNumber < 0 || fileContent.size() < lineNumber + linesToDelete)
+            throw new IllegalArgumentException("removeRange called with invalid arguments: lineNumber=" + lineNumber
+            + " linesToDelete=" + linesToDelete);
 
-    public void replacePayload(int linenumber, OrgNode node) {
-        if (OrgFileParser.numberOfStars(fileContent.get(linenumber)) > 0)
-            throw new IllegalArgumentException("Heading found on line number instead of payload");
-
-        removePayload(linenumber);
-        fileContent.add(linenumber, node.toStringRecursively());
-    }
-
-    private int removePayload(final int linenumber) {
-        int nextHeadingIndex = linenumber + 1;
-        while (true) {
-            if (fileContent.size() <= nextHeadingIndex)
-                break;
-
-            int numberOfStars = OrgFileParser.numberOfStars(fileContent.get(nextHeadingIndex));
-            if (numberOfStars > 0)
-                break;
-
-            nextHeadingIndex++;
-        }
-
-        int linesToDelete = nextHeadingIndex - linenumber;
         for (int i = 0; i < linesToDelete; i++)
-            fileContent.remove(linenumber + i);
+            fileContent.remove(lineNumber + i);
         return linesToDelete;
     }
 
