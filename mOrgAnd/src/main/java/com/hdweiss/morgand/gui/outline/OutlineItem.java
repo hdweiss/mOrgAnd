@@ -179,6 +179,8 @@ public class OutlineItem extends RelativeLayout implements Checkable {
                 builder.append("\n");
             else if (line.startsWith("- ") || line.startsWith("+ "))
                 builder.append("\n").append(line);
+            else if (line.startsWith("|") && line.endsWith("|"))
+                builder.append("\n").append(line);
             else if (line.matches("^\\d+(\\.|\\)).*"))
                 builder.append("\n").append(line);
             else
