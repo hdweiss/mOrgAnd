@@ -9,6 +9,7 @@ import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.Theme.DefaultTheme;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+import com.hdweiss.morgand.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	}
 	
 	
-	public long[] getState() {
+	public long[] getNodeState() {
 		int count = getCount();
 		long[] state = new long[count];
 		
@@ -49,8 +50,16 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		
 		return state;
 	}
-	
-	public void setState(long[] state) {
+
+    public ArrayList<Integer> getLevelState() {
+        return this.level;
+    }
+
+    public boolean[] getExpandedState() {
+        return Utils.toPrimitiveArray(this.expanded);
+    }
+
+	public void setState(long[] state, ArrayList<Integer> levels, boolean[] expanded) {
 		clear();
 		
 		for(int i = 0; i < state.length; i++) {
@@ -59,6 +68,11 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
                 add(node);
             } catch(Exception ex) {}
 		}
+
+        this.expanded.clear();
+        for(boolean expand: expanded)
+            this.expanded.add(expand);
+        this.level = levels;
 	}
 	
 	public void refresh() {

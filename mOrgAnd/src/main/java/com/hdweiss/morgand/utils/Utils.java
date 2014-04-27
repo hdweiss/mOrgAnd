@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.List;
 
 public class Utils {
     public static String ExceptionTraceToString(Exception exception) {
@@ -59,5 +60,14 @@ public class Utils {
         else
             return isWifiOnline(context)
                     || isMobileOnline(context);
+    }
+
+    public static boolean[] toPrimitiveArray(final List<Boolean> booleanList) {
+        final boolean[] primitives = new boolean[booleanList.size()];
+        int index = 0;
+        for (Boolean object : booleanList) {
+            primitives[index++] = object;
+        }
+        return primitives;
     }
 }

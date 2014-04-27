@@ -15,9 +15,13 @@ import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+
 public class OutlineFragment extends Fragment {
 
     private final static String OUTLINE_NODES = "nodes";
+    private final static String OUTLINE_LEVELS = "levels";
+    private final static String OUTLINE_EXPANDED = "expanded";
     private final static String OUTLINE_CHECKED_POS = "selection";
     private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
@@ -63,8 +67,10 @@ public class OutlineFragment extends Fragment {
             return;
 
         long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
+        ArrayList<Integer> levels = savedInstanceState.getIntegerArrayList(OUTLINE_LEVELS);
+        boolean[] expanded = savedInstanceState.getBooleanArray(OUTLINE_EXPANDED);
         if(state != null)
-            listView.setState(state);
+            listView.setState(state, levels, expanded);
 
         int checkedPos= savedInstanceState.getInt(OUTLINE_CHECKED_POS, 0);
         listView.setItemChecked(checkedPos, true);
@@ -76,7 +82,9 @@ public class OutlineFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLongArray(OUTLINE_NODES, listView.getState());
+        outState.putLongArray(OUTLINE_NODES, listView.getNodeState());
+        outState.putIntegerArrayList(OUTLINE_LEVELS, listView.getLevelState());
+        outState.putBooleanArray(OUTLINE_EXPANDED, listView.getExpandedState());
         outState.putInt(OUTLINE_CHECKED_POS, listView.getCheckedItemPosition());
         outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
     }

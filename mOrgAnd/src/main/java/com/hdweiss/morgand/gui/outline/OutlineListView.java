@@ -13,6 +13,7 @@ import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.hdweiss.morgand.utils.PreferenceUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OutlineListView extends ListView {
@@ -47,12 +48,20 @@ public class OutlineListView extends ListView {
 		this.context = activity;
 	}
 
-	public long[] getState() {
-		return this.adapter.getState();
+	public long[] getNodeState() {
+		return this.adapter.getNodeState();
 	}
-	
-	public void setState(long[] state) {
-		this.adapter.setState(state);
+
+    public ArrayList<Integer> getLevelState() {
+        return this.adapter.getLevelState();
+    }
+
+    public boolean[] getExpandedState() {
+        return this.adapter.getExpandedState();
+    }
+
+	public void setState(long[] state, ArrayList<Integer> levels, boolean[] expanded) {
+		this.adapter.setState(state, levels, expanded);
 	}
 	
 	public void refresh() {
