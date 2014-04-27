@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.hdweiss.morgand.utils.PreferenceUtils;
 
 import java.util.List;
@@ -99,7 +100,14 @@ public class OutlineListView extends ListView {
 				boolean viewOnClick = PreferenceManager
 						.getDefaultSharedPreferences(context).getBoolean(
 								"viewOnClick", false);
-				
+
+                if (node.type == OrgNode.Type.Checkbox) {
+                    OrgNodeUtils.toggleCheckbox(node);
+                    adapter.notifyDataSetInvalidated();
+                    return;
+                }
+
+
 				if (viewOnClick)
 					OutlineActionMode.runViewNodeActivity(node.Id, context);
 				else

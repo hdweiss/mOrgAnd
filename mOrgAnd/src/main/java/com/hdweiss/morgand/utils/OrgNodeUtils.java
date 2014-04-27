@@ -2,7 +2,11 @@ package com.hdweiss.morgand.utils;
 
 import android.text.TextUtils;
 
+import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+
 import java.util.HashSet;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OrgNodeUtils {
@@ -35,5 +39,39 @@ public class OrgNodeUtils {
             result.deleteCharAt(result.lastIndexOf(":"));
 
         return result.toString();
+    }
+
+    public static void toggleCheckbox(OrgNode node) {
+        boolean checkedOff = node.title.contains("- [ ]");
+        if (checkedOff) {
+            node.title = node.title.replaceFirst("-\\s\\[\\s\\]", "- [X]");
+        } else
+            node.title = node.title.replaceFirst("-\\s\\[X\\]", "- [ ]");
+
+        OrgNodeRepository.getDao().update(node);
+
+        if (node.parent == null)
+            return;
+
+        updateCheckboxCookie(node.parent, checkedOff);
+    }
+
+    private static void updateCheckboxCookie(OrgNode node, boolean increment) {
+        try {
+            Matcher matcher = Pattern.compile("\\[(\\d+)/(\\d+)\\]").matcher(node.title);
+            if (matcher.find()) {
+                int currentAmount = Integer.parseInt(matcher.group(1));
+                int total = Integer.parseInt(matcher.group(2));
+                currentAmount = increment ? currentAmount + 1 : currentAmount - 1;
+
+                if (currentAmount < 0)
+                    return;
+
+                node.title = node.title.replace(matcher.group(), "[" + currentAmount + "/" + total + "]");
+                OrgNodeRepository.getDao().update(node);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
