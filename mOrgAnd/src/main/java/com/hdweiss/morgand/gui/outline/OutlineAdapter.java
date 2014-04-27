@@ -17,11 +17,12 @@ import java.util.Collections;
 public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 
 	private ArrayList<Boolean> expanded = new ArrayList<Boolean>();
+    private ArrayList<Integer> level = new ArrayList<Integer>();
 
 	private DefaultTheme theme;
-	
+
 	private boolean agendaMode = false;
-	
+
 	public OutlineAdapter(Context context) {
 		super(context, R.layout.outline_item);
 
@@ -93,32 +94,36 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 			outlineItem = new OutlineItem(getContext());
 
 		outlineItem.setAgendaMode(agendaMode);
+        outlineItem.setup(getItem(position), getExpanded(position), getLevel(position), theme);
 
-        if (this.expanded.size() > position);
-		    outlineItem.setup(getItem(position), this.expanded.get(position), theme);
 		return outlineItem;
 	}
 
 	public void setAgendaMode(boolean agendaMode) {
 		this.agendaMode = agendaMode;
 	}
-	
+
 	@Override
 	public void clear() {
 		super.clear();
 		this.expanded.clear();
+        this.level.clear();
 	}
 
 	@Override
 	public void add(OrgNode node) {
 		super.add(node);
 		this.expanded.add(false);
+        this.level.add(0);
 	}
 
 	@Override
 	public void insert(OrgNode node, int index) {
 		super.insert(node, index);
 		this.expanded.add(index, false);
+
+        int level = index > 0 ? this.level.get(index - 1) + 1 : 0;
+        this.level.add(index, level);
 	}
 	
 	public void insertAll(Collection<OrgNode> nodes, int position) {
@@ -133,6 +138,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	public void remove(OrgNode node) {
 		int position = getPosition(node);
 		this.expanded.remove(position);
+        this.level.remove(position);
 		super.remove(node);
 	}
 
@@ -143,12 +149,19 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		return this.expanded.get(position);
 	}
 
+    public int getLevel(int position) {
+        if (position < 0 || position > this.level.size())
+            return 0;
+
+        return this.level.get(position);
+    }
+
 	public void collapseExpand(int position) {
 		if(position >= getCount() || position >= this.expanded.size() || position < 0)
 			return;
 		
 		if(this.expanded.get(position))
-			collapse(getItem(position), position);
+			collapse(position);
 		else
 			expand(position);
 	}
@@ -166,7 +179,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
                 expandAll(position);
                 return true;
             } else {
-                collapse(getItem(position), position);
+                collapse(position);
                 return false;
             }
         }
@@ -176,12 +189,12 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
         }
     }
 	
-	public void collapse(OrgNode node, int position) {
+	public void collapse(int position) {
 		int activePos = position + 1;
 		while(activePos < this.expanded.size()) {
-			if(getItem(activePos).getLevel() <= node.getLevel())
+			if(getLevel(activePos) <= getLevel(position))
 				break;
-			collapse(getItem(activePos), activePos);
+			collapse(activePos);
 			remove(getItem(activePos));
 		}
 		this.expanded.set(position, false);
@@ -190,7 +203,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
     public void collapseAll() {
         for(int activePos = 0; activePos < expanded.size(); activePos++) {
             if (expanded.get(activePos))
-                collapse(getItem(activePos), activePos);
+                collapse(activePos);
         }
     }
 
@@ -200,14 +213,14 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
         ArrayList<OrgNode> children = node.getDisplayChildren();
         if (node.type == OrgNode.Type.Directory)
             Collections.sort(children, new OrgNode.OrgNodeCompare());
+
 		insertAll(children, position + 1);
 		this.expanded.set(position, true);
         return children;
 	}
 
     public void expandAll(int position) {
-        if (expanded.get(position)) // TODO Hack
-            collapse(getItem(position), position);
+        collapse(position); // TODO Hack
 
         ArrayList<OrgNode> expandedChildren = expand(position);
 
@@ -226,9 +239,8 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		if(position >= getCount() || position < 0)
 			return -1;
 		
-		long currentLevel = getItem(position).getLevel();
 		for(int activePos = position - 1; activePos >= 0; activePos--) {
-			if(getItem(activePos).getLevel() < currentLevel)
+			if(getLevel(activePos) < getLevel(position))
 				return activePos;
 		}
 		

@@ -147,7 +147,7 @@ public class OutlineListView extends ListView {
 		if (adapter.getExpanded(position)) // Item is expanded, collapse it
 			adapter.collapseExpand(position);
 		else {
-			if(adapter.getItem(position).getLevel() == 0) { // Top level, collapse all entries
+			if(adapter.getLevel(position) == 0) { // Top level, collapse all entries
 				adapter.collapseAll();
 				setItemChecked(position, false);
 			} else {									// Collapse parent

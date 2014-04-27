@@ -64,7 +64,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
         this.agendaMode = enabled;
     }
 
-    public void setup(OrgNode node, boolean expanded, DefaultTheme theme) {
+    public void setup(OrgNode node, boolean expanded, int level, DefaultTheme theme) {
         this.node = node;
         this.theme = theme;
 
@@ -86,7 +86,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
             case File:
             case Headline:
-                setupHeadlineTitle();
+                setupHeadlineTitle(level);
                 setupTags();
                 break;
 
@@ -125,16 +125,11 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
 
     // TODO Mark up COMMENT and Archive nodes
-    private void setupHeadlineTitle() {
+    private void setupHeadlineTitle(int level) {
         SpannableStringBuilder titleSpan = new SpannableStringBuilder();
 
-        if (agendaMode) {
-            final String title = node.title.replaceFirst("^\\**", "*");
-            titleSpan.append(title);
-        } else {
-            titleSpan.append(node.title);
-            titleView.setPadding(node.getLevel() * 5, titleView.getPaddingTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
-        }
+        titleSpan.append(node.title);
+        titleView.setPadding(level * 5, titleView.getPaddingTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
 
         setupUrls(titleSpan);
         setupTodoKeyword(titleSpan);

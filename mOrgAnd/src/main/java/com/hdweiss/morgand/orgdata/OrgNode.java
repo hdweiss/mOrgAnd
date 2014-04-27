@@ -67,10 +67,6 @@ public class OrgNode {
     public String inheritedTags;
 
 
-    public int getLevel() {
-        return level;
-    }
-
     public String toString() {
         return title + "\t" + tags;
     }
