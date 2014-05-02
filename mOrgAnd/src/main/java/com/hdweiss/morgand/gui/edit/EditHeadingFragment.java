@@ -1,14 +1,11 @@
 package com.hdweiss.morgand.gui.edit;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -21,7 +18,7 @@ import com.hdweiss.morgand.utils.Utils;
 
 import java.util.HashSet;
 
-public class EditHeadingFragment extends DialogFragment implements TextView.OnEditorActionListener {
+public class EditHeadingFragment extends EditBaseFragment {
 
     private OrgNode node;
 
@@ -91,15 +88,5 @@ public class EditHeadingFragment extends DialogFragment implements TextView.OnEd
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, Utils.toList(todoKeywords));
         headingView.setAdapter(adapter);
-    }
-
-    @Override
-    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        if (EditorInfo.IME_ACTION_DONE == actionId) {
-            dismiss();
-            return true;
-        }
-
-        return false;
     }
 }

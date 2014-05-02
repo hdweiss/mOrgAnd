@@ -1,16 +1,12 @@
 package com.hdweiss.morgand.gui.edit;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
@@ -18,7 +14,7 @@ import com.hdweiss.morgand.orgdata.OrgNodeTimeDate;
 
 import java.util.Calendar;
 
-public class EditDateFragment extends DialogFragment implements TextView.OnEditorActionListener {
+public class EditDateFragment extends EditBaseFragment {
 
     private OrgNodeTimeDate.TYPE type;
     private OrgNodeTimeDate timeDate;
@@ -147,16 +143,5 @@ public class EditDateFragment extends DialogFragment implements TextView.OnEdito
         }
 
         return resultTimeDate;
-    }
-
-
-    @Override
-    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        if (EditorInfo.IME_ACTION_DONE == actionId) {
-            dismiss();
-            return true;
-        }
-
-        return false;
     }
 }
