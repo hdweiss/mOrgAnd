@@ -162,6 +162,7 @@ public class OrgFileParser {
         matcher.find();
         final String heading = matcher.group(1) == null ? "" : matcher.group(1).trim();
         OrgNode node = getNodeFromLine(OrgNode.Type.Headline, heading);
+        node.level = starCount;
         if (matcher.group(2) != null)
             node.tags = matcher.group(2);
 		parseStack.add(starCount, node);
