@@ -126,7 +126,7 @@ public class OrgNode {
     public String getTodo() {
         if (type == Type.Headline) {
 
-            Matcher matcher = OrgNodeUtils.todoPattern.matcher(title);
+            Matcher matcher = OrgNodeUtils.headingPattern.matcher(title);
             if (matcher.find())
                 return matcher.group(1);
         }

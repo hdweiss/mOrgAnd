@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Utils {
@@ -69,5 +71,13 @@ public class Utils {
             primitives[index++] = object;
         }
         return primitives;
+    }
+
+    public static List<String> toList(HashSet<String> set) {
+        ArrayList<String> list = new ArrayList<String>();
+        if (set == null)
+            return list;
+        list.addAll(set);
+        return list;
     }
 }

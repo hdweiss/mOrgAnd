@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.gui.Theme;
+package com.hdweiss.morgand.gui.theme;
 
 import android.graphics.Color;
 

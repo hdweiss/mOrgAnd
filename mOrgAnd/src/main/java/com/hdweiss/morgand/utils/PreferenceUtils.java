@@ -31,6 +31,12 @@ public class PreferenceUtils {
         return getHashSetFromPreferenceString("todo_active", "TODO:NEXT", ":");
     }
 
+    public static HashSet<String> getAllTodoKeywords() {
+        HashSet<String> todoKeywords = getActiveTodoKeywords();
+        todoKeywords.addAll(getInactiveTodoKeywords());
+        return todoKeywords;
+    }
+
     public static HashSet<String> getPriorties() {
         return getHashSetFromPreferenceString("priorities", "A:B:C", ":");
     }

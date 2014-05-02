@@ -7,8 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgNode;
 
 
@@ -48,17 +46,17 @@ public class OutlineActionMode implements ActionMode.Callback {
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
 		
-		if (this.node != null && this.node.Id >= 0 && node.isEditable()) {
-	        inflater.inflate(R.menu.outline_node, menu);
-		}
-		else if(this.node != null && this.node.type == OrgNode.Type.File) {
-			if(this.node.title.equals(OrgFile.AGENDA_FILE_ALIAS))
-		        inflater.inflate(R.menu.outline_file_uneditable, menu);
-			else
-				inflater.inflate(R.menu.outline_file, menu);
-		} else
-	        inflater.inflate(R.menu.outline_node_uneditable, menu);
-        
+//		if (this.node != null && this.node.Id >= 0 && node.isEditable()) {
+//	        inflater.inflate(R.menu.outline_node, menu);
+//		}
+//		else if(this.node != null && this.node.type == OrgNode.Type.File) {
+//			if(this.node.title.equals(OrgFile.AGENDA_FILE_ALIAS))
+//		        inflater.inflate(R.menu.outline_file_uneditable, menu);
+//			else
+//				inflater.inflate(R.menu.outline_file, menu);
+//		} else
+//	        inflater.inflate(R.menu.outline_node_uneditable, menu);
+//
         return true;
 	}
 	
@@ -71,32 +69,32 @@ public class OutlineActionMode implements ActionMode.Callback {
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 
-		case R.id.menu_edit:
-			runEditNodeActivity(node.Id, context);
-			break;
-		case R.id.menu_delete:
-			runDeleteNode();
-			break;
-		case R.id.menu_delete_file:
-			runDeleteFileNode();
-			break;
-		case R.id.menu_clockin:
-			runTimeClockingService();
-			break;
-		case R.id.menu_archive:
-			runArchiveNode(false);
-			break;
-		case R.id.menu_view:
-			runViewNodeActivity();
-			break;
-
-		case R.id.menu_capturechild:
-			runCaptureActivity(node.Id, context);
-			break;
-			
-		default:
-			mode.finish();
-			return false;
+//		case R.id.menu_edit:
+//			runEditNodeActivity(node.Id, context);
+//			break;
+//		case R.id.menu_delete:
+//			runDeleteNode();
+//			break;
+//		case R.id.menu_delete_file:
+//			runDeleteFileNode();
+//			break;
+//		case R.id.menu_clockin:
+//			runTimeClockingService();
+//			break;
+//		case R.id.menu_archive:
+//			runArchiveNode(false);
+//			break;
+//		case R.id.menu_view:
+//			runViewNodeActivity();
+//			break;
+//
+//		case R.id.menu_capturechild:
+//			runCaptureActivity(node.Id, context);
+//			break;
+//
+//		default:
+//			mode.finish();
+//			return false;
 		}
 
 		mode.finish();

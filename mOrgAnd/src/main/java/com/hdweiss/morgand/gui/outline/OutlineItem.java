@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.gui.Theme.DefaultTheme;
+import com.hdweiss.morgand.gui.theme.DefaultTheme;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.hdweiss.morgand.utils.PreferenceUtils;
@@ -141,7 +141,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
     }
 
     private void setupTodoKeyword(SpannableStringBuilder titleSpan) {
-        Matcher matcher = OrgNodeUtils.todoPattern.matcher(titleSpan);
+        Matcher matcher = OrgNodeUtils.headingPattern.matcher(titleSpan);
         if (matcher.find()) {
             String todoKeyword = matcher.group(1);
 

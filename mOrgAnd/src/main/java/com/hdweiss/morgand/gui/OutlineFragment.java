@@ -1,15 +1,20 @@
 package com.hdweiss.morgand.gui;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.gui.edit.EditHeadingFragment;
 import com.hdweiss.morgand.gui.outline.OutlineListView;
+import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -90,11 +95,29 @@ public class OutlineFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.outline, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
                 if (listView != null)
                     listView.collapseCurrent();
+                break;
+
+            case R.id.add_child:
+                int position = listView.getCheckedItemPosition();
+                if (position < 0)
+                    return true;
+
+                OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
+
+                EditHeadingFragment editHeadingFragment = new EditHeadingFragment(node);
+                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+                fragmentTransaction.add(editHeadingFragment, "dialog");
+                fragmentTransaction.commit();
                 break;
 
             default:

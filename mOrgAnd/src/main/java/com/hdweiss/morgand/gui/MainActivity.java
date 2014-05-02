@@ -20,7 +20,6 @@ import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.CalendarWrapper;
 import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
-import com.hdweiss.morgand.synchronizer.SyncCalendarTask;
 import com.hdweiss.morgand.synchronizer.SyncEvent;
 import com.hdweiss.morgand.synchronizer.SyncGitTask;
 import com.squareup.otto.Subscribe;
@@ -53,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowTitleEnabled(false);
+        //actionBar.setDisplayShowTitleEnabled(false);
 
         actionBar.setHomeButtonEnabled(true);
         //actionBar.setDisplayHomeAsUpEnabled(false);
@@ -182,11 +181,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             case R.id.action_sync:
                 SyncGitTask synchronizerTask = new SyncGitTask(this);
                 synchronizerTask.execute();
-                break;
-
-            case R.id.action_calendar:
-                SyncCalendarTask calendarTask = new SyncCalendarTask(this);
-                calendarTask.execute("/sdcard/morg/GTD.org");
                 break;
 
             case R.id.action_clearDB:
