@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.gui.edit.EditHeadingFragment;
+import com.hdweiss.morgand.gui.edit.EditDateFragment;
 import com.hdweiss.morgand.gui.outline.OutlineListView;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
@@ -114,10 +114,15 @@ public class OutlineFragment extends Fragment {
 
                 OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
 
-                EditHeadingFragment editHeadingFragment = new EditHeadingFragment(node);
+                EditDateFragment editHeadingFragment = new EditDateFragment();
                 FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
                 fragmentTransaction.add(editHeadingFragment, "dialog");
                 fragmentTransaction.commit();
+
+//                EditHeadingFragment editHeadingFragment = new EditHeadingFragment(node);
+//                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+//                fragmentTransaction.add(editHeadingFragment, "dialog");
+//                fragmentTransaction.commit();
                 break;
 
             default:

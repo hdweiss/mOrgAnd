@@ -56,7 +56,9 @@ public class OrgNodeTimeDate {
 
 				endTimeOfDay = Integer.parseInt(propm.group(10));
 				endMinute = Integer.parseInt(propm.group(11));
-			} catch (NumberFormatException e) {}
+			} catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
 		}
 	}
 

@@ -25,6 +25,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_sync">Synchronize</string>
     <string name="save">Save</string>
+    <string name="action_set_time">Set time</string>
 
     <string name="error_sync">Synchronization failed</string>
     <string name="error_key_file_copy">Error copying key file to internal storage</string>
