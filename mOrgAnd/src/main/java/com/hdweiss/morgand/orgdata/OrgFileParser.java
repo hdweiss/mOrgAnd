@@ -114,7 +114,7 @@ public class OrgFileParser {
         if (trimmedLine.matches(".*<\\d{4}-\\d{2}-\\d{2}.*>.*"))
             return OrgNode.Type.Date;
 
-        if (trimmedLine.matches("\\s*:\\w*:\\s*"))
+        if (trimmedLine.matches("\\s*:\\w*:\\s*(.+)?"))
             return OrgNode.Type.Drawer;
 
         return OrgNode.Type.Body;
