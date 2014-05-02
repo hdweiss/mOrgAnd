@@ -14,21 +14,28 @@
         android:dropDownWidth="fill_parent"
         android:imeOptions="actionDone"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/heading"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/inheritedTags" />
+        android:orientation="horizontal">
 
-    <AutoCompleteTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tags"
-        android:layout_below="@+id/heading"
-        android:layout_toRightOf="@+id/inheritedTags"
-        android:hint="Tag1 Tag2"
-        android:inputType="textCapWords"
-        android:imeOptions="actionDone"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/inheritedTags" />
+
+        <AutoCompleteTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tags"
+            android:hint="Tag1 Tag2"
+            android:inputType="textCapWords"
+            android:imeOptions="actionDone"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

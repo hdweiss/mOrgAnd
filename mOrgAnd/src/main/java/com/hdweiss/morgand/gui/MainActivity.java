@@ -178,6 +178,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
+
             case R.id.action_sync:
                 SyncGitTask synchronizerTask = new SyncGitTask(this);
                 synchronizerTask.execute();

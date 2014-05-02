@@ -2,6 +2,7 @@ package com.hdweiss.morgand.gui.edit;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +25,9 @@ public class EditHeadingFragment extends DialogFragment implements TextView.OnEd
 
     private OrgNode node;
 
-    private AutoCompleteTextView heading;
-    private TextView inheritedTags;
-    private AutoCompleteTextView tags;
+    private AutoCompleteTextView headingView;
+    private TextView inheritedTagsView;
+    private AutoCompleteTextView tagsView;
 
     // Android requires empty constructor
     public EditHeadingFragment() {}
@@ -41,13 +42,13 @@ public class EditHeadingFragment extends DialogFragment implements TextView.OnEd
 
         getDialog().setTitle(R.string.action_capture);
 
-        tags = (AutoCompleteTextView) view.findViewById(R.id.tags);
-        inheritedTags = (TextView) view.findViewById(R.id.inheritedTags);
+        tagsView = (AutoCompleteTextView) view.findViewById(R.id.tags);
+        inheritedTagsView = (TextView) view.findViewById(R.id.inheritedTags);
 
-        heading = (AutoCompleteTextView) view.findViewById(R.id.heading);
-        heading.setOnEditorActionListener(this);
-        heading.setThreshold(0);
-        heading.requestFocus();
+        headingView = (AutoCompleteTextView) view.findViewById(R.id.heading);
+        headingView.setOnEditorActionListener(this);
+        headingView.setThreshold(0);
+        headingView.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -59,27 +60,37 @@ public class EditHeadingFragment extends DialogFragment implements TextView.OnEd
         super.onViewCreated(view, savedInstanceState);
 
         if (node != null)
-            populateAddView(node);
+            populateEditView(node);
         populateAutocompletion();
     }
 
     private void populateEditView(OrgNode node) {
-        heading.setText(node.getTitle());
-
-        tags.setText(node.tags);
-        inheritedTags.setText(node.inheritedTags);
+        populateView(node.getTitle(), node.tags, node.inheritedTags);
     }
 
     private void populateAddView(OrgNode parent) {
-        String combinedTags = OrgNodeUtils.combineTags(parent.tags, parent.inheritedTags, PreferenceUtils.getExcludedTags());
-        inheritedTags.setText(combinedTags);
+        String inheritedTags = OrgNodeUtils.combineTags(parent.tags, parent.inheritedTags, PreferenceUtils.getExcludedTags());
+        populateView("", "", inheritedTags);
+    }
+
+    private void populateView(String heading, String tags, String inheritedTags) {
+        headingView.setText(heading);
+
+        if (TextUtils.isEmpty(inheritedTags))
+            inheritedTagsView.setVisibility(View.GONE);
+        else {
+            inheritedTagsView.setVisibility(View.VISIBLE);
+            inheritedTagsView.setText(inheritedTags);
+        }
+
+        tagsView.setText(tags);
     }
 
     private void populateAutocompletion() {
         HashSet<String> todoKeywords = PreferenceUtils.getAllTodoKeywords();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, Utils.toList(todoKeywords));
-        heading.setAdapter(adapter);
+        headingView.setAdapter(adapter);
     }
 
     @Override
