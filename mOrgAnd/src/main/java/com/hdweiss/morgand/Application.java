@@ -3,7 +3,7 @@ package com.hdweiss.morgand;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.hdweiss.morgand.synchronizer.SyncEvent;
+import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.synchronizer.SyncService;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;

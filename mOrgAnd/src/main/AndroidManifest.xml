@@ -24,17 +24,17 @@
         </service>
 
         <activity
-            android:name="com.hdweiss.morgand.settings.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings">
         </activity>
-        <activity android:name="com.hdweiss.morgand.settings.KeySettingActivity">
+        <activity android:name=".settings.KeySettingActivity">
             <intent-filter>
                 <action android:name=".settings.KeySettingActivity"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.hdweiss.morgand.settings.LocalPathSettingsActivity">
+        <activity android:name=".settings.LocalPathSettingsActivity">
             <intent-filter>
                 <action android:name=".settings.LocalPathSettingActivity"/>
 

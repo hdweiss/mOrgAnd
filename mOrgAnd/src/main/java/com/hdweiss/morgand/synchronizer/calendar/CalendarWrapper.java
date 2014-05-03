@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.calendar;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,7 +12,7 @@ import android.provider.CalendarContract;
 import android.text.format.Time;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
+import com.hdweiss.morgand.data.OrgCalendarEntry;
 
 public class CalendarWrapper {
 

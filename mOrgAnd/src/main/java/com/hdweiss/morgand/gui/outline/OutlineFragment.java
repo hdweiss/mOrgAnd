@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.gui.edit.EditDateFragment;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
-import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 

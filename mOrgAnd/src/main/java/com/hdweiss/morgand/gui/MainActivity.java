@@ -15,14 +15,14 @@ import android.view.Window;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.dao.OrgFile;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
+import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.outline.OutlineFragment;
-import com.hdweiss.morgand.orgdata.OrgFile;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;
-import com.hdweiss.morgand.synchronizer.CalendarWrapper;
-import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
-import com.hdweiss.morgand.synchronizer.SyncEvent;
-import com.hdweiss.morgand.synchronizer.SyncGitTask;
+import com.hdweiss.morgand.synchronizer.calendar.CalendarWrapper;
+import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
 import com.squareup.otto.Subscribe;
 
 import java.util.Locale;

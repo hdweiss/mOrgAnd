@@ -1,11 +1,13 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.git;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.SynchronizerNotification;
+import com.hdweiss.morgand.synchronizer.parser.SyncParserTask;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
 

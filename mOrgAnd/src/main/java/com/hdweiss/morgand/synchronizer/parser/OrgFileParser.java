@@ -1,10 +1,13 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.synchronizer.parser;
 
 import android.text.TextUtils;
 import android.util.Pair;
 
-import com.hdweiss.morgand.utils.OrgNodeUtils;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.data.OrgNodeUtils;
+import com.hdweiss.morgand.data.dao.OrgFile;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.io.File;

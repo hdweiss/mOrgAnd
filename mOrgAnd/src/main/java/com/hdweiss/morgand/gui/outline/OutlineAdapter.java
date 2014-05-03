@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.gui.theme.DefaultTheme;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.utils.Utils;
 
 import java.util.ArrayList;

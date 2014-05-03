@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.events;
 
 public class SyncEvent {
     public enum State {

@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.calendar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,11 +8,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hdweiss.morgand.Application;
-import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+import com.hdweiss.morgand.data.OrgCalendarEntry;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.utils.MultiMap;
-import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 
 import java.util.HashSet;

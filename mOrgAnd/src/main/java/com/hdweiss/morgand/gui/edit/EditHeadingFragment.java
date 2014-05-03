@@ -11,8 +11,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.utils.Utils;
 
 import java.util.HashSet;

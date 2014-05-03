@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.utils;
+package com.hdweiss.morgand.settings;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

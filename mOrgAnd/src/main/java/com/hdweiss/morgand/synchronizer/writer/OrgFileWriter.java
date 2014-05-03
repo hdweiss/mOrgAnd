@@ -1,5 +1,7 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.synchronizer.writer;
 
+import com.hdweiss.morgand.data.dao.OrgFile;
+import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.utils.FileUtils;
 
 import java.io.BufferedWriter;

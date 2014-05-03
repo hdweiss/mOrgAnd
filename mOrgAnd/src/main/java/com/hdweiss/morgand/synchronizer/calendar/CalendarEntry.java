@@ -1,10 +1,10 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.calendar;
 
 import android.text.TextUtils;
 
-import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeTimeDate;
+import com.hdweiss.morgand.data.OrgCalendarEntry;
+import com.hdweiss.morgand.data.OrgNodeTimeDate;
+import com.hdweiss.morgand.data.dao.OrgNode;
 
 public class CalendarEntry {
 	public String title = "";

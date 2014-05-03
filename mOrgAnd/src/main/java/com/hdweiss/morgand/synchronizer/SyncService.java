@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
 
 public class SyncService extends Service implements
         SharedPreferences.OnSharedPreferenceChangeListener {

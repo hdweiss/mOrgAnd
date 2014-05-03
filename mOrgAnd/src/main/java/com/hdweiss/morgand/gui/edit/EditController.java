@@ -1,7 +1,7 @@
 package com.hdweiss.morgand.gui.edit;
 
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 
 public class EditController {
 

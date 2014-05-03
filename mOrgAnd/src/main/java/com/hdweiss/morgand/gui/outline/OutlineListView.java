@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.utils.OrgNodeUtils;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.data.OrgNodeUtils;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;

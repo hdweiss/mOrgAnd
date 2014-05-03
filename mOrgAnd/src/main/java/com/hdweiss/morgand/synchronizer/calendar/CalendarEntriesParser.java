@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.calendar;
 
 import android.database.Cursor;
 import android.provider.CalendarContract;

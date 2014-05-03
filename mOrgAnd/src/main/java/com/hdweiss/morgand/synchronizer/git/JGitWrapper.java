@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.git;
 
 import android.content.SharedPreferences;
 import android.text.TextUtils;

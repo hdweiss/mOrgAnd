@@ -3,7 +3,7 @@ package com.hdweiss.morgand.gui.theme;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 
 public class DefaultTheme {
 	

@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.data.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

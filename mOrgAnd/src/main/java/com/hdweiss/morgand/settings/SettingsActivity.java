@@ -10,7 +10,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.synchronizer.CalendarWrapper;
+import com.hdweiss.morgand.synchronizer.calendar.CalendarWrapper;
 
 import java.util.List;
 

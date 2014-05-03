@@ -4,7 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 
-import com.hdweiss.morgand.synchronizer.JGitWrapper;
+import com.hdweiss.morgand.synchronizer.git.JGitWrapper;
 
 import java.io.File;
 

@@ -1,9 +1,9 @@
-package com.hdweiss.morgand.utils;
+package com.hdweiss.morgand.data;
 
 import android.text.TextUtils;
 
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 
 import java.util.HashSet;
 import java.util.regex.Matcher;

@@ -18,10 +18,10 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.OrgNodeUtils;
+import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.gui.theme.DefaultTheme;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.utils.OrgNodeUtils;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 
 import java.util.regex.Matcher;
 

@@ -10,7 +10,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.OrgNodeTimeDate;
+import com.hdweiss.morgand.data.OrgNodeTimeDate;
 
 import java.util.Calendar;
 

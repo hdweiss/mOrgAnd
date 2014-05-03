@@ -1,15 +1,16 @@
-package com.hdweiss.morgand.synchronizer;
+package com.hdweiss.morgand.synchronizer.parser;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.data.dao.OrgFile;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
+import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.SynchronizerNotification;
-import com.hdweiss.morgand.orgdata.OrgFile;
-import com.hdweiss.morgand.orgdata.OrgFileParser;
-import com.hdweiss.morgand.orgdata.OrgRepository;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.settings.PreferenceUtils;
+import com.hdweiss.morgand.synchronizer.calendar.SyncCalendarTask;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
 

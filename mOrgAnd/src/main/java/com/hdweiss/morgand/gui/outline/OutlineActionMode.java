@@ -7,7 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.hdweiss.morgand.orgdata.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNode;
 
 
 public class OutlineActionMode implements ActionMode.Callback {

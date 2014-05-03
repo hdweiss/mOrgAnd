@@ -1,10 +1,10 @@
 package com.hdweiss.morgand.gui;
 
+import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.gui.outline.OutlineAdapter;
 import com.hdweiss.morgand.gui.outline.OutlineFragment;
-import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeRepository;
-import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
 import com.squareup.otto.Subscribe;
 
 import java.sql.SQLException;

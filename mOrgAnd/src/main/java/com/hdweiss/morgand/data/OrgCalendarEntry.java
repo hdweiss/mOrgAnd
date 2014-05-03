@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.data;
 
 import android.text.TextUtils;
 import android.text.format.DateUtils;

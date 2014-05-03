@@ -1,7 +1,8 @@
-package com.hdweiss.morgand.orgdata;
+package com.hdweiss.morgand.data.dao;
 
-import com.hdweiss.morgand.utils.OrgNodeUtils;
-import com.hdweiss.morgand.utils.PreferenceUtils;
+import com.hdweiss.morgand.data.OrgCalendarEntry;
+import com.hdweiss.morgand.data.OrgNodeUtils;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
