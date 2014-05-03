@@ -1,4 +1,4 @@
-package com.hdweiss.morgand.gui;
+package com.hdweiss.morgand.gui.outline;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.gui.edit.EditDateFragment;
-import com.hdweiss.morgand.gui.outline.OutlineListView;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;

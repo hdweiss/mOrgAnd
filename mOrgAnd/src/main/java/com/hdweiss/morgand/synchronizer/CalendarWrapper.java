@@ -12,7 +12,7 @@ import android.provider.CalendarContract;
 import android.text.format.Time;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.orgdata.OrgNodeDate;
+import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
 
 public class CalendarWrapper {
 
@@ -56,7 +56,7 @@ public class CalendarWrapper {
 				new String[] { CALENDAR_ORGANIZER + ":" + filename + "%" });
 	}
 	
-	public String insertEntry(OrgNodeDate date, String payload,
+	public String insertEntry(OrgCalendarEntry date, String payload,
 			String filename, String location, String busy) throws IllegalArgumentException {
 
 		if (this.calendarId == -1)

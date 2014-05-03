@@ -15,6 +15,7 @@ import android.view.Window;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.gui.outline.OutlineFragment;
 import com.hdweiss.morgand.orgdata.OrgFile;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.settings.SettingsActivity;

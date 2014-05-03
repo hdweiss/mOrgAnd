@@ -23,7 +23,7 @@ public class OrgNode {
     }
 
     public enum State {
-        Clean, Dirty, Deleted
+        Clean, Updated, Added, Deleted
     }
 
     @DatabaseField(generatedId = true)
@@ -170,11 +170,17 @@ public class OrgNode {
         return nodes;
     }
 
-    public OrgNode addChild(Type type, String title) {
+    public OrgNode addChild(Type type) {
         OrgNode node = new OrgNode();
         node.parent = this;
         node.file = this.file;
         node.type = type;
+        node.inheritedTags = OrgNodeUtils.combineTags(tags, inheritedTags, PreferenceUtils.getExcludedTags());
+        return node;
+    }
+
+    public OrgNode addChild(Type type, String title) {
+        OrgNode node = addChild(type);
         node.title = title;
 
         OrgNodeRepository.getDao().create(node);
@@ -200,8 +206,8 @@ public class OrgNode {
         return -1;
     }
 
-    public List<OrgNodeDate> getOrgNodeDates() {
-        ArrayList<OrgNodeDate> dates = new ArrayList<OrgNodeDate>();
+    public List<OrgCalendarEntry> getOrgNodeDates() {
+        ArrayList<OrgCalendarEntry> dates = new ArrayList<OrgCalendarEntry>();
 
         Matcher matcher = OrgNodeUtils.dateMatcher.matcher(title);
         while(matcher.find()) {
@@ -210,11 +216,11 @@ public class OrgNode {
             String endDate = matcher.group(3);
 
             try {
-                OrgNodeDate orgNodeDate = new OrgNodeDate(startDate);
-                orgNodeDate.type = type != null ? type : "";
+                OrgCalendarEntry orgCalendarEntry = new OrgCalendarEntry(startDate);
+                orgCalendarEntry.type = type != null ? type : "";
 
-                orgNodeDate.setTitle(getTitle());
-                dates.add(orgNodeDate);
+                orgCalendarEntry.setTitle(getTitle());
+                dates.add(orgCalendarEntry);
             } catch (IllegalArgumentException ex) {}
         }
 

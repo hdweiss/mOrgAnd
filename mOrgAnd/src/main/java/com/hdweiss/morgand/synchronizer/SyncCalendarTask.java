@@ -8,8 +8,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
 import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeDate;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.utils.MultiMap;
 import com.hdweiss.morgand.utils.PreferenceUtils;
@@ -73,7 +73,7 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
         Log.d("Calendar", filename + " has " + nodes.size() + " entries");
 
         for(OrgNode node: nodes) {
-            for(OrgNodeDate date: node.getOrgNodeDates()) {
+            for(OrgCalendarEntry date: node.getOrgNodeDates()) {
                 if (shouldInsertEntry(date, node))
                     createOrUpdateEntry(entries, date, filename, node);
             }
@@ -86,7 +86,7 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
     }
 
     private void createOrUpdateEntry(MultiMap<CalendarEntry> entries,
-                                     OrgNodeDate date, String filename, OrgNode node) {
+                                     OrgCalendarEntry date, String filename, OrgNode node) {
         CalendarEntry insertedEntry = entries.findValue(date.beginTime, date);
 
         if (insertedEntry != null && insertedEntry.title.equals(date.getTitle())) {
@@ -99,7 +99,7 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
         }
     }
 
-    private boolean shouldInsertEntry(OrgNodeDate date, OrgNode node) {
+    private boolean shouldInsertEntry(OrgCalendarEntry date, OrgNode node) {
         String todo = node.getTodo();
         if (this.showDone == false && TextUtils.isEmpty(todo) == false && inactiveTodoKeywords.contains(todo))
             return false;

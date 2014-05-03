@@ -12,7 +12,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class OrgNodeDate {
+public class OrgCalendarEntry {
 
 	public long beginTime = 0;
 	public long endTime = 0;
@@ -34,7 +34,7 @@ public class OrgNodeDate {
 					+ datePattern + "?" // Begin time
 					+ "(?:\\-" + datePattern + ")?"); // "-" followed by end time
 	
-	public OrgNodeDate (String date) throws IllegalArgumentException {
+	public OrgCalendarEntry(String date) throws IllegalArgumentException {
 		Matcher schedule = schedulePattern.matcher(date);
 
 		if (schedule.find()) {

@@ -8,15 +8,14 @@ import android.widget.EditText;
 
 import com.hdweiss.morgand.R;
 
-public class EditTextFragment extends EditBaseFragment {
+public class EditTextFragment extends BaseEditFragment {
 
-    private String text;
     private EditText editText;
 
-    public EditTextFragment() {}
+    public EditTextFragment() { super(); }
 
-    public EditTextFragment(String text) {
-        this.text = text;
+    public EditTextFragment(EditController controller) {
+        super(controller);
     }
 
     @Override
@@ -32,6 +31,11 @@ public class EditTextFragment extends EditBaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String text = controller.getEditNode().title;
+        populateView(text);
+    }
+
+    private void populateView(String text) {
         if (text != null)
             editText.setText(text);
 

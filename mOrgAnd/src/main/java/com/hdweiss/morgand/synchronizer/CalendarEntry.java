@@ -2,8 +2,8 @@ package com.hdweiss.morgand.synchronizer;
 
 import android.text.TextUtils;
 
+import com.hdweiss.morgand.orgdata.OrgCalendarEntry;
 import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.orgdata.OrgNodeDate;
 import com.hdweiss.morgand.orgdata.OrgNodeTimeDate;
 
 public class CalendarEntry {
@@ -17,8 +17,8 @@ public class CalendarEntry {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o instanceof OrgNodeDate) {
-			OrgNodeDate entry = (OrgNodeDate) o;
+		if (o instanceof OrgCalendarEntry) {
+			OrgCalendarEntry entry = (OrgCalendarEntry) o;
 			return this.dtStart == entry.beginTime
 					&& this.dtEnd == entry.endTime
 					&& entry.getTitle().startsWith(this.title);
@@ -31,7 +31,7 @@ public class CalendarEntry {
         OrgNode headingNode = parentNode.addChild(OrgNode.Type.Headline, this.title);
 
         boolean isAllDay = allDay > 0;
-        String date = OrgNodeDate.getDate(this.dtStart, this.dtEnd, isAllDay);
+        String date = OrgCalendarEntry.getDate(this.dtStart, this.dtEnd, isAllDay);
         String formatedDate = OrgNodeTimeDate.formatDate(
                 OrgNodeTimeDate.TYPE.Timestamp, date);
 

@@ -14,10 +14,9 @@ import com.hdweiss.morgand.orgdata.OrgNodeTimeDate;
 
 import java.util.Calendar;
 
-public class EditDateFragment extends EditBaseFragment {
+public class EditDateFragment extends BaseEditFragment {
 
     private OrgNodeTimeDate.TYPE type;
-    private OrgNodeTimeDate timeDate;
 
     private DatePicker datePicker;
     private CheckBox timeStartCheckbox;
@@ -26,10 +25,10 @@ public class EditDateFragment extends EditBaseFragment {
     private TimePicker timeEndPicker;
 
     // Android requires empty constructor
-    public EditDateFragment() {}
+    public EditDateFragment() { super(); }
 
-    public EditDateFragment(OrgNodeTimeDate timeDate) {
-        this.timeDate = timeDate;
+    public EditDateFragment(EditController controller) {
+        super(controller);
     }
 
     @Override
@@ -80,6 +79,9 @@ public class EditDateFragment extends EditBaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        OrgNodeTimeDate timeDate = null; // TODO Complete
+        controller.getEditNode().getTitle();
         if (timeDate != null)
             type = timeDate.type;
         else

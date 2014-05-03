@@ -12,25 +12,22 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.orgdata.OrgNode;
-import com.hdweiss.morgand.utils.OrgNodeUtils;
 import com.hdweiss.morgand.utils.PreferenceUtils;
 import com.hdweiss.morgand.utils.Utils;
 
 import java.util.HashSet;
 
-public class EditHeadingFragment extends EditBaseFragment {
-
-    private OrgNode node;
+public class EditHeadingFragment extends BaseEditFragment {
 
     private AutoCompleteTextView headingView;
     private TextView inheritedTagsView;
     private AutoCompleteTextView tagsView;
 
     // Android requires empty constructor
-    public EditHeadingFragment() {}
+    public EditHeadingFragment() { super();}
 
-    public EditHeadingFragment(OrgNode parent) {
-        this.node = parent;
+    public EditHeadingFragment(EditController controller) {
+        super(controller);
     }
 
     @Override
@@ -56,22 +53,14 @@ public class EditHeadingFragment extends EditBaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (node != null)
-            populateEditView(node);
+        OrgNode node = controller.getEditNode();
+        populateView(node.getTitle(), node.tags, node.inheritedTags);
         populateAutocompletion();
     }
 
-    private void populateEditView(OrgNode node) {
-        populateView(node.getTitle(), node.tags, node.inheritedTags);
-    }
-
-    private void populateAddView(OrgNode parent) {
-        String inheritedTags = OrgNodeUtils.combineTags(parent.tags, parent.inheritedTags, PreferenceUtils.getExcludedTags());
-        populateView("", "", inheritedTags);
-    }
-
     private void populateView(String heading, String tags, String inheritedTags) {
-        headingView.setText(heading);
+        if (heading != null)
+            headingView.setText(heading);
 
         if (TextUtils.isEmpty(inheritedTags))
             inheritedTagsView.setVisibility(View.GONE);
@@ -80,11 +69,15 @@ public class EditHeadingFragment extends EditBaseFragment {
             inheritedTagsView.setText(inheritedTags);
         }
 
-        tagsView.setText(tags);
+        if (tags != null)
+            tagsView.setText(tags);
     }
 
     private void populateAutocompletion() {
         HashSet<String> todoKeywords = PreferenceUtils.getAllTodoKeywords();
+        if (todoKeywords.size() == 0)
+            return;
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, Utils.toList(todoKeywords));
         headingView.setAdapter(adapter);

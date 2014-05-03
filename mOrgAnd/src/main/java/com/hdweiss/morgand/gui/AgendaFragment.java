@@ -1,6 +1,7 @@
 package com.hdweiss.morgand.gui;
 
 import com.hdweiss.morgand.gui.outline.OutlineAdapter;
+import com.hdweiss.morgand.gui.outline.OutlineFragment;
 import com.hdweiss.morgand.orgdata.OrgNode;
 import com.hdweiss.morgand.orgdata.OrgNodeRepository;
 import com.hdweiss.morgand.synchronizer.DataUpdatedEvent;
