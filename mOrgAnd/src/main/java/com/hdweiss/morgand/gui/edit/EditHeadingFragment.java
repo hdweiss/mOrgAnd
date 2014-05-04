@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.utils.Utils;
 
@@ -26,7 +27,7 @@ public class EditHeadingFragment extends BaseEditFragment {
     // Android requires empty constructor
     public EditHeadingFragment() { super();}
 
-    public EditHeadingFragment(EditController controller) {
+    public EditHeadingFragment(BaseEditController controller) {
         super(controller);
     }
 
@@ -51,7 +52,7 @@ public class EditHeadingFragment extends BaseEditFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        OrgNode node = controller.getEditNode();
+        OrgNode node = controller.getNode();
         populateView(node.getTitle(), node.tags, node.inheritedTags);
         populateAutocompletion();
 
@@ -95,7 +96,7 @@ public class EditHeadingFragment extends BaseEditFragment {
 
     @Override
     public OrgNode getEditedNode() {
-        OrgNode editNode = controller.getEditNode();
+        OrgNode editNode = controller.getNode();
         editNode.title = headingView.getText().toString();
         editNode.tags = tagsView.getText().toString();
         return editNode;

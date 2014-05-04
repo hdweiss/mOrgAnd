@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/heading"
-        android:inputType="textAutoComplete|textAutoCorrect|textCapSentences"
+        android:inputType="textAutoComplete|textAutoCorrect|textCapSentences|textImeMultiLine"
         android:hint="TODO Heading"
         android:dropDownWidth="fill_parent"
         android:imeOptions="actionDone"/>

@@ -17,8 +17,9 @@ import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.gui.edit.BaseEditFragment;
-import com.hdweiss.morgand.gui.edit.EditController;
 import com.hdweiss.morgand.gui.edit.EditHeadingFragment;
+import com.hdweiss.morgand.gui.edit.controller.AddController;
+import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 
@@ -130,7 +131,7 @@ public class OutlineFragment extends Fragment {
             return;
 
         OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
-        EditController editController = EditController.getAddNodeController(node, OrgNode.Type.Headline);
+        BaseEditController editController = new AddController(node, OrgNode.Type.Headline);
         BaseEditFragment fragment = new EditHeadingFragment(editController);
         showDialog(fragment);
     }

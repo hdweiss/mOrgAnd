@@ -6,11 +6,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
+import com.hdweiss.morgand.gui.edit.controller.EditController;
 
 public abstract class BaseEditFragment extends DialogFragment implements TextView.OnEditorActionListener  {
 
     public static BaseEditFragment getEditFragment(OrgNode node) {
-        EditController editController = EditController.getEditNodeController(node);
+        BaseEditController editController = new EditController(node);
 
         BaseEditFragment fragment;
         switch (node.type) {
@@ -30,11 +32,11 @@ public abstract class BaseEditFragment extends DialogFragment implements TextVie
         return fragment;
     }
 
-    protected EditController controller;
+    protected BaseEditController controller;
 
     public BaseEditFragment() {}
 
-    public BaseEditFragment(EditController controller) {
+    public BaseEditFragment(BaseEditController controller) {
         this.controller = controller;
     }
 

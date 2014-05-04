@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 
 public class EditTextFragment extends BaseEditFragment {
 
@@ -15,7 +16,7 @@ public class EditTextFragment extends BaseEditFragment {
 
     public EditTextFragment() { super(); }
 
-    public EditTextFragment(EditController controller) {
+    public EditTextFragment(BaseEditController controller) {
         super(controller);
     }
 
@@ -32,7 +33,7 @@ public class EditTextFragment extends BaseEditFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String text = controller.getEditNode().title;
+        String text = controller.getNode().title;
         populateView(text);
     }
 
@@ -45,7 +46,7 @@ public class EditTextFragment extends BaseEditFragment {
 
     @Override
     public OrgNode getEditedNode() {
-        OrgNode editNode = controller.getEditNode();
+        OrgNode editNode = controller.getNode();
         editNode.title = editText.getText().toString();
         return editNode;
     }

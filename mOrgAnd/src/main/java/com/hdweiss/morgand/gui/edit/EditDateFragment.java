@@ -11,6 +11,7 @@ import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 
 import java.util.Calendar;
 
@@ -25,7 +26,7 @@ public class EditDateFragment extends BaseEditFragment {
     // Android requires empty constructor
     public EditDateFragment() { super(); }
 
-    public EditDateFragment(EditController controller) {
+    public EditDateFragment(BaseEditController controller) {
         super(controller);
     }
 
@@ -79,7 +80,7 @@ public class EditDateFragment extends BaseEditFragment {
 
 
 //        OrgNodeTimeDate timeDate = null; // TODO Complete
-        controller.getEditNode().getTitle();
+        controller.getNode().getTitle();
 //        if (timeDate != null)
 //            type = timeDate.type;
 //        else
@@ -147,6 +148,6 @@ public class EditDateFragment extends BaseEditFragment {
 
     @Override
     public OrgNode getEditedNode() {
-        return controller.getEditNode();
+        return controller.getNode();
     }
 }
