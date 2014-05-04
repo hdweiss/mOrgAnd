@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class OrgFileWriter {
 
     private final OrgFile orgFile;
-    private ArrayList<String> fileContent;
+    public ArrayList<String> fileContent;
 
     public OrgFileWriter(OrgFile orgFile) throws IOException {
         this.orgFile = orgFile;
@@ -22,8 +22,8 @@ public class OrgFileWriter {
     /**
      * Constructor for unit testing.
      */
-    public OrgFileWriter(OrgFile orgFile, ArrayList<String> fileContent) {
-        this.orgFile = orgFile;
+    public OrgFileWriter(ArrayList<String> fileContent) {
+        this.orgFile = null;
         this.fileContent = fileContent;
     }
 
@@ -51,14 +51,14 @@ public class OrgFileWriter {
         if (node == null) throw new IllegalArgumentException("Got null node as argument");
         if (node.lineNumber < 0) throw new IllegalArgumentException("Node's lineNumber can't be less than 0: " + node.title);
 
-        int startIndex = node.lineNumber;
-        int endIndex = node.getSiblingLineNumber() - 1;
+        int startIndex = node.lineNumber - 1;
+        int endIndex = node.getSiblingLineNumber();
         removeRange(startIndex, endIndex);
     }
 
     public void overwrite(OrgNode node) {
-        int startIndex = node.lineNumber - 1;
-        int endIndex = node.getNextNodeLineNumber() - 2;
+        int startIndex = node.lineNumber;
+        int endIndex = node.getNextNodeLineNumber();
         removeRange(startIndex, endIndex);
         add(startIndex, node.toString());
     }
@@ -68,7 +68,7 @@ public class OrgFileWriter {
         if (from < 0 || from > to) throw new IllegalArgumentException("Can't remove range from=" + from + " to=" + to + " fileContent.size()=" + fileContent.size());
 
         for (int i = from; i < to && i < fileContent.size(); i++)
-            fileContent.remove(from + i);
+            fileContent.remove(from);
     }
 
     private void add(final int index, final String content) {

@@ -27,20 +27,20 @@ public class JGitWrapperTests extends AndroidTestCase {
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        jGitWrapper.getGit().close();
+        jGitWrapper.getGit(null).close();
     }
 
 
     public void testGitSetup() throws Exception {
         assertTrue(new File(localPath).exists());
         assertTrue(new File(localPath + "/.git").exists());
-        assertTrue(jGitWrapper.getGit().branchList().call().size() > 0);
+        assertTrue(jGitWrapper.getGit(null).branchList().call().size() > 0);
     }
 
     public void testCommitAndPush() throws Exception {
         String orgContents = TestUtils.readFileAsString(localPath + "/" + testFile);
         TestUtils.writeStringAsFile(orgContents + "\nmorgand", localPath + "/" + testFile);
         jGitWrapper.commitAllChanges("Automatic commit");
-        jGitWrapper.updateChanges();
+        jGitWrapper.updateChanges(null);
     }
 }
