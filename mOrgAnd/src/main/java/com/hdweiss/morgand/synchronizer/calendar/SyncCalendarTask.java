@@ -90,7 +90,7 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
                                      OrgCalendarEntry date, String filename, OrgNode node) {
         CalendarEntry insertedEntry = entries.findValue(date.beginTime, date);
 
-        if (insertedEntry != null && insertedEntry.title.equals(date.getTitle())) {
+        if (insertedEntry != null && insertedEntry.title.equals(date.getCalendarTitle())) {
             entries.remove(date.beginTime, insertedEntry);
             unchanged++;
         } else {

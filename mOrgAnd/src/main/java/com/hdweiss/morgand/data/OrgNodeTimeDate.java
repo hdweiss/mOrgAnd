@@ -7,39 +7,39 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OrgNodeTimeDate {
-	public TYPE type = TYPE.Scheduled;
+    private TYPE type = TYPE.Scheduled;
 
-	public int year = -1;
-	public int monthOfYear = -1;
-	public int dayOfMonth = -1;
-	public int startTimeOfDay = -1;
-	public int startMinute = -1;
-	public int endTimeOfDay = -1;
-	public int endMinute = -1;
+    private int year = -1;
+    private int monthOfYear = -1;
+    private int dayOfMonth = -1;
+    private int startTimeOfDay = -1;
+    private int startMinute = -1;
+    private int endTimeOfDay = -1;
+    private int endMinute = -1;
 	
-	public enum TYPE {
+	private enum TYPE {
 		Scheduled,
 		Deadline,
 		Timestamp,
 		InactiveTimestamp
 	};
 
-	public OrgNodeTimeDate(TYPE type) {
+    private OrgNodeTimeDate(TYPE type) {
 		this.type = type;
 	}
 
 
-	public void setToCurrentDate() {
+    private void setToCurrentDate() {
 		final Calendar c = Calendar.getInstance();
 		this.year = c.get(Calendar.YEAR);
 		this.monthOfYear = c.get(Calendar.MONTH) + 1;
 		this.dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
 	}
-	
-	private static final Pattern schedulePattern = Pattern
+
+    private static final Pattern schedulePattern = Pattern
 			.compile("((\\d{4})-(\\d{1,2})-(\\d{1,2}))(?:[^\\d]*)"
 					+ "((\\d{1,2})\\:(\\d{2}))?(-((\\d{1,2})\\:(\\d{2})))?");
-	public void parseDate(String date) {
+    private void parseDate(String date) {
 		if(date == null)
 			return;
 
@@ -62,21 +62,21 @@ public class OrgNodeTimeDate {
 		}
 	}
 
-	
-	public String getDate() {
+
+    private String getDate() {
 		return String.format("%d-%02d-%02d", year, monthOfYear, dayOfMonth);
 	}
-	
-	public String getStartTime() {
+
+    private String getStartTime() {
 		return String.format("%02d:%02d", startTimeOfDay, startMinute);
 	}
-	
-	public String getEndTime() {
+
+    private String getEndTime() {
 		return String.format("%02d:%02d", endTimeOfDay, endMinute);
 	}
 	
 	
-	public String toString() {
+	private String toString2() {
 		return getDate().toString() + getStartTimeFormated() + getEndTimeFormated();
 	}
 	
@@ -106,7 +106,7 @@ public class OrgNodeTimeDate {
 	}
 	
 	
-	public static String typeToFormated(TYPE type) {
+	private static String typeToFormated(TYPE type) {
 		switch (type) {
 		case Scheduled:
 			return "SCHEDULED: ";
@@ -118,8 +118,8 @@ public class OrgNodeTimeDate {
 			return "";
 		}
 	}
-	
-	public static String formatDate(TYPE type, String timestamp) {
+
+	private String formatDate(TYPE type, String timestamp) {
 		if (TextUtils.isEmpty(timestamp))
 			return "";
 		else {

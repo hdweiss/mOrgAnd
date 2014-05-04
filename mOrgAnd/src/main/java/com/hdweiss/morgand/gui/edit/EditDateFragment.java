@@ -10,13 +10,10 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
-import com.hdweiss.morgand.data.OrgNodeTimeDate;
 
 import java.util.Calendar;
 
 public class EditDateFragment extends BaseEditFragment {
-
-    private OrgNodeTimeDate.TYPE type;
 
     private DatePicker datePicker;
     private CheckBox timeStartCheckbox;
@@ -80,19 +77,19 @@ public class EditDateFragment extends BaseEditFragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        OrgNodeTimeDate timeDate = null; // TODO Complete
+//        OrgNodeTimeDate timeDate = null; // TODO Complete
         controller.getEditNode().getTitle();
-        if (timeDate != null)
-            type = timeDate.type;
-        else
-            type = OrgNodeTimeDate.TYPE.Scheduled;
+//        if (timeDate != null)
+//            type = timeDate.type;
+//        else
+//            type = OrgNodeTimeDate.TYPE.Scheduled;
 
-        getDialog().setTitle(getResources().getString(R.string.action_set_time) + " - " + type.toString());
+//        getDialog().setTitle(getResources().getString(R.string.action_set_time) + " - " + type.toString());
 
-        if (timeDate != null)
-            populateView(timeDate);
-        else
-            populateView();
+//        if (timeDate != null)
+//            populateView(timeDate);
+//        else
+//            populateView();
     }
 
     private void populateView() {
@@ -107,43 +104,43 @@ public class EditDateFragment extends BaseEditFragment {
         timeEndPicker.setVisibility(View.INVISIBLE);
     }
 
-    private void populateView(OrgNodeTimeDate timeDate) {
-        if (timeDate.year >= 0 && timeDate.monthOfYear >= 0 && timeDate.dayOfMonth >= 0)
-            datePicker.updateDate(timeDate.year - 1, timeDate.monthOfYear - 1, timeDate.dayOfMonth - 1);
-
-        if (timeDate.startTimeOfDay >= 0 && timeDate.startMinute >= 0) {
-            timeStartPicker.setCurrentHour(timeDate.startTimeOfDay);
-            timeStartPicker.setCurrentMinute(timeDate.startMinute);
-            timeStartCheckbox.setChecked(true);
-        } else
-            timeStartCheckbox.setChecked(false);
-
-        if (timeDate.endTimeOfDay >= 0 && timeDate.endMinute >= 0) {
-            timeEndPicker.setCurrentHour(timeDate.endTimeOfDay);
-            timeEndPicker.setCurrentMinute(timeDate.endMinute);
-            timeEndCheckbox.setChecked(true);
-        } else
-            timeEndCheckbox.setChecked(false);
-    }
-
-
-    private OrgNodeTimeDate getTimeDate() {
-        OrgNodeTimeDate resultTimeDate = new OrgNodeTimeDate(type);
-
-        resultTimeDate.year = datePicker.getYear() + 1;
-        resultTimeDate.monthOfYear = datePicker.getMonth() + 1;
-        resultTimeDate.dayOfMonth = datePicker.getDayOfMonth() + 1;
-
-        if (timeStartCheckbox.isChecked()) {
-            resultTimeDate.startTimeOfDay = timeStartPicker.getCurrentHour();
-            resultTimeDate.startMinute = timeStartPicker.getCurrentMinute();
-
-            if (timeEndCheckbox.isChecked()) {
-                resultTimeDate.endTimeOfDay = timeEndPicker.getCurrentHour();
-                resultTimeDate.endMinute = timeEndPicker.getCurrentMinute();
-            }
-        }
-
-        return resultTimeDate;
-    }
+//    private void populateView(OrgNodeTimeDate timeDate) {
+//        if (timeDate.year >= 0 && timeDate.monthOfYear >= 0 && timeDate.dayOfMonth >= 0)
+//            datePicker.updateDate(timeDate.year - 1, timeDate.monthOfYear - 1, timeDate.dayOfMonth - 1);
+//
+//        if (timeDate.startTimeOfDay >= 0 && timeDate.startMinute >= 0) {
+//            timeStartPicker.setCurrentHour(timeDate.startTimeOfDay);
+//            timeStartPicker.setCurrentMinute(timeDate.startMinute);
+//            timeStartCheckbox.setChecked(true);
+//        } else
+//            timeStartCheckbox.setChecked(false);
+//
+//        if (timeDate.endTimeOfDay >= 0 && timeDate.endMinute >= 0) {
+//            timeEndPicker.setCurrentHour(timeDate.endTimeOfDay);
+//            timeEndPicker.setCurrentMinute(timeDate.endMinute);
+//            timeEndCheckbox.setChecked(true);
+//        } else
+//            timeEndCheckbox.setChecked(false);
+//    }
+//
+//
+//    private OrgNodeTimeDate getTimeDate() {
+//        OrgNodeTimeDate resultTimeDate = new OrgNodeTimeDate(type);
+//
+//        resultTimeDate.year = datePicker.getYear() + 1;
+//        resultTimeDate.monthOfYear = datePicker.getMonth() + 1;
+//        resultTimeDate.dayOfMonth = datePicker.getDayOfMonth() + 1;
+//
+//        if (timeStartCheckbox.isChecked()) {
+//            resultTimeDate.startTimeOfDay = timeStartPicker.getCurrentHour();
+//            resultTimeDate.startMinute = timeStartPicker.getCurrentMinute();
+//
+//            if (timeEndCheckbox.isChecked()) {
+//                resultTimeDate.endTimeOfDay = timeEndPicker.getCurrentHour();
+//                resultTimeDate.endMinute = timeEndPicker.getCurrentMinute();
+//            }
+//        }
+//
+//        return resultTimeDate;
+//    }
 }

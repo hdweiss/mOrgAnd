@@ -65,7 +65,7 @@ public class CalendarWrapper {
 
 		ContentValues values = new ContentValues();
 		values.put(CalendarContract.Events.CALENDAR_ID, this.calendarId);
-		values.put(CalendarContract.Events.TITLE, date.getTitle());
+		values.put(CalendarContract.Events.TITLE, date.getCalendarTitle());
 		values.put(CalendarContract.Events.DESCRIPTION, CALENDAR_ORGANIZER + ":"
 				+ filename + "\n" + payload);
 		values.put(CalendarContract.Events.EVENT_LOCATION, location);
