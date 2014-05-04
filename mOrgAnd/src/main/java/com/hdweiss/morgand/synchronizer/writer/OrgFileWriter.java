@@ -52,13 +52,13 @@ public class OrgFileWriter {
         if (node.lineNumber < 0) throw new IllegalArgumentException("Node's lineNumber can't be less than 0: " + node.title);
 
         int startIndex = node.lineNumber - 1;
-        int endIndex = node.getSiblingLineNumber();
+        int endIndex = node.getSiblingLineNumber() - 1;
         removeRange(startIndex, endIndex);
     }
 
     public void overwrite(OrgNode node) {
-        int startIndex = node.lineNumber;
-        int endIndex = node.getNextNodeLineNumber();
+        int startIndex = node.lineNumber - 1;
+        int endIndex = node.getNextNodeLineNumber() - 1;
         removeRange(startIndex, endIndex);
         add(startIndex, node.toString());
     }
@@ -67,7 +67,7 @@ public class OrgFileWriter {
     private void removeRange(final int from, final int to) {
         if (from < 0 || from > to) throw new IllegalArgumentException("Can't remove range from=" + from + " to=" + to + " fileContent.size()=" + fileContent.size());
 
-        for (int i = from; i < to && i < fileContent.size(); i++)
+        for (int linesToDelete = to - from; linesToDelete > 0 && from < fileContent.size(); linesToDelete--)
             fileContent.remove(from);
     }
 

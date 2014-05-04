@@ -237,15 +237,18 @@ public class OrgNode {
         return -1;
     }
 
-    public boolean isParentAdded() {
+    public boolean isNodeWritable() {
         if (parent != null) {
             if (parent.state == State.Added)
-                return true;
+                return false;
 
-            return parent.isParentAdded();
+            if (parent.state == State.Deleted)
+                return false;
+
+            return parent.isNodeWritable();
         }
 
-        return false;
+        return true;
     }
 
     public List<OrgCalendarEntry> getOrgNodeDates() {
