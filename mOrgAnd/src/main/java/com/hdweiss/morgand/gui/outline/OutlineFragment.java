@@ -1,7 +1,5 @@
 package com.hdweiss.morgand.gui.outline;
 
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -115,10 +113,6 @@ public class OutlineFragment extends Fragment {
                 showAddDialog(position);
                 break;
 
-            case R.id.edit:
-                showEditDialog(position);
-                break;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -133,26 +127,10 @@ public class OutlineFragment extends Fragment {
         OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
         BaseEditController editController = new AddController(node, OrgNode.Type.Headline);
         BaseEditFragment fragment = new EditHeadingFragment(editController);
-        showDialog(fragment);
+        fragment.show(getActivity());
     }
 
-    private void showEditDialog(int position) {
-        if (position < 0)
-            return;
 
-        OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
-        if (node == null)
-            return;
-
-        BaseEditFragment fragment = BaseEditFragment.getEditFragment(node);
-        showDialog(fragment);
-    }
-
-    private void showDialog(DialogFragment fragment) {
-        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-        fragmentTransaction.add(fragment, "dialog");
-        fragmentTransaction.commit();
-    }
 
     @Subscribe
     public void refreshView(DataUpdatedEvent event) {

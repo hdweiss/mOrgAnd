@@ -1,6 +1,8 @@
 package com.hdweiss.morgand.gui.edit;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ public abstract class BaseEditFragment extends DialogFragment implements TextVie
         return fragment;
     }
 
+
     protected BaseEditController controller;
 
     public BaseEditFragment() {}
@@ -42,6 +45,13 @@ public abstract class BaseEditFragment extends DialogFragment implements TextVie
 
 
     public abstract OrgNode getEditedNode();
+
+
+    public void show(Activity activity) {
+        FragmentTransaction fragmentTransaction = activity.getFragmentManager().beginTransaction();
+        fragmentTransaction.add(this, "dialog");
+        fragmentTransaction.commit();
+    }
 
     @Override
     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {

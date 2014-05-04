@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.hdweiss.morgand.data.OrgNodeUtils;
 import com.hdweiss.morgand.data.dao.OrgNode;
+import com.hdweiss.morgand.gui.edit.BaseEditFragment;
 import com.hdweiss.morgand.settings.PreferenceUtils;
 
 import java.util.ArrayList;
@@ -132,13 +133,27 @@ public class OutlineListView extends ListView {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent, View v, int position,
 				long id) {
-			if(activity != null) {
-				actionMode.initActionMode(OutlineListView.this, position);
-				activeActionMode = activity.startActionMode(actionMode);
-			}
+
+            showEditDialog(position);
+//			if(activity != null) {
+//				actionMode.initActionMode(OutlineListView.this, position);
+//				activeActionMode = activity.startActionMode(actionMode);
+//			}
 			return true;
 		}
 	};
+
+    private void showEditDialog(int position) {
+        if (position < 0)
+            return;
+
+        OrgNode node = (OrgNode) getAdapter().getItem(position);
+        if (node == null)
+            return;
+
+        BaseEditFragment fragment = BaseEditFragment.getEditFragment(node);
+        fragment.show(activity);
+    }
 	
 	@SuppressWarnings("unused")
 	private void setParentChecked(int position) {
