@@ -59,13 +59,13 @@ public class OrgNode {
 
     public static final String TITLE_FIELD_NAME = "title";
     @DatabaseField(columnName = TITLE_FIELD_NAME)
-    public String title;
+    public String title = "";
 
     @DatabaseField
-    public String tags;
+    public String tags = "";
 
     @DatabaseField
-    public String inheritedTags;
+    public String inheritedTags = "";
 
 
     public String toString() {

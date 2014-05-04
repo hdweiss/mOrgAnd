@@ -34,8 +34,6 @@ public class EditHeadingFragment extends BaseEditFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_heading_fragment, container, false);
 
-        getDialog().setTitle(R.string.action_capture);
-
         tagsView = (AutoCompleteTextView) view.findViewById(R.id.tags);
         inheritedTagsView = (TextView) view.findViewById(R.id.inheritedTags);
 
@@ -56,11 +54,23 @@ public class EditHeadingFragment extends BaseEditFragment {
         OrgNode node = controller.getEditNode();
         populateView(node.getTitle(), node.tags, node.inheritedTags);
         populateAutocompletion();
+
+        switch (controller.getMode()) {
+            case Add:
+                getDialog().setTitle(R.string.action_capture);
+                break;
+
+            case Edit:
+                getDialog().setTitle(R.string.action_edit);
+                break;
+        }
     }
 
     private void populateView(String heading, String tags, String inheritedTags) {
-        if (heading != null)
+        if (heading != null) {
             headingView.setText(heading);
+            headingView.setSelection(headingView.getText().length());
+        }
 
         if (TextUtils.isEmpty(inheritedTags))
             inheritedTagsView.setVisibility(View.GONE);
@@ -81,5 +91,13 @@ public class EditHeadingFragment extends BaseEditFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_dropdown_item_1line, Utils.toList(todoKeywords));
         headingView.setAdapter(adapter);
+    }
+
+    @Override
+    public OrgNode getEditedNode() {
+        OrgNode editNode = controller.getEditNode();
+        editNode.title = headingView.getText().toString();
+        editNode.tags = tagsView.getText().toString();
+        return editNode;
     }
 }

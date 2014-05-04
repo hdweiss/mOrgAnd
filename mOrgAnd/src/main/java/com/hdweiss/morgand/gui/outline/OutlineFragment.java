@@ -1,5 +1,6 @@
 package com.hdweiss.morgand.gui.outline;
 
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.DataUpdatedEvent;
-import com.hdweiss.morgand.gui.edit.EditDateFragment;
+import com.hdweiss.morgand.gui.edit.BaseEditFragment;
+import com.hdweiss.morgand.gui.edit.EditController;
+import com.hdweiss.morgand.gui.edit.EditHeadingFragment;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 
@@ -100,6 +103,7 @@ public class OutlineFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int position = listView.getCheckedItemPosition();
         switch(item.getItemId()) {
             case android.R.id.home:
                 if (listView != null)
@@ -107,21 +111,11 @@ public class OutlineFragment extends Fragment {
                 break;
 
             case R.id.add_child:
-                int position = listView.getCheckedItemPosition();
-                if (position < 0)
-                    return true;
+                showAddDialog(position);
+                break;
 
-                OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
-
-                EditDateFragment editHeadingFragment = new EditDateFragment();
-                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-                fragmentTransaction.add(editHeadingFragment, "dialog");
-                fragmentTransaction.commit();
-
-//                EditHeadingFragment editHeadingFragment = new EditHeadingFragment(node);
-//                FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-//                fragmentTransaction.add(editHeadingFragment, "dialog");
-//                fragmentTransaction.commit();
+            case R.id.edit:
+                showEditDialog(position);
                 break;
 
             default:
@@ -129,6 +123,34 @@ public class OutlineFragment extends Fragment {
         }
 
         return true;
+    }
+
+    private void showAddDialog(int position) {
+        if (position < 0)
+            return;
+
+        OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
+        EditController editController = EditController.getAddNodeController(node, OrgNode.Type.Headline);
+        BaseEditFragment fragment = new EditHeadingFragment(editController);
+        showDialog(fragment);
+    }
+
+    private void showEditDialog(int position) {
+        if (position < 0)
+            return;
+
+        OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
+        if (node == null)
+            return;
+
+        BaseEditFragment fragment = BaseEditFragment.getEditFragment(node);
+        showDialog(fragment);
+    }
+
+    private void showDialog(DialogFragment fragment) {
+        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+        fragmentTransaction.add(fragment, "dialog");
+        fragmentTransaction.commit();
     }
 
     @Subscribe

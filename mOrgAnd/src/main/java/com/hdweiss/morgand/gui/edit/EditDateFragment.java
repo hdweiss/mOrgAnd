@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.dao.OrgNode;
 
 import java.util.Calendar;
 
@@ -143,4 +144,9 @@ public class EditDateFragment extends BaseEditFragment {
 //
 //        return resultTimeDate;
 //    }
+
+    @Override
+    public OrgNode getEditedNode() {
+        return controller.getEditNode();
+    }
 }

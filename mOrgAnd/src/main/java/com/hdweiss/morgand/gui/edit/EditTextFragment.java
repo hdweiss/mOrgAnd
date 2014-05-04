@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.hdweiss.morgand.R;
+import com.hdweiss.morgand.data.dao.OrgNode;
 
 public class EditTextFragment extends BaseEditFragment {
 
@@ -40,5 +41,12 @@ public class EditTextFragment extends BaseEditFragment {
             editText.setText(text);
 
         getDialog().setTitle(R.string.action_edit);
+    }
+
+    @Override
+    public OrgNode getEditedNode() {
+        OrgNode editNode = controller.getEditNode();
+        editNode.title = editText.getText().toString();
+        return editNode;
     }
 }

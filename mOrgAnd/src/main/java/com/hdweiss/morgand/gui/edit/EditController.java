@@ -30,7 +30,11 @@ public class EditController {
         return node;
     }
 
-    public void save() {
+    public EditMode getMode() {
+        return mode;
+    }
+
+    public void save(OrgNode node) {
         switch (mode) {
             case Add:
                 node.state = OrgNode.State.Added;

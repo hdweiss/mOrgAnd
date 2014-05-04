@@ -7,4 +7,12 @@
         android:showAsAction="always"
         android:title="@string/action_capture"
         android:visible="true"/>
+
+    <item
+        android:id="@+id/edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:showAsAction="always"
+        android:title="@string/action_edit"
+        android:visible="true"/>
+
 </menu>
