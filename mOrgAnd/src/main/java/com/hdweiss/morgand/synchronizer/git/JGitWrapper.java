@@ -12,6 +12,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
 import org.eclipse.jgit.api.ResetCommand;
+import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.ProgressMonitor;
@@ -102,8 +103,17 @@ public class JGitWrapper {
 
     public void commitAllChanges(String commitMessage) throws Exception {
         Git git = getGit(null);
+
+        Status status = git.status().call();
+
+        if (status.getModified().isEmpty()) {
+            Log.d("JGitWrapper", "No files modified, not committing");
+            return;
+        }
+
         git.add().addFilepattern(".").call();
         git.commit().setMessage(commitMessage).setAuthor(commitAuthor, commitEmail).call();
+        Log.d("JGitWrapper", "Committed changes");
     }
 
     public void updateChanges(ProgressMonitor monitor) throws Exception {

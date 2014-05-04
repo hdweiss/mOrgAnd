@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.Application;
-import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
+import com.hdweiss.morgand.synchronizer.writer.SyncWriterTask;
 
 public class SyncService extends Service implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -70,7 +70,7 @@ public class SyncService extends Service implements
 
     private void runSynchronizerAsync() {
         unsetAlarm();
-        syncTask = new SyncGitTask(getBaseContext()).execute();
+        syncTask = new SyncWriterTask(getBaseContext()).execute();
         setAlarm();
     }
 

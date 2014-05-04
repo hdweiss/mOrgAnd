@@ -31,7 +31,7 @@ public class OrgFileWriter {
     public void write() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(orgFile.path, false));
         for(String line: fileContent)
-            writer.write(line);
+            writer.write(line + "\n");
         writer.close();
     }
 

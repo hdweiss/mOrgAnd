@@ -1,5 +1,7 @@
 package com.hdweiss.morgand.data.dao;
 
+import android.text.TextUtils;
+
 import com.hdweiss.morgand.data.OrgCalendarEntry;
 import com.hdweiss.morgand.data.OrgNodeUtils;
 import com.hdweiss.morgand.settings.PreferenceUtils;
@@ -77,8 +79,10 @@ public class OrgNode {
             builder.append("*");
         builder.append(" ");
 
-        builder.append(title.trim());
-        builder.append("\t" + tags);
+        if (TextUtils.isEmpty(title) == false) {
+            builder.append(title.trim());
+            builder.append("\t" + tags);
+        }
         return builder.toString();
     }
 

@@ -2,6 +2,7 @@ package com.hdweiss.morgand.synchronizer.git;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import com.hdweiss.morgand.Application;
@@ -29,6 +30,7 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         try {
             JGitWrapper jGitWrapper = new JGitWrapper(preferences);
+            jGitWrapper.commitAllChanges(Build.MODEL + ": Automatic commit");
             jGitWrapper.updateChanges(monitor);
         } catch (IllegalArgumentException ex) {
             throw new ReportableException(ex.getMessage());

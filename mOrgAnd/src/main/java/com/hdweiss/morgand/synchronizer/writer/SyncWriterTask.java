@@ -7,6 +7,7 @@ import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.SynchronizerNotification;
+import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
 import com.j256.ormlite.stmt.Where;
@@ -22,8 +23,13 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
     @Override
     protected Void safeDoInBackground(OrgFile... files) throws Exception {
 
-        for(OrgFile file: files)
-            writeChanges(file);
+        if (files.length > 0) {
+            for (OrgFile file : files)
+                writeChanges(file);
+        } else {
+            for(OrgFile file : OrgFile.getAllFiles())
+                writeChanges(file);
+        }
 
         return null;
     }
@@ -36,6 +42,9 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
         builder.and().ne(OrgNode.STATE_FIELD_NAME, OrgNode.State.Clean);
 
         List<OrgNode> dirtyNodes = builder.query();
+
+        if (dirtyNodes.isEmpty())
+            return;
 
         for(OrgNode node: dirtyNodes)
             applyChanges(writer, node);
@@ -68,6 +77,11 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onSuccess(Void aVoid) {
+        new SyncGitTask(context).execute();
     }
 
     @Override

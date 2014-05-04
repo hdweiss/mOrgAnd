@@ -22,7 +22,7 @@ import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.outline.OutlineFragment;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.calendar.CalendarWrapper;
-import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
+import com.hdweiss.morgand.synchronizer.writer.SyncWriterTask;
 import com.squareup.otto.Subscribe;
 
 import java.util.Locale;
@@ -181,7 +181,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 break;
 
             case R.id.action_sync:
-                SyncGitTask synchronizerTask = new SyncGitTask(this);
+                SyncWriterTask synchronizerTask = new SyncWriterTask(this);
                 synchronizerTask.execute();
                 break;
 
