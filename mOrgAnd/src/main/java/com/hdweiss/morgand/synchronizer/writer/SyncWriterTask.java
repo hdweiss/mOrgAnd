@@ -49,6 +49,9 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
     }
 
     private void applyChanges(OrgFileWriter writer, OrgNode node) {
+        if (node.isParentAdded()) // Parents will be serialized recursively if they are added
+            return;
+
         switch (node.state) {
             case Added:
                 writer.add(node);

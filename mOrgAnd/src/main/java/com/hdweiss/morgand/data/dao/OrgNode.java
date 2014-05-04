@@ -237,6 +237,17 @@ public class OrgNode {
         return -1;
     }
 
+    public boolean isParentAdded() {
+        if (parent != null) {
+            if (parent.state == State.Added)
+                return true;
+
+            return parent.isParentAdded();
+        }
+
+        return false;
+    }
+
     public List<OrgCalendarEntry> getOrgNodeDates() {
         ArrayList<OrgCalendarEntry> dates = new ArrayList<OrgCalendarEntry>();
 

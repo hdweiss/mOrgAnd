@@ -16,18 +16,14 @@ public class OrgNodeRepository {
     }
 
     public static void update(OrgNode node) {
-        if (node.state != OrgNode.State.Added)
+        if (node.state != OrgNode.State.Added) // Keep the added state when updating nodes
             node.state = OrgNode.State.Updated;
 
         DatabaseHelper.getOrgNodeDao().update(node);
     }
 
     public static void create(OrgNode node) {
-        if (node.parent != null && node.parent.state == OrgNode.State.Added)
-            node.state = OrgNode.State.Clean; // When writing added nodes, the top node is called with toStringResursively()
-        else
-            node.state = OrgNode.State.Added;
-
+        node.state = OrgNode.State.Added;
         DatabaseHelper.getOrgNodeDao().create(node);
     }
 
