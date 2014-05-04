@@ -13,7 +13,7 @@ public class OrgNodeUtils {
 
     public static final Pattern urlPattern = Pattern.compile("(?:\\[\\[([^\\]]+)\\](?:\\[([^\\]]+)\\])?\\])|(http(?:s?)://\\S+)"); // Match [[url]], [[url][alias]] and http(s)://url
     public static final Pattern dateMatcher = Pattern.compile("((?:SCHEDULED:|DEADLINE:)\\s?)?<([^>]+)>" + "(?:\\s*--\\s*<([^>]+)>)?");
-    public static final Pattern headingPattern = Pattern.compile("\\*+\\s([A-Z]+)(:?\\s(.+))?");
+    public static final Pattern headingPattern = Pattern.compile("([A-Z]+)(:?\\s(.+))?");
     public static final Pattern prioritiesPattern = Pattern.compile("\\[#([^\\]]*)\\]");
 
     public static String combineTags(String tags, String inheritedTags, HashSet<String> excludedTags) {

@@ -121,7 +121,7 @@ public class OrgNode {
             }
         }
 
-        return title.replaceAll("^\\** ", "");
+        return title;
     }
 
     public String getTodo() {
@@ -176,6 +176,7 @@ public class OrgNode {
         node.parent = this;
         node.file = this.file;
         node.type = type;
+        node.level = this.level + 1;
         node.inheritedTags = OrgNodeUtils.combineTags(tags, inheritedTags, PreferenceUtils.getExcludedTags());
         return node;
     }

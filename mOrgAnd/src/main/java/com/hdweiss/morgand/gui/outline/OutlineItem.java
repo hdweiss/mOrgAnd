@@ -88,7 +88,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
             case File:
             case Headline:
-                setupHeadlineTitle(expanded);
+                setupHeadlineTitle(expanded, level);
                 setupTags();
                 break;
 
@@ -127,9 +127,12 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
 
     // TODO Mark up COMMENT and Archive nodes
-    private void setupHeadlineTitle(boolean expanded) {
+    private void setupHeadlineTitle(boolean expanded, int level) {
         SpannableStringBuilder titleSpan = new SpannableStringBuilder();
 
+        for(int i = 0; i < level; i++)
+            titleSpan.append("*");
+        titleSpan.append(" ");
         titleSpan.append(node.title);
 
         setupUrls(titleSpan);

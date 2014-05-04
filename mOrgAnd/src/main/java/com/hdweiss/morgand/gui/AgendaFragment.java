@@ -20,7 +20,7 @@ public class AgendaFragment extends OutlineFragment {
     @Override
     protected void refreshView() {
         try {
-            List<OrgNode> orgNodes = OrgNodeRepository.getDao().queryBuilder().where().like(OrgNode.TITLE_FIELD_NAME, "%* NEXT%")
+            List<OrgNode> orgNodes = OrgNodeRepository.getDao().queryBuilder().where().like(OrgNode.TITLE_FIELD_NAME, "NEXT%")
                     .and().eq(OrgNode.FILE_FIELD_NAME, "/sdcard/morg/GTD.org").query();
             listView.setData(orgNodes);
             ((OutlineAdapter) listView.getAdapter()).setAgendaMode(true);

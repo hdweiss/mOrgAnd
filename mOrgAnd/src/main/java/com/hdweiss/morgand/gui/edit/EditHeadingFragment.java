@@ -52,6 +52,9 @@ public class EditHeadingFragment extends BaseEditFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (controller == null)
+            return;
+
         OrgNode node = controller.getNode();
         populateView(node.getTitle(), node.tags, node.inheritedTags);
         populateAutocompletion();

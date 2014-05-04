@@ -33,8 +33,10 @@ public class EditTextFragment extends BaseEditFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String text = controller.getNode().title;
-        populateView(text);
+        if (controller != null) {
+            String text = controller.getNode().title;
+            populateView(text);
+        }
     }
 
     private void populateView(String text) {

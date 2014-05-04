@@ -147,7 +147,7 @@ public class OrgFileParser {
         return node;
     }
 
-    private static final String headingRegex = "(.*?)" + // Title
+    private static final String headingRegex = "(?:\\*+\\s)?(.*?)" + // Title
             "\\s*" + // Whitespaces
             "(?::([^\\s]+):)?\\s*" + // Tags
             "$"; // End of line
