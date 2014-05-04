@@ -27,6 +27,13 @@ public class OrgNodeRepository {
         DatabaseHelper.getOrgNodeDao().create(node);
     }
 
+    public static void delete(OrgNode node) {
+        node.state = OrgNode.State.Deleted;
+        DatabaseHelper.getOrgNodeDao().update(node);
+
+        for(OrgNode child: node.children)
+            delete(child);
+    }
 
     public static QueryBuilder<OrgNode, Integer> queryBuilder() {
         return DatabaseHelper.getOrgNodeDao().queryBuilder();

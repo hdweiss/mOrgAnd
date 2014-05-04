@@ -2,6 +2,7 @@ package com.hdweiss.morgand.gui.outline;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.ActionMode;
@@ -18,6 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutlineListView extends ListView {
+
+    private final static String OUTLINE_NODES = "nodes";
+    private final static String OUTLINE_LEVELS = "levels";
+    private final static String OUTLINE_EXPANDED = "expanded";
+    private final static String OUTLINE_CHECKED_POS = "selection";
+    private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
 	private Context context;
 	private Activity activity;
@@ -49,22 +56,31 @@ public class OutlineListView extends ListView {
 		this.context = activity;
 	}
 
-	public long[] getNodeState() {
-		return this.adapter.getNodeState();
-	}
 
-    public ArrayList<Integer> getLevelState() {
-        return this.adapter.getLevelState();
+    public void saveState(Bundle outState) {
+        outState.putLongArray(OUTLINE_NODES, adapter.getNodeState());
+        outState.putIntegerArrayList(OUTLINE_LEVELS, adapter.getLevelState());
+        outState.putBooleanArray(OUTLINE_EXPANDED, adapter.getExpandedState());
+        outState.putInt(OUTLINE_CHECKED_POS, getCheckedItemPosition());
+        outState.putInt(OUTLINE_SCROLL_POS, getFirstVisiblePosition());
     }
 
-    public boolean[] getExpandedState() {
-        return this.adapter.getExpandedState();
+    public void loadState(Bundle savedInstanceState) {
+        long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
+        ArrayList<Integer> levels = savedInstanceState.getIntegerArrayList(OUTLINE_LEVELS);
+        boolean[] expanded = savedInstanceState.getBooleanArray(OUTLINE_EXPANDED);
+        if(state != null) {
+            this.adapter.setState(state, levels, expanded);
+        }
+
+        int checkedPos= savedInstanceState.getInt(OUTLINE_CHECKED_POS, 0);
+        setItemChecked(checkedPos, true);
+
+        int scrollPos = savedInstanceState.getInt(OUTLINE_SCROLL_POS, 0);
+        setSelection(scrollPos);
     }
 
-	public void setState(long[] state, ArrayList<Integer> levels, boolean[] expanded) {
-		this.adapter.setState(state, levels, expanded);
-	}
-	
+
 	public void refresh() {
 		int position = getFirstVisiblePosition();
 		this.adapter.refresh();

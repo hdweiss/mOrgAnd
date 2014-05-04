@@ -34,7 +34,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	public void init() {
 		clear();
 		
-		for (OrgNode node : new ArrayList<OrgNode>())
+		for (OrgNode node : OrgNodeRepository.getRootNodes())
 			add(node);
 		
 		notifyDataSetInvalidated();

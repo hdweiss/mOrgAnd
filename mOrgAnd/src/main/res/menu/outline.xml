@@ -8,5 +8,9 @@
         mytest:showAsAction="always"
         android:title="@string/action_capture"
         android:visible="true"/>
-
+    <item
+        android:id="@+id/delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/action_delete"
+        android:visible="true"/>
 </menu>

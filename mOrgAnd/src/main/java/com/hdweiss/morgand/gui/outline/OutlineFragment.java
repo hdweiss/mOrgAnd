@@ -21,15 +21,7 @@ import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-
 public class OutlineFragment extends Fragment {
-
-    private final static String OUTLINE_NODES = "nodes";
-    private final static String OUTLINE_LEVELS = "levels";
-    private final static String OUTLINE_EXPANDED = "expanded";
-    private final static String OUTLINE_CHECKED_POS = "selection";
-    private final static String OUTLINE_SCROLL_POS = "scrollPosition";
 
     protected OutlineListView listView;
 
@@ -72,27 +64,13 @@ public class OutlineFragment extends Fragment {
         if (savedInstanceState == null)
             return;
 
-        long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
-        ArrayList<Integer> levels = savedInstanceState.getIntegerArrayList(OUTLINE_LEVELS);
-        boolean[] expanded = savedInstanceState.getBooleanArray(OUTLINE_EXPANDED);
-        if(state != null)
-            listView.setState(state, levels, expanded);
-
-        int checkedPos= savedInstanceState.getInt(OUTLINE_CHECKED_POS, 0);
-        listView.setItemChecked(checkedPos, true);
-
-        int scrollPos = savedInstanceState.getInt(OUTLINE_SCROLL_POS, 0);
-        listView.setSelection(scrollPos);
+        listView.loadState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLongArray(OUTLINE_NODES, listView.getNodeState());
-        outState.putIntegerArrayList(OUTLINE_LEVELS, listView.getLevelState());
-        outState.putBooleanArray(OUTLINE_EXPANDED, listView.getExpandedState());
-        outState.putInt(OUTLINE_CHECKED_POS, listView.getCheckedItemPosition());
-        outState.putInt(OUTLINE_SCROLL_POS, listView.getFirstVisiblePosition());
+        listView.saveState(outState);
     }
 
     @Override
@@ -113,11 +91,24 @@ public class OutlineFragment extends Fragment {
                 showAddDialog(position);
                 break;
 
+            case R.id.delete:
+                showDeleteDialog(position);
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
 
         return true;
+    }
+
+    private void showDeleteDialog(int position) {
+        if (position < 0)
+            return;
+
+        OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
+        OrgNodeRepository.delete(node);
+        Application.getBus().post(new DataUpdatedEvent());
     }
 
     private void showAddDialog(int position) {
@@ -131,12 +122,11 @@ public class OutlineFragment extends Fragment {
     }
 
 
-
     @Subscribe
     public void refreshView(DataUpdatedEvent event) {
         refreshView();
     }
     protected void refreshView() {
-        listView.setData(OrgNodeRepository.getRootNodes());
+        listView.refresh();
     }
 }

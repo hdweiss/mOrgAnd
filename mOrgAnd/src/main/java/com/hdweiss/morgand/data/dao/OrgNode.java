@@ -168,6 +168,9 @@ public class OrgNode {
         boolean showSettings = PreferenceUtils.showSettings();
         boolean showDrawers = PreferenceUtils.showDrawers();
         for(OrgNode node: children) {
+            if (node.state == State.Deleted)
+                continue;
+
             switch (node.type) {
                 case Drawer:
                     if (showDrawers)
