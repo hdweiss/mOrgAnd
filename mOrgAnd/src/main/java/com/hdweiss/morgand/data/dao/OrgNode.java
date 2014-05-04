@@ -69,17 +69,28 @@ public class OrgNode {
 
 
     public String toString() {
-        return title + "\t" + tags;
+        if (type != Type.Headline)
+            return title;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < level; i++)
+            builder.append("*");
+        builder.append(" ");
+
+        builder.append(title.trim());
+        builder.append("\t" + tags);
+        return builder.toString();
     }
 
     public String toStringRecursively() {
         StringBuilder builder = new StringBuilder(toString());
 
         for(OrgNode child : children)
-            builder.append("\n").append(child.toString());
+            builder.append("\n").append(child.toStringRecursively());
 
         return builder.toString();
     }
+
 
     public boolean isEditable() {
         if (type == Type.File || type == Type.Directory)
@@ -189,16 +200,34 @@ public class OrgNode {
         return node;
     }
 
+    public int getNextNodeLineNumber() {
+        try {
+            Where<OrgNode, Integer> where = OrgNodeRepository.queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
+            where.eq(FILE_FIELD_NAME, file).and().gt(LINENUMBER_FIELD_NAME, lineNumber);
+            OrgNode node = where.queryForFirst();
+            if (node != null)
+                return node.lineNumber;
+            else
+                return Integer.MAX_VALUE; // Current node seems to be last in file
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
     /**
      * @return line number of next node on same or higher level than current node.
      */
-    public int getNextNodeLineNumber() {
+    public int getSiblingLineNumber() {
         try {
             Where<OrgNode, Integer> where = OrgNodeRepository.queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
             where.eq(FILE_FIELD_NAME, file).and().gt(LINENUMBER_FIELD_NAME, lineNumber).and().le(LEVEL_FIELD_NAME, level);
             OrgNode node = where.queryForFirst();
-            if (node != null)
-                return node.lineNumber;
+            if (node != null) {
+                if (node.type != Type.File)
+                    return node.lineNumber;
+            }
             else
                 return Integer.MAX_VALUE; // Current node seems to be last in file
         } catch (SQLException e) {
@@ -215,7 +244,7 @@ public class OrgNode {
         while(matcher.find()) {
             String type = matcher.group(1);
             String startDate = matcher.group(2);
-            String endDate = matcher.group(3);
+            String endDate = matcher.group(3); // TODO Support day ranges?
 
             try {
                 OrgCalendarEntry orgCalendarEntry = new OrgCalendarEntry(startDate);

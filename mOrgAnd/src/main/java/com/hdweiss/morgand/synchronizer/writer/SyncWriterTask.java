@@ -31,7 +31,7 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
     private void writeChanges(OrgFile file) throws Exception {
         OrgFileWriter writer = new OrgFileWriter(file);
 
-        Where<OrgNode, Integer> builder = OrgNodeRepository.queryBuilder().where();
+        Where<OrgNode, Integer> builder = OrgNodeRepository.queryBuilder().orderBy(OrgNode.LINENUMBER_FIELD_NAME, false).where();
         builder.eq(OrgNode.FILE_FIELD_NAME, file);
         builder.and().ne(OrgNode.STATE_FIELD_NAME, OrgNode.State.Clean);
 

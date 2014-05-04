@@ -23,7 +23,11 @@ public class OrgNodeRepository {
     }
 
     public static void create(OrgNode node) {
-        node.state = OrgNode.State.Added;
+        if (node.parent != null && node.parent.state == OrgNode.State.Added)
+            node.state = OrgNode.State.Clean; // When writing added nodes, the top node is called with toStringResursively()
+        else
+            node.state = OrgNode.State.Added;
+
         DatabaseHelper.getOrgNodeDao().create(node);
     }
 
