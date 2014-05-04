@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class OrgRepository {
 
     private String path;
-    private RuntimeExceptionDao<OrgNode, Integer> nodeDao;
+    private OrgNodeRepository nodeDao;
     private RuntimeExceptionDao<OrgFile, String> fileDao;
 
     public OrgRepository(String path) {
@@ -25,7 +25,7 @@ public class OrgRepository {
             throw new IllegalArgumentException("Path can't be empty");
 
         this.path = path;
-        this.nodeDao = OrgNodeRepository.getDao();
+        this.nodeDao = new OrgNodeRepository();
         this.fileDao = OrgFile.getDao();
     }
 

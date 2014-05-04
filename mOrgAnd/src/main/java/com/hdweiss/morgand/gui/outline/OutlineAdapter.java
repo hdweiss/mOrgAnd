@@ -64,7 +64,7 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		
 		for(int i = 0; i < state.length; i++) {
             try {
-                OrgNode node = OrgNodeRepository.getDao().queryForId((int) state[i]);
+                OrgNode node = OrgNodeRepository.queryForId((int) state[i]);
                 add(node);
             } catch(Exception ex) {}
 		}

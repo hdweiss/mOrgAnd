@@ -9,18 +9,14 @@ import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.SynchronizerNotification;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.Where;
 
 import java.util.List;
 
 public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
 
-    private RuntimeExceptionDao<OrgNode, Integer> nodeDao;
-
     public SyncWriterTask(Context context) {
         super(context, ReportMode.Log);
-        nodeDao = OrgNodeRepository.getDao();
     }
 
     @Override
@@ -35,7 +31,7 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
     private void writeChanges(OrgFile file) throws Exception {
         OrgFileWriter writer = new OrgFileWriter(file);
 
-        Where<OrgNode, Integer> builder = nodeDao.queryBuilder().where();
+        Where<OrgNode, Integer> builder = OrgNodeRepository.queryBuilder().where();
         builder.eq(OrgNode.FILE_FIELD_NAME, file);
         builder.and().ne(OrgNode.STATE_FIELD_NAME, OrgNode.State.Clean);
 
@@ -48,7 +44,7 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
 
         for(OrgNode node: dirtyNodes) {
             node.state = OrgNode.State.Clean;
-            nodeDao.update(node);
+            OrgNodeRepository.update(node);
         }
     }
 

@@ -4,9 +4,9 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import com.hdweiss.morgand.data.OrgNodeUtils;
+import com.hdweiss.morgand.data.dao.DatabaseHelper;
 import com.hdweiss.morgand.data.dao.OrgFile;
 import com.hdweiss.morgand.data.dao.OrgNode;
-import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
@@ -32,7 +32,7 @@ public class OrgFileParser {
 
 	public OrgFileParser() {
         this.excludedTags = PreferenceUtils.getExcludedTags();
-        this.nodeDao = OrgNodeRepository.getDao();
+        this.nodeDao = DatabaseHelper.getOrgNodeDao();
 	}
 
     public void parse(OrgFile orgFile) throws IOException {

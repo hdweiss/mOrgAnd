@@ -185,7 +185,7 @@ public class OrgNode {
         OrgNode node = addChild(type);
         node.title = title;
 
-        OrgNodeRepository.getDao().create(node);
+        OrgNodeRepository.create(node);
         return node;
     }
 
@@ -194,7 +194,7 @@ public class OrgNode {
      */
     public int getNextNodeLineNumber() {
         try {
-            Where<OrgNode, Integer> where = OrgNodeRepository.getDao().queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
+            Where<OrgNode, Integer> where = OrgNodeRepository.queryBuilder().orderBy(LINENUMBER_FIELD_NAME, true).where();
             where.eq(FILE_FIELD_NAME, file).and().gt(LINENUMBER_FIELD_NAME, lineNumber).and().le(LEVEL_FIELD_NAME, level);
             OrgNode node = where.queryForFirst();
             if (node != null)

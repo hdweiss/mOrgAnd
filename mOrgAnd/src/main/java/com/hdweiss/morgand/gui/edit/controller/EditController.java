@@ -12,7 +12,6 @@ public class EditController extends BaseEditController {
 
     @Override
     public void save(OrgNode node) {
-        node.state = OrgNode.State.Updated;
-        OrgNodeRepository.getDao().update(node);
+        OrgNodeRepository.update(node);
     }
 }

@@ -48,7 +48,7 @@ public class OrgNodeUtils {
         } else
             node.title = node.title.replaceFirst("-\\s\\[X\\]", "- [ ]");
 
-        OrgNodeRepository.getDao().update(node);
+        OrgNodeRepository.update(node);
 
         if (node.parent == null)
             return;
@@ -68,7 +68,7 @@ public class OrgNodeUtils {
                     return;
 
                 node.title = node.title.replace(matcher.group(), "[" + currentAmount + "/" + total + "]");
-                OrgNodeRepository.getDao().update(node);
+                OrgNodeRepository.update(node);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

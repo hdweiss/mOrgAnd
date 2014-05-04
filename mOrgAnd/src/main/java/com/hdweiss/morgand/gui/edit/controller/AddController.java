@@ -12,7 +12,6 @@ public class AddController extends BaseEditController {
 
     @Override
     public void save(OrgNode node) {
-        node.state = OrgNode.State.Added;
-        OrgNodeRepository.getDao().create(node);
+        OrgNodeRepository.create(node);
     }
 }
