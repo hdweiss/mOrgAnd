@@ -58,8 +58,10 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
     }
 
     private void applyChanges(OrgFileWriter writer, OrgNode node) {
-        if (node.isNodeWritable() == false)
+        if (node.isNodeWritable() == false) {
+            Log.d("Writer", "Node not writable " + node.getTitle());
             return;
+        }
 
         switch (node.state) {
             case Added:

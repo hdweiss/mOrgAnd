@@ -6,7 +6,6 @@ import com.hdweiss.morgand.data.dao.OrgFile;
 import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import java.io.File;
@@ -117,9 +116,7 @@ public class OrgRepository {
                 return null;
 
             try {
-                DeleteBuilder<OrgNode, Integer> deleteBuilder = nodeDao.deleteBuilder();
-                deleteBuilder.where().eq(OrgNode.FILE_FIELD_NAME, orgFile);
-                deleteBuilder.delete();
+                nodeDao.delete(orgFile);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class Utils {
@@ -79,5 +80,16 @@ public class Utils {
             return list;
         list.addAll(set);
         return list;
+    }
+
+
+    public static int getIteratorSize(Iterator<?> iterator) {
+        int i = 0;
+        while (iterator.hasNext()) {
+            iterator.next();
+            i++;
+        }
+
+        return i;
     }
 }

@@ -23,7 +23,9 @@ public class OrgNodeRepository {
     }
 
     public static void create(OrgNode node) {
-        node.state = OrgNode.State.Added;
+        if (node.type != OrgNode.Type.Directory) // Directories should always have state=clean
+            node.state = OrgNode.State.Added;
+
         DatabaseHelper.getOrgNodeDao().create(node);
     }
 
@@ -50,6 +52,12 @@ public class OrgNodeRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int delete(OrgFile orgFile) throws SQLException {
+        DeleteBuilder<OrgNode, Integer> deleteBuilder = deleteBuilder();
+        deleteBuilder.where().eq(OrgNode.FILE_FIELD_NAME, orgFile);
+        return deleteBuilder.delete();
     }
 
     public static List<OrgNode> getRootNodes() {

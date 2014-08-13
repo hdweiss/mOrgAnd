@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hdweiss.morgand.utils.FileUtils;
+import com.hdweiss.morgand.utils.Utils;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.FetchCommand;
@@ -22,7 +23,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.SshSessionFactory;
 
 import java.io.File;
-import java.util.Iterator;
 
 public class JGitWrapper {
 
@@ -74,10 +74,10 @@ public class JGitWrapper {
         return new Git(fileRepository);
     }
 
-    private void createNewRepo(ProgressMonitor monitor) throws Exception {
+    private void createNewRepo(ProgressMonitor monitor) throws GitAPIException, IllegalArgumentException {
         File localRepo = new File(localPath);
         if (localRepo.exists()) // Safety check so we don't accidentally delete directory
-            throw new Exception("Directory already exists");
+            throw new IllegalStateException("Directory already exists");
 
         try {
             CloneCommand cloneCommand = Git.cloneRepository()
@@ -139,8 +139,7 @@ public class JGitWrapper {
             case Behind:
                 MergeResult result = git.merge().include(fetchHead).setFastForward(MergeCommand.FastForwardMode.FF_ONLY).call(); // TODO Set remote refs
                 if (result.getMergeStatus().isSuccessful() == false) {
-                    git.reset().setMode(ResetCommand.ResetType.HARD).call();
-                    throw new Exception("Merge fast forward failed");
+                    abortMerge(git);
                 }
                 break;
 
@@ -149,11 +148,15 @@ public class JGitWrapper {
                 if (mergeResult.getMergeStatus().isSuccessful()) {
                     git.push().setRemote(remotePath).call();
                 } else {
-                    git.reset().setMode(ResetCommand.ResetType.HARD).call();
-                    throw new Exception("Merge failed");
+                    abortMerge(git);
                 }
                 break;
         }
+    }
+
+    private void abortMerge(Git git) throws GitAPIException {
+        git.reset().setMode(ResetCommand.ResetType.HARD).call();
+        throw new IllegalStateException("Merge failed");
     }
 
     private enum SyncState {
@@ -165,16 +168,16 @@ public class JGitWrapper {
         Ref head = git.getRepository().getRef("HEAD");
 
         if (fetchHead == null)
-            throw new Exception("fetchHead not found!");
+            throw new IllegalStateException("fetchHead not found!");
 
         if (head == null)
-            throw new Exception("head not found!");
+            throw new IllegalStateException("head not found!");
 
         Iterable<RevCommit> call = git.log().addRange(fetchHead.getObjectId(), head.getObjectId()).call();
-        int originToHead = countIterator(call.iterator());
+        int originToHead = Utils.getIteratorSize(call.iterator());
 
         Iterable<RevCommit> call2 = git.log().addRange(head.getObjectId(), fetchHead.getObjectId()).call();
-        int headToOrigin = countIterator(call2.iterator());
+        int headToOrigin = Utils.getIteratorSize(call2.iterator());
 
         Log.d("JGitWrapper", "fetchHead->head: " + originToHead + " head->fetchHead: " + headToOrigin);
 
@@ -186,15 +189,5 @@ public class JGitWrapper {
             return SyncState.Ahead;
         else
             return SyncState.Diverged;
-    }
-
-    public static int countIterator(Iterator<?> iterator) {
-        int i = 0;
-        while (iterator.hasNext()) {
-            iterator.next();
-            i++;
-        }
-
-        return i;
     }
 }
