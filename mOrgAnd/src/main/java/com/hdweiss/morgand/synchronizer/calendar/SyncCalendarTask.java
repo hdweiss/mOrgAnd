@@ -44,8 +44,9 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
     @Override
     protected Void safeDoInBackground(String... files) throws Exception {
         Log.d("Calendar", "Started synchronization");
-        if (files.length == 0)
-            return null;
+        if (files.length == 0) {
+            Log.d("Calendar", "No modified files");
+        }
 
         for(String file: files)
             syncFileSchedule(file);
@@ -71,7 +72,7 @@ public class SyncCalendarTask extends SafeAsyncTask<String, DataUpdatedEvent, Vo
         MultiMap<CalendarEntry> entries = getCalendarEntries(filename);
         List<OrgNode> nodes = OrgNodeRepository.getScheduledNodes(filename, showHabits);
 
-        Log.d("Calendar", filename + " has " + nodes.size() + " entries");
+        Log.d("Calendar", filename + " has " + nodes.size() + " calendar entries");
 
         for(OrgNode node: nodes) {
             for(OrgCalendarEntry date: node.getOrgNodeDates()) {

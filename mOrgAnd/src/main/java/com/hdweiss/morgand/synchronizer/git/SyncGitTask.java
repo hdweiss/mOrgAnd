@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.events.SyncEvent;
@@ -22,8 +23,12 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
     @Override
     protected Void safeDoInBackground(Void... params) throws Exception {
-        if (Utils.isNetworkOnline(context) == false)
+        Log.d("Git", "Started synchronization");
+
+        if (Utils.isNetworkOnline(context) == false) {
+            Log.d("Git", "Network is offline, aborting git synchronization");
             return null;
+        }
 
         publishProgress(new SyncEvent(SyncEvent.State.Intermediate));
 
@@ -36,6 +41,7 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
             throw new ReportableException(ex.getMessage());
         }
 
+        Log.d("Git", "Ended synchronization");
         return null;
     }
 

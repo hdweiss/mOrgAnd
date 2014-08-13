@@ -265,7 +265,7 @@ public class OrgNode {
         while(matcher.find()) {
             String type = matcher.group(1);
             String startDate = matcher.group(2);
-            String endDate = matcher.group(3); // TODO Support day ranges?
+            String endDate = matcher.group(3); // TODO Support day ranges
 
             try {
                 OrgCalendarEntry orgCalendarEntry = new OrgCalendarEntry(startDate);

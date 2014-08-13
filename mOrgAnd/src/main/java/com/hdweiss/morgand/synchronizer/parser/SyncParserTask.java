@@ -3,6 +3,7 @@ package com.hdweiss.morgand.synchronizer.parser;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.data.dao.OrgFile;
@@ -26,6 +27,8 @@ public class SyncParserTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
     @Override
     protected Void safeDoInBackground(Void... voids) throws Exception {
+        Log.d("Parser", "Started synchronization");
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String localRepoPath = preferences.getString("git_local_path", "");
 
@@ -34,16 +37,22 @@ public class SyncParserTask extends SafeAsyncTask<Void, SyncEvent, Void> {
         OrgRepository repository = new OrgRepository(localRepoPath);
         modifiedFiles = repository.getModifiedFiles();
 
+        if (modifiedFiles.isEmpty()) {
+            Log.d("Parser", "No modified files");
+        }
+
         int fileIndex = 0;
         for(OrgFile orgFile: modifiedFiles) {
             fileIndex++;
 
+            Log.d("Parser", "Parsing " + orgFile.path);
             new OrgFileParser().parse(orgFile);
 
             int progress = (100 / modifiedFiles.size()) * fileIndex;
             publishProgress(new SyncEvent(SyncEvent.State.Progress, progress, orgFile.path));
         }
 
+        Log.d("Parser", "Ended synchronization");
         return null;
     }
 

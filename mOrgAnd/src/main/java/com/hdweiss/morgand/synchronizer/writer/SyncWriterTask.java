@@ -1,6 +1,7 @@
 package com.hdweiss.morgand.synchronizer.writer;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hdweiss.morgand.data.dao.OrgFile;
 import com.hdweiss.morgand.data.dao.OrgNode;
@@ -10,7 +11,6 @@ import com.hdweiss.morgand.gui.SynchronizerNotification;
 import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
-import com.j256.ormlite.stmt.Where;
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
 
     @Override
     protected Void safeDoInBackground(OrgFile... files) throws Exception {
+        Log.d("Writer", "Started synchronization");
 
         if (files.length > 0) {
             for (OrgFile file : files)
@@ -31,20 +32,19 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
                 writeChanges(file);
         }
 
+        Log.d("Writer", "Ended synchronization");
         return null;
     }
 
     private void writeChanges(OrgFile file) throws Exception {
         OrgFileWriter writer = new OrgFileWriter(file);
 
-        Where<OrgNode, Integer> builder = OrgNodeRepository.queryBuilder().orderBy(OrgNode.LINENUMBER_FIELD_NAME, false).where();
-        builder.eq(OrgNode.FILE_FIELD_NAME, file);
-        builder.and().ne(OrgNode.STATE_FIELD_NAME, OrgNode.State.Clean);
-
-        List<OrgNode> dirtyNodes = builder.query();
+        List<OrgNode> dirtyNodes = OrgNodeRepository.getDirtyNodes(file);
 
         if (dirtyNodes.isEmpty())
             return;
+
+        Log.d("Writer", "Writing changes to " + file.path);
 
         for(OrgNode node: dirtyNodes)
             applyChanges(writer, node);

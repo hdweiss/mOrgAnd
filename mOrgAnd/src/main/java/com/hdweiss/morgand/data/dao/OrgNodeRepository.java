@@ -80,6 +80,13 @@ public class OrgNodeRepository {
         return new ArrayList<OrgNode>();
     }
 
+    public static List<OrgNode> getDirtyNodes(OrgFile file) throws SQLException {
+        Where<OrgNode, Integer> builder = queryBuilder().orderBy(OrgNode.LINENUMBER_FIELD_NAME, false).where();
+        builder.eq(OrgNode.FILE_FIELD_NAME, file);
+        builder.and().ne(OrgNode.STATE_FIELD_NAME, OrgNode.State.Clean);
+        return builder.query();
+    }
+
     public static OrgNode getDefaultCaptureNode() {
         return new OrgNode(); // TODO
     }
