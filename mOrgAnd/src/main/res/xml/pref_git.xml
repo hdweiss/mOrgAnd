@@ -68,5 +68,14 @@
             android:capitalize="none"
             android:singleLine="true"
             android:maxLines="1"/>
+
+        <ListPreference
+            android:key="git_merge_strategy"
+            android:title="@string/pref_title_git_merge_strategy"
+            android:entries="@array/pref_git_merge_strategies_titles"
+            android:entryValues="@array/pref_git_merge_strategies_values"
+            android:defaultValue="theirs"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"/>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -12,7 +12,6 @@ import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
-import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
@@ -34,7 +33,7 @@ public class JGitWrapper {
     private final String commitAuthor;
     private final String commitEmail;
 
-    private final MergeStrategy mergeStrategy = MergeStrategy.OURS;
+    private MergeStrategy mergeStrategy;
 
     // TODO Externalize strings
     public JGitWrapper(SharedPreferences preferences) throws Exception {
@@ -48,6 +47,11 @@ public class JGitWrapper {
 
         commitAuthor = preferences.getString("git_commit_author", "");
         commitEmail = preferences.getString("git_commit_email", "");
+
+        String mergeStrategyString = preferences.getString("git_merge_strategy", "theirs");
+        mergeStrategy = MergeStrategy.get(mergeStrategyString);
+        if (mergeStrategy == null)
+            throw new IllegalArgumentException("Invalid merge strategy: " + mergeStrategyString);
 
         setupJGitAuthentication(preferences);
     }
@@ -98,6 +102,9 @@ public class JGitWrapper {
         if (this.git == null)
             this.git = initGitRepo(monitor);
 
+        if (this.git.status().call().getConflicting().isEmpty() == false)
+            throw new IllegalStateException("Unresolved conflict(s) in git repository");
+
         return this.git;
     }
 
@@ -125,38 +132,36 @@ public class JGitWrapper {
         fetch.call();
 
         SyncState state = getSyncState(git);
-        Log.d("JGitWrapper", "Got sync state: " + state.name());
         Ref fetchHead = git.getRepository().getRef("FETCH_HEAD");
         switch (state) {
             case Equal:
                 // Do nothing
+                Log.d("Git", "Local branch is up-to-date");
                 break;
 
             case Ahead:
+                Log.d("Git", "Local branch ahead, pushing changes to remote");
                 git.push().setRemote(remotePath).call();
                 break;
 
             case Behind:
-                MergeResult result = git.merge().include(fetchHead).setFastForward(MergeCommand.FastForwardMode.FF_ONLY).call(); // TODO Set remote refs
+                Log.d("Git", "Local branch behind, fast forwarding changes");
+                MergeResult result = git.merge().include(fetchHead).setFastForward(MergeCommand.FastForwardMode.FF_ONLY).call();
                 if (result.getMergeStatus().isSuccessful() == false) {
-                    abortMerge(git);
+                    throw new IllegalStateException("Fast forward failed on behind merge");
                 }
                 break;
 
             case Diverged:
+                Log.d("Git", "Branches are diverged, merging with strategy " + mergeStrategy.getName());
                 MergeResult mergeResult = git.merge().include(fetchHead).setStrategy(mergeStrategy).call();
                 if (mergeResult.getMergeStatus().isSuccessful()) {
                     git.push().setRemote(remotePath).call();
                 } else {
-                    abortMerge(git);
+                    throw new IllegalStateException("Merge failed for diverged branches using strategy " + mergeStrategy.getName());
                 }
                 break;
         }
-    }
-
-    private void abortMerge(Git git) throws GitAPIException {
-        git.reset().setMode(ResetCommand.ResetType.HARD).call();
-        throw new IllegalStateException("Merge failed");
     }
 
     private enum SyncState {

@@ -74,6 +74,7 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("git_key_info"));
             bindPreferenceSummaryToValue(findPreference("git_username"));
             bindPreferenceSummaryToValue(findPreference("git_local_path"));
+            bindPreferenceSummaryToValue(findPreference("git_merge_strategy"));
         }
 
         @Override

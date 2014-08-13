@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pref_sync_frequency_values">
+        <item>100000</item>
         <item>300000</item>
         <item>600000</item>
         <item>900000</item>
@@ -10,5 +11,10 @@
         <item>10800000</item>
         <item>21600000</item>
         <item>43200000</item>
+    </string-array>
+
+    <string-array name="pref_git_merge_strategies_values">
+        <item>theirs</item>
+        <item>ours</item>
     </string-array>
 </resources>
