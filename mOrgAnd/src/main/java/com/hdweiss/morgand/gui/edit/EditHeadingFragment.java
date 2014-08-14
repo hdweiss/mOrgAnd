@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
-import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.utils.Utils;
 
@@ -23,13 +22,6 @@ public class EditHeadingFragment extends BaseEditFragment {
     private AutoCompleteTextView headingView;
     private TextView inheritedTagsView;
     private AutoCompleteTextView tagsView;
-
-    // Android requires empty constructor
-    public EditHeadingFragment() { super();}
-
-    public EditHeadingFragment(BaseEditController controller) {
-        super(controller);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

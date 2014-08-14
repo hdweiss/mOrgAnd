@@ -116,8 +116,7 @@ public class OutlineFragment extends Fragment {
             return;
 
         OrgNode node = (OrgNode) listView.getAdapter().getItem(position);
-        BaseEditController editController = new AddController(node, OrgNode.Type.Headline);
-        BaseEditFragment fragment = new EditHeadingFragment(editController);
+        BaseEditFragment fragment = BaseEditFragment.getAddFragment(node);
         fragment.show(getActivity());
     }
 

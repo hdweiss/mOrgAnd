@@ -1,4 +1,6 @@
-Uses https://code.google.com/p/android-file-dialog/
 
-* Installation
+* Compilation
 - Follow the instructions at http://developer.android.com/sdk/installing/index.html?pkg=studio to install "Android Studio" and the Android SDK
+
+* Notes
+- Uses https://code.google.com/p/android-file-dialog/

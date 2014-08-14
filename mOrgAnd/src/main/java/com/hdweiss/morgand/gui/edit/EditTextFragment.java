@@ -8,17 +8,10 @@ import android.widget.EditText;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
-import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 
 public class EditTextFragment extends BaseEditFragment {
 
     private EditText editText;
-
-    public EditTextFragment() { super(); }
-
-    public EditTextFragment(BaseEditController controller) {
-        super(controller);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

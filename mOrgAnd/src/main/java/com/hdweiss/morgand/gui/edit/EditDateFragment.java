@@ -11,7 +11,6 @@ import android.widget.TimePicker;
 
 import com.hdweiss.morgand.R;
 import com.hdweiss.morgand.data.dao.OrgNode;
-import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 
 import java.util.Calendar;
 
@@ -22,13 +21,6 @@ public class EditDateFragment extends BaseEditFragment {
     private TimePicker timeStartPicker;
     private CheckBox timeEndCheckbox;
     private TimePicker timeEndPicker;
-
-    // Android requires empty constructor
-    public EditDateFragment() { super(); }
-
-    public EditDateFragment(BaseEditController controller) {
-        super(controller);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
