@@ -94,6 +94,10 @@ public class OrgFileParser {
                 node = getNodeFromLine(type, line);
                 break;
 
+            case Table:
+                node = getNodeFromTable(line);
+                break;
+
             case Body:
             default:
                 node = getNodeFromBody(line);
@@ -119,6 +123,9 @@ public class OrgFileParser {
 
         if (trimmedLine.matches("\\s*:\\w*:\\s*(.+)?"))
             return OrgNode.Type.Drawer;
+
+        if (trimmedLine.startsWith("|") && trimmedLine.endsWith("|"))
+            return OrgNode.Type.Table;
 
         return OrgNode.Type.Body;
     }
@@ -207,6 +214,18 @@ public class OrgFileParser {
 
         final ArrayList<OrgNode.Type> allowedTypes = new ArrayList<OrgNode.Type>();
         allowedTypes.add(OrgNode.Type.Body);
+        node.title = readSection(builder, allowedTypes, "");
+        return node;
+    }
+
+    private OrgNode getNodeFromTable(final String line) throws IOException {
+        OrgNode node = getNodeFromLine(OrgNode.Type.Table, line);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(line);
+
+        final ArrayList<OrgNode.Type> allowedTypes = new ArrayList<OrgNode.Type>();
+        allowedTypes.add(OrgNode.Type.Table);
         node.title = readSection(builder, allowedTypes, "");
         return node;
     }

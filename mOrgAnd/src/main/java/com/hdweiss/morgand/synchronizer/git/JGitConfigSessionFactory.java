@@ -25,19 +25,19 @@ public class JGitConfigSessionFactory extends JschConfigSessionFactory {
 
     @Override
     protected void configure(OpenSshConfig.Host host, Session session) {
-        session.setConfig("StrictHostKeyChecking", "no");
+        session.setConfig("StrictHostKeyChecking", "no"); // TODO Find out how to enable strict host checking
+
 
         session.setConfig("User", username);
         session.setPassword(password);
 
-        // TODO Test keyfile with passphrase
-//        session.setUserInfo(new MyUserInfo());
+//        session.setUserInfo(new MyUserInfo()); // TODO Delete me
 
         try {
             JSch jSch = getJSch(host, FS.DETECTED);
-            jSch.addIdentity(keyLocation);
+            jSch.addIdentity(keyLocation); // TODO Test keyfile with passphrase
 
-            // TODO Enable strict host checking
+            // TODO Delete me
 //            String knownHostsLocation = "/sdcard/morg/known_hosts";
 //            jSch.setKnownHosts(knownHostsLocation);
         } catch (JSchException e) {

@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class OrgNode {
 
     public enum Type {
-        File, Directory, Date, Headline, Body, Drawer, Checkbox, Setting
+        File, Directory, Date, Headline, Body, Drawer, Checkbox, Setting, Table
     }
 
     public enum State {

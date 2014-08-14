@@ -25,7 +25,7 @@ import com.hdweiss.morgand.settings.PreferenceUtils;
 
 import java.util.regex.Matcher;
 
-public class OutlineItem extends RelativeLayout implements Checkable {
+public class OutlineItemView extends RelativeLayout implements Checkable {
 
     private TextView titleView;
     private TextView tagsView;
@@ -34,7 +34,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
     private OrgNode node;
     private DefaultTheme theme;
 
-    public OutlineItem(Context context) {
+    public OutlineItemView(Context context) {
         super(context);
         View.inflate(context, R.layout.outline_item, this);
         titleView = (TextView) findViewById(R.id.title);
@@ -70,6 +70,14 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
         titleView.setPadding(level * 5, titleView.getPaddingTop(), titleView.getPaddingRight(), titleView.getPaddingBottom());
 
+//        if (node.type == OrgNode.Type.Table) {
+//            titleView.setTypeface(Typeface.MONOSPACE);
+//            titleView.setTextSize(android.R.style.);
+//        }
+//        else {
+//            titleView.setTextAppearance(getContext(), android.R.attr.textAppearanceMedium);
+//        }
+
         switch (node.type) {
             case Setting:
                 setupTitle(theme.settingsForeground);
@@ -99,8 +107,9 @@ public class OutlineItem extends RelativeLayout implements Checkable {
 
             case Body:
             case Checkbox:
+            case Table:
             default:
-                String formattedTitle = formatText(node.title);
+                String formattedTitle = applyNewlineFormatting(node.title);
                 SpannableStringBuilder titleSpan = setupTitle(theme.defaultForeground, formattedTitle);
                 setupUrls(titleSpan);
                 titleView.setText(titleSpan);
@@ -118,7 +127,6 @@ public class OutlineItem extends RelativeLayout implements Checkable {
         titleSpan.setSpan(new ForegroundColorSpan(color), 0, titleSpan.length(), 0);
 
         titleView.setText(titleSpan);
-
         titleView.setMovementMethod(null);
         titleView.setFocusable(false);
 
@@ -171,7 +179,7 @@ public class OutlineItem extends RelativeLayout implements Checkable {
         }
     }
 
-    private String formatText(String text) {
+    private String applyNewlineFormatting(String text) {
         StringBuilder builder = new StringBuilder();
 
         for(String line: text.trim().split("\n")) {

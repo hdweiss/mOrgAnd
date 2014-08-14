@@ -103,14 +103,14 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {				
-		OutlineItem outlineItem = (OutlineItem) convertView;
+		OutlineItemView outlineItemView = (OutlineItemView) convertView;
 		if (convertView == null)
-			outlineItem = new OutlineItem(getContext());
+			outlineItemView = new OutlineItemView(getContext());
 
-		outlineItem.setAgendaMode(agendaMode);
-        outlineItem.setup(getItem(position), getExpanded(position), getLevel(position), theme);
+		outlineItemView.setAgendaMode(agendaMode);
+        outlineItemView.setup(getItem(position), getExpanded(position), getLevel(position), theme);
 
-		return outlineItem;
+		return outlineItemView;
 	}
 
 	public void setAgendaMode(boolean agendaMode) {

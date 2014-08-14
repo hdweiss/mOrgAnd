@@ -147,9 +147,8 @@ public class JGitWrapper {
             case Behind:
                 Log.d("Git", "Local branch behind, fast forwarding changes");
                 MergeResult result = git.merge().include(fetchHead).setFastForward(MergeCommand.FastForwardMode.FF_ONLY).call();
-                if (result.getMergeStatus().isSuccessful() == false) {
+                if (result.getMergeStatus().isSuccessful() == false)
                     throw new IllegalStateException("Fast forward failed on behind merge");
-                }
                 break;
 
             case Diverged:
@@ -157,9 +156,8 @@ public class JGitWrapper {
                 MergeResult mergeResult = git.merge().include(fetchHead).setStrategy(mergeStrategy).call();
                 if (mergeResult.getMergeStatus().isSuccessful()) {
                     git.push().setRemote(remotePath).call();
-                } else {
+                } else
                     throw new IllegalStateException("Merge failed for diverged branches using strategy " + mergeStrategy.getName());
-                }
                 break;
         }
     }
