@@ -1,7 +1,8 @@
 All documentation for this project is located at [[https://github.com/hdweiss/mOrgAnd/wiki]]
 
-* Compilation
+* Building
 Follow the instructions at [[https://github.com/hdweiss/mOrgAnd/wiki/Starting%20Development][Starting Development]]
 
 * Notes
 - This project uses https://code.google.com/p/android-file-dialog/
+
