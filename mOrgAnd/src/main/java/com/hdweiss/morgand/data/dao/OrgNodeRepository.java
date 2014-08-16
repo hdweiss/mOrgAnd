@@ -30,11 +30,25 @@ public class OrgNodeRepository {
     }
 
     public static void delete(OrgNode node) {
+        if (node.type == OrgNode.Type.File || node.type == OrgNode.Type.Directory)
+            deleteWithoutUpdate(node);
+        else
+            deleteWithUpdate(node);
+    }
+
+    private static void deleteWithUpdate(OrgNode node) {
         node.state = OrgNode.State.Deleted;
         DatabaseHelper.getOrgNodeDao().update(node);
 
         for(OrgNode child: node.children)
-            delete(child);
+            deleteWithUpdate(child);
+    }
+
+    private static void deleteWithoutUpdate(OrgNode node) {
+        for(OrgNode child: node.children)
+            deleteWithoutUpdate(child);
+
+        DatabaseHelper.getOrgNodeDao().delete(node);
     }
 
     public static QueryBuilder<OrgNode, Integer> queryBuilder() {

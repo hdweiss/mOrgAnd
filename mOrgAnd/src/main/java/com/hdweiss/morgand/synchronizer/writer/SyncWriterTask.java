@@ -63,6 +63,9 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
             return;
         }
 
+        if (node.type == OrgNode.Type.File || node.type == OrgNode.Type.Directory)
+            return; // We don't handle deletion of files or directories
+
         switch (node.state) {
             case Added:
                 writer.add(node);

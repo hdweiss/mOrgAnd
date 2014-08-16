@@ -128,7 +128,7 @@ public class OrgRepository {
 
     private OrgNode getRootNode(File file, OrgFile orgFile, OrgNode parent) {
         OrgNode rootNode = new OrgNode();
-        rootNode.type = OrgNode.Type.Headline;
+        rootNode.type = OrgNode.Type.File;
         rootNode.title = file.getName();
         rootNode.file = orgFile;
         rootNode.parent = parent;
