@@ -15,9 +15,6 @@ import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.gui.edit.BaseEditFragment;
-import com.hdweiss.morgand.gui.edit.EditHeadingFragment;
-import com.hdweiss.morgand.gui.edit.controller.AddController;
-import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.squareup.otto.Subscribe;
 
@@ -44,6 +41,7 @@ public class OutlineFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_outline, container, false);
         listView = (OutlineListView) rootView.findViewById(R.id.list);
+        listView.setEmptyView(rootView.findViewById(R.id.outline_list_empty));
         return rootView;
     }
 

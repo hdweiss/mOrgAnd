@@ -1,4 +1,5 @@
 # Android
+*.apk
 gen/
 build/
 local.properties

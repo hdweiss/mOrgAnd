@@ -5,7 +5,9 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.hdweiss.morgand.Application;
+import com.hdweiss.morgand.utils.FileUtils;
 
+import java.io.File;
 import java.util.HashSet;
 
 public class PreferenceUtils {
@@ -67,5 +69,23 @@ public class PreferenceUtils {
 
     public static boolean outlineExpandAll() {
         return getPrefs().getBoolean("outline_expandall", true);
+    }
+
+
+    public static void setupGitToWiki() {
+        SharedPreferences.Editor editor = getPrefs().edit();
+        editor.remove("git_username");
+        editor.remove("git_password");
+        editor.remove("git_key_path");
+
+        File externalDir = Application.getInstace().getExternalFilesDir(null);
+        File file = new File(externalDir, "mOrgAnd.wiki");
+
+        if (file.exists())
+            FileUtils.deleteDirectory(file);
+
+        editor.putString("git_local_path", file.getAbsolutePath());
+        editor.putString("git_url", "git://github.com/hdweiss/mOrgAnd/wiki");
+        editor.commit();
     }
 }

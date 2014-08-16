@@ -93,7 +93,7 @@ public abstract class SafeAsyncTask<Params, Progress, Result> extends AsyncTask<
     protected void reportError(String error) {
         if (mode == ReportMode.Toast && context != null)
             Toast.makeText(context, error, Toast.LENGTH_LONG).show();
-        else if (mode == ReportMode.Log)
+        if (mode != ReportMode.Silent)
             Log.d("SafeAsyncTask", error);
     }
 

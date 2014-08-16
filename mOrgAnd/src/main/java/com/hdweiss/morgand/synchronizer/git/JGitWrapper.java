@@ -58,13 +58,8 @@ public class JGitWrapper {
 
     private void setupJGitAuthentication(SharedPreferences preferences) {
         String username = preferences.getString("git_username", "");
-        if (TextUtils.isEmpty(username))
-            throw new IllegalArgumentException("Must specify git username");
-
         String password = preferences.getString("git_password", "");
         String keyLocation = preferences.getString("git_key_path", "");
-        if (TextUtils.isEmpty(password) && TextUtils.isEmpty(keyLocation))
-            throw new IllegalArgumentException("Must specify either git password or keyfile path");
 
         JGitConfigSessionFactory session = new JGitConfigSessionFactory(username, password, keyLocation);
         SshSessionFactory.setInstance(session);

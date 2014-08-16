@@ -30,26 +30,35 @@ public class SynchronizerNotification {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 notifyIntent, 0);
 
-        Notification notification;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            notification = new Notification.BigTextStyle(
-                    new Notification.Builder(context)
-                            .setContentIntent(contentIntent)
-                            .setContentTitle(context.getString(R.string.error_sync))
-                            .setContentText("Error")
-                            .setSmallIcon(R.drawable.ic_launcher))
-                    .bigText(errorMsg)
-                    .build();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notification = getBigstyleNotification(errorMsg, contentIntent);
         } else {
-            Notification.Builder builder = new Notification.Builder(context);
-            builder.setContentIntent(contentIntent);
-            builder.setSmallIcon(R.drawable.ic_launcher);
-            builder.setContentText(errorMsg);
-            notification = builder.getNotification();
+            notification = getSimpleNotification(errorMsg, contentIntent);
         }
         notificationManager.notify(notifyRef, notification);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private Notification getBigstyleNotification(String message, PendingIntent contentIntent) {
+        Notification notification = new Notification.BigTextStyle(
+                new Notification.Builder(context)
+                        .setContentIntent(contentIntent)
+                        .setContentTitle(context.getString(R.string.error_sync))
+                        .setContentText("Error")
+                        .setSmallIcon(R.drawable.ic_launcher))
+                .bigText(message)
+                .build();
+        return notification;
+    }
+
+
+    private Notification getSimpleNotification(String message, PendingIntent contentIntent) {
+        Notification.Builder builder = new Notification.Builder(context);
+        builder.setContentIntent(contentIntent);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setContentText(message);
+        return builder.getNotification();
+    }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void setupNotification() {

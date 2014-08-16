@@ -1,17 +1,17 @@
 package com.hdweiss.morgand.gui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.R;
@@ -19,17 +19,15 @@ import com.hdweiss.morgand.data.dao.OrgFile;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.events.SyncEvent;
-import com.hdweiss.morgand.gui.outline.OutlineFragment;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.settings.SettingsActivity;
 import com.hdweiss.morgand.synchronizer.calendar.CalendarWrapper;
 import com.hdweiss.morgand.synchronizer.writer.SyncWriterTask;
 import com.squareup.otto.Subscribe;
 
-import java.util.Locale;
-
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private MainPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
     @Override
@@ -38,7 +36,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_main);
-
         ActionBar actionBar = initActionbar();
         initViewPager(actionBar);
     }
@@ -47,14 +44,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         //actionBar.setDisplayShowTitleEnabled(false);
-
         actionBar.setHomeButtonEnabled(true);
         //actionBar.setDisplayHomeAsUpEnabled(false);
         return actionBar;
     }
 
     private void initViewPager(final ActionBar actionBar) {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -97,45 +93,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            switch (position) {
-                case 0:
-                    return new OutlineFragment();
-                case 1:
-                    return new AgendaFragment();
-
-                default:
-                    return new AgendaFragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_outline).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_agenda).toUpperCase(l);
-            }
-            return null;
-        }
     }
 
 
@@ -194,5 +151,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 setSecondaryProgress(secondaryProgress);
                 break;
         }
+    }
+
+    public void runShowWiki(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+        Uri.parse("https://github.com/hdweiss/mOrgAnd.wiki"));
+        startActivity(intent);
+    }
+
+    public void runDownloadWiki(View view) {
+        Toast.makeText(this, R.string.action_downloadwiki, Toast.LENGTH_SHORT).show();
+        PreferenceUtils.setupGitToWiki();
+        new SyncWriterTask(this).execute();
     }
 }

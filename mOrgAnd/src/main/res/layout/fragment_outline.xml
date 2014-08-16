@@ -10,4 +10,99 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fastScrollEnabled="true"/>
+
+    <RelativeLayout
+        android:id="@+id/outline_list_empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@android:color/black"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:contentDescription="Logo"
+            android:paddingTop="15dp"
+            android:src="@drawable/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@android:color/darker_gray"
+            android:text="Welcome to mOrgAnd!" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/outline_wiki"
+                        android:layout_width="@dimen/outline_dashitem_width"
+                        android:layout_height="@dimen/outline_dashitem_height"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:drawable/ic_menu_directions"
+                        android:contentDescription="Wiki button"
+                        android:onClick="runDownloadWiki"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Download wiki"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="bold">
+                    </TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/outline_openwiki"
+                        android:layout_width="@dimen/outline_dashitem_width"
+                        android:layout_height="@dimen/outline_dashitem_height"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:drawable/ic_menu_help"
+                        android:contentDescription="Openwiki button"
+                        android:onClick="runShowWiki"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Open wiki in browser"
+                        android:textColor="@android:color/darker_gray"
+                        android:textStyle="bold">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

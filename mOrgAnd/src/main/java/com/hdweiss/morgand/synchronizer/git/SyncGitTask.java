@@ -33,13 +33,9 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
         publishProgress(new SyncEvent(SyncEvent.State.Intermediate));
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        try {
-            JGitWrapper jGitWrapper = new JGitWrapper(preferences);
-            jGitWrapper.commitAllChanges(Build.MODEL + ": Automatic commit");
-            jGitWrapper.updateChanges(monitor);
-        } catch (IllegalArgumentException ex) {
-            throw new ReportableException(ex.getMessage());
-        }
+        JGitWrapper jGitWrapper = new JGitWrapper(preferences);
+        jGitWrapper.commitAllChanges(Build.MODEL + ": Automatic commit");
+        jGitWrapper.updateChanges(monitor);
 
         Log.d("Git", "Ended synchronization");
         return null;
@@ -62,7 +58,7 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
     protected void onError() {
         Application.getBus().post(new SyncEvent(SyncEvent.State.Done));
         SynchronizerNotification notification = new SynchronizerNotification(context);
-        notification.errorNotification(exception.getMessage() + "\n" + Utils.ExceptionTraceToString(exception));
+        notification.errorNotification(exception.getLocalizedMessage() + "\n" + Utils.ExceptionTraceToString(exception));
     }
 
 
