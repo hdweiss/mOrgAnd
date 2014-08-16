@@ -1,12 +1,11 @@
 package com.hdweiss.morgand.gui;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.hdweiss.morgand.synchronizer.calendar.CalendarWrapper;
 import com.hdweiss.morgand.synchronizer.writer.SyncWriterTask;
 import com.squareup.otto.Subscribe;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private MainPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -41,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     private ActionBar initActionbar() {
-        final ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         //actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(true);
@@ -69,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -83,16 +83,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction fragmentTransaction) {
     }
 
 

@@ -85,7 +85,7 @@ public class PreferenceUtils {
             FileUtils.deleteDirectory(file);
 
         editor.putString("git_local_path", file.getAbsolutePath());
-        editor.putString("git_url", "git://github.com/hdweiss/mOrgAnd/wiki");
+        editor.putString("git_url", "git://github.com/hdweiss/mOrgAnd.wiki");
         editor.commit();
     }
 }

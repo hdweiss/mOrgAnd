@@ -34,7 +34,7 @@
     <string name="action_view">View</string>
     <string name="action_capture">Capture</string>
     <string name="action_edit">Edit</string>
-    <string name="action_delete">Delete</string>
+    <string name="action_delete">Delete node</string>
     <string name="action_clockin">Clock in</string>
     <string name="action_archive">Archive</string>
     <string name="error_setting_no_calendar">No calendar</string>

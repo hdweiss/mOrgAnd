@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:mytest="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/add_child"
         android:icon="@android:drawable/ic_menu_add"
-        mytest:showAsAction="always"
+        android:showAsAction="always"
         android:title="@string/action_capture"
         android:visible="true"/>
     <item

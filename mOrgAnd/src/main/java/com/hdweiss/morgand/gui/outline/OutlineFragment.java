@@ -62,13 +62,16 @@ public class OutlineFragment extends Fragment {
         if (savedInstanceState == null)
             return;
 
-        listView.loadState(savedInstanceState);
+        if (listView != null)
+            listView.loadState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        listView.saveState(outState);
+
+        if (listView != null)
+            listView.saveState(outState);
     }
 
     @Override

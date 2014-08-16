@@ -1,6 +1,7 @@
 package com.hdweiss.morgand.gui;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,21 +23,36 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
+        Fragment fragment;
+        Bundle argumentBundle = new Bundle();
+
         switch (position) {
             case 0:
-                return new OutlineFragment();
+                fragment = new OutlineFragment();
+                break;
+
             case 1:
-                return new AgendaFragment();
+                fragment = new AgendaFragment();
+                argumentBundle.putString("query", "NEXT%");
+                break;
+
+            case 2:
+                fragment = new AgendaFragment();
+                argumentBundle.putString("query", "TODO%");
+                break;
 
             default:
-                return new AgendaFragment();
+                fragment = new OutlineFragment();
+                break;
         }
+
+        fragment.setArguments(argumentBundle);
+        return fragment;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -46,7 +62,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return context.getString(R.string.title_outline).toUpperCase(l);
             case 1:
-                return context.getString(R.string.title_agenda).toUpperCase(l);
+                return "NEXTs";
+            case 2:
+                return "TODOs";
         }
         return null;
     }

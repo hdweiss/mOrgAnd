@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hdweiss.morgand.gui.MainActivity" >
 
     <item android:id="@+id/action_sync"
         android:title="@string/action_sync"
         android:icon="@android:drawable/ic_menu_rotate"
-        app:showAsAction="always"/>
+        android:showAsAction="always"/>
 
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:showAsAction="never" />
     <item android:id="@+id/action_clearDB"
         android:title="Clear DB" />
 </menu>
