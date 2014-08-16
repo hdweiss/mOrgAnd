@@ -20,6 +20,11 @@ public class AgendaFragment extends OutlineFragment {
         // Empty options menu for now.
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        // Empty options menu for now.
+    }
+
     @Subscribe
     public void refreshView(DataUpdatedEvent event) {
         refreshView();

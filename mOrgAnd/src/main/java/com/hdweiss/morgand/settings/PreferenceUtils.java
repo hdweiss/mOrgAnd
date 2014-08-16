@@ -60,15 +60,15 @@ public class PreferenceUtils {
     }
 
     public static boolean showDrawers() {
-        return getPrefs().getBoolean("show_drawers", true);
+        return getPrefs().getBoolean("show_drawers", false);
     }
 
     public static boolean showSettings() {
-        return getPrefs().getBoolean("show_settings", true);
+        return getPrefs().getBoolean("show_settings", false);
     }
 
     public static boolean outlineExpandAll() {
-        return getPrefs().getBoolean("outline_expandall", true);
+        return getPrefs().getBoolean("outline_expandall", false);
     }
 
 

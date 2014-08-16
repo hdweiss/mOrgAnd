@@ -6,19 +6,19 @@
 
         <CheckBoxPreference
             android:key="show_drawers"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:summary="@string/preference_show_drawers_summary"
             android:title="@string/preference_show_drawers"/>
 
         <CheckBoxPreference
             android:key="show_settings"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:summary="@string/preference_show_settings_summary"
             android:title="@string/preference_show_settings"/>
 
         <CheckBoxPreference
             android:key="outline_expandall"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:summary="@string/preference_outline_expandall_summary"
             android:title="@string/preference_outline_expandall"/>
 

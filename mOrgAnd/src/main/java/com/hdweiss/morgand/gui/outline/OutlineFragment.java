@@ -80,6 +80,19 @@ public class OutlineFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (listView == null || listView.getAdapter().isEmpty()) {
+            menu.findItem(R.id.delete).setEnabled(false);
+            menu.findItem(R.id.add_child).setEnabled(false);
+        } else {
+            menu.findItem(R.id.delete).setEnabled(true);
+            menu.findItem(R.id.add_child).setEnabled(true);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int position = listView.getCheckedItemPosition();
         switch(item.getItemId()) {
