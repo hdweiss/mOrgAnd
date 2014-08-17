@@ -20,8 +20,10 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 public class JGitWrapper {
 
@@ -41,9 +43,19 @@ public class JGitWrapper {
         if (TextUtils.isEmpty(localPath))
             throw new IllegalArgumentException("Must specify local git path");
 
-        remotePath = preferences.getString("git_url", "");
-        if (TextUtils.isEmpty(remotePath))
+        String url = preferences.getString("git_url", "");
+        if (TextUtils.isEmpty(url))
             throw new IllegalArgumentException("Must specify remote git url");
+        try {
+            URIish urIish = new URIish(url);
+            if (urIish.getUser() == null) {
+                String username = preferences.getString("git_username", "");
+                urIish = urIish.setUser(username);
+            }
+            remotePath = urIish.toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid remote git url");
+        }
 
         commitAuthor = preferences.getString("git_commit_author", "");
         commitEmail = preferences.getString("git_commit_email", "");
