@@ -32,6 +32,8 @@ public class JGitWrapper {
     private final String localPath;
     private final String remotePath;
 
+    private final String branch;
+
     private final String commitAuthor;
     private final String commitEmail;
 
@@ -56,6 +58,10 @@ public class JGitWrapper {
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid remote git url");
         }
+
+        branch = preferences.getString("git_branch", "");
+        if (branch.isEmpty())
+            throw new IllegalArgumentException("Must specify a git branch");
 
         commitAuthor = preferences.getString("git_commit_author", "");
         commitEmail = preferences.getString("git_commit_email", "");
@@ -93,6 +99,7 @@ public class JGitWrapper {
         try {
             CloneCommand cloneCommand = Git.cloneRepository()
                     .setURI(remotePath)
+                    .setBranch(branch)
                     .setDirectory(localRepo)
                     .setBare(false);
             if (monitor != null)
