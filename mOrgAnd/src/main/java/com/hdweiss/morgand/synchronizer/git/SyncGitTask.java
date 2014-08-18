@@ -17,6 +17,8 @@ import org.eclipse.jgit.lib.ProgressMonitor;
 
 public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
+    private JGitWrapper jGitWrapper;
+
     public SyncGitTask(Context context) {
         super(context, ReportMode.Toast);
     }
@@ -33,7 +35,7 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
         publishProgress(new SyncEvent(SyncEvent.State.Intermediate));
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        JGitWrapper jGitWrapper = new JGitWrapper(preferences);
+        jGitWrapper = new JGitWrapper(preferences);
         jGitWrapper.commitAllChanges(Build.MODEL + ": Automatic commit");
         jGitWrapper.updateChanges(monitor);
 
@@ -59,6 +61,11 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
         Application.getBus().post(new SyncEvent(SyncEvent.State.Done));
         SynchronizerNotification notification = new SynchronizerNotification(context);
         notification.errorNotification(exception.getLocalizedMessage() + "\n" + Utils.ExceptionTraceToString(exception));
+    }
+
+    @Override
+    protected void onCleanup() {
+        jGitWrapper.cleanup();
     }
 
 
