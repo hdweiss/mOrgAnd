@@ -4,11 +4,14 @@ package com.hdweiss.morgand.synchronizer.git;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import com.jcraft.jsch.UIKeyboardInteractive;
-import com.jcraft.jsch.UserInfo;
 
+import org.eclipse.jgit.errors.UnsupportedCredentialItem;
+import org.eclipse.jgit.transport.CredentialItem;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.CredentialsProviderUserInfo;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
+import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.util.FS;
 
 public class JGitConfigSessionFactory extends JschConfigSessionFactory {
@@ -27,59 +30,55 @@ public class JGitConfigSessionFactory extends JschConfigSessionFactory {
     protected void configure(OpenSshConfig.Host host, Session session) {
         session.setConfig("StrictHostKeyChecking", "no"); // TODO Find out how to enable strict host checking
 
+        // TODO Delete me
+        // String knownHostsLocation = "/sdcard/morg/known_hosts";
+        // jSch.setKnownHosts(knownHostsLocation);
 
-        session.setConfig("User", username);
-        session.setPassword(password);
-
-//        session.setUserInfo(new MyUserInfo()); // TODO Delete me
-
-        try {
-            JSch jSch = getJSch(host, FS.DETECTED);
-            jSch.addIdentity(keyLocation); // TODO Test keyfile with passphrase
-
-            // TODO Delete me
-//            String knownHostsLocation = "/sdcard/morg/known_hosts";
-//            jSch.setKnownHosts(knownHostsLocation);
-        } catch (JSchException e) {
-            e.printStackTrace();
-        }
+        CredentialsProvider provider = new JGitCredentialsProvider();
+        session.setUserInfo(new CredentialsProviderUserInfo(session, provider));
     }
 
+    @Override
+    protected JSch getJSch(OpenSshConfig.Host hc, FS fs) throws JSchException {
+        JSch jSch = super.getJSch(hc, fs);
+        jSch.removeAllIdentity();
+        if (!keyLocation.isEmpty())
+            jSch.addIdentity(keyLocation, password);
+        return jSch;
+    }
 
-    public class MyUserInfo implements UserInfo, UIKeyboardInteractive {
-        @Override
-        public String getPassphrase() {
-            return null;
-        }
+    public class JGitCredentialsProvider extends CredentialsProvider {
 
         @Override
-        public String getPassword() {
-            return password;
-        }
-
-        @Override
-        public boolean promptPassphrase(String arg0) {
+        public boolean isInteractive() {
             return false;
         }
 
-        @Override
-        public boolean promptPassword(String arg0) {
-            return false;
-        }
-
-        @Override
-        public boolean promptYesNo(String arg0) {
+        @Override // never gets called
+        public boolean supports(CredentialItem... items) {
             return true;
         }
 
         @Override
-        public void showMessage(String arg0) {
-        }
-
-        @Override
-        public String[] promptKeyboardInteractive(String arg0, String arg1,
-                                                  String arg2, String[] arg3, boolean[] arg4) {
-            return null;
+        public boolean get(URIish uri, CredentialItem... items)
+                throws UnsupportedCredentialItem {
+            for (CredentialItem item : items) {
+                if (item instanceof CredentialItem.Username) {
+                    ((CredentialItem.Username) item).setValue(username);
+                } else if (item instanceof CredentialItem.Password) {
+                    ((CredentialItem.Password) item).setValue(password.toCharArray());
+                } else if (item instanceof CredentialItem.StringType) {
+                    ((CredentialItem.StringType) item).setValue(password);
+                } else if (item instanceof CredentialItem.InformationalMessage) {
+                    throw new UnsupportedCredentialItem(uri, "Not supported");
+                } else if (item instanceof CredentialItem.YesNoType) {
+                    // TODO handle strict host key checking here
+                    throw new UnsupportedCredentialItem(uri, "Not supported");
+                } else {
+                    throw new UnsupportedCredentialItem(uri, "Not supported");
+                }
+            }
+            return true;
         }
     }
 }

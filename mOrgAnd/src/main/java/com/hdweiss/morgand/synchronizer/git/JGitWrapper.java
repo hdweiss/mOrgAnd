@@ -207,4 +207,9 @@ public class JGitWrapper {
         else
             return SyncState.Diverged;
     }
+
+    public void cleanup() {
+        if (git != null)
+            git.close();
+    }
 }
