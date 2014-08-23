@@ -59,7 +59,7 @@ public class JGitWrapper {
             throw new IllegalArgumentException("Invalid remote git url");
         }
 
-        branch = preferences.getString("git_branch", "");
+        branch = preferences.getString("git_branch", "master");
         if (branch.isEmpty())
             throw new IllegalArgumentException("Must specify a git branch");
 

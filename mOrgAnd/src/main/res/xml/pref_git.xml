@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="git_url"
+        android:title="@string/pref_title_git_url"
+        android:defaultValue=""
+        android:selectAllOnFocus="true"
+        android:inputType="textUri"
+        android:capitalize="none"
+        android:singleLine="true"
+        android:maxLines="1"/>
+
     <Preference
         android:title="@string/pref_title_git_local_path"
         android:key="git_local_path">
         <intent android:action=".settings.LocalPathSettingActivity"/>
     </Preference>
 
-    <PreferenceCategory android:title="@string/pref_group_remote">
-
-        <EditTextPreference
-            android:key="git_url"
-            android:title="@string/pref_title_git_url"
-            android:defaultValue=""
-            android:selectAllOnFocus="true"
-            android:inputType="textUri"
-            android:capitalize="none"
-            android:singleLine="true"
-            android:maxLines="1"/>
+    <PreferenceCategory android:title="@string/pref_group_authentication">
 
         <EditTextPreference
             android:key="git_username"

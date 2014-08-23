@@ -68,13 +68,16 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_git);
 
-            bindPreferenceSummaryToValue(findPreference("git_url"));
             bindPreferenceSummaryToValue(findPreference("git_commit_author"));
             bindPreferenceSummaryToValue(findPreference("git_commit_email"));
             bindPreferenceSummaryToValue(findPreference("git_key_info"));
             bindPreferenceSummaryToValue(findPreference("git_username"));
             bindPreferenceSummaryToValue(findPreference("git_local_path"));
             bindPreferenceSummaryToValue(findPreference("git_merge_strategy"));
+            bindPreferenceSummaryToValue(findPreference("git_branch"));
+
+            bindPreferenceSummaryToValue(findPreference("git_url"));
+            findPreference("git_url").setOnPreferenceChangeListener(sResetGitLocalPathListener);
         }
 
         @Override
@@ -118,6 +121,17 @@ public class SettingsActivity extends PreferenceActivity {
         }
     }
 
+    private static Preference.OnPreferenceChangeListener sResetGitLocalPathListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            preference.setSummary(value.toString());
+
+            PreferenceUtils.set("git_local_path", "");
+            preference.getPreferenceManager().findPreference("git_local_path").setSummary("");
+
+            return true;
+        }
+    };
 
     /**
      * A preference value change listener that updates the preference's summary to reflect its new

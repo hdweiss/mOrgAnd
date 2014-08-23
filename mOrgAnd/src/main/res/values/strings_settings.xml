@@ -50,7 +50,7 @@
 
     <!-- Settings for Git -->
     <string name="pref_header_git">Git</string>
-    <string name="pref_group_remote">Remote</string>
+    <string name="pref_group_authentication">Authentication</string>
     <string name="pref_title_git_url">Git Url</string>
     <string name="pref_title_git_branch">Git branch</string>
     <string name="pref_title_git_commit_author">Git commit author</string>

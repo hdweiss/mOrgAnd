@@ -16,6 +16,12 @@ public class PreferenceUtils {
         return PreferenceManager.getDefaultSharedPreferences(Application.getInstace());
     }
 
+    public static void set(String key, String value) {
+        SharedPreferences.Editor editor = getPrefs().edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
     public static String getThemeName() {
         return "Light";
     }
@@ -86,6 +92,7 @@ public class PreferenceUtils {
 
         editor.putString("git_local_path", file.getAbsolutePath());
         editor.putString("git_url", "git://github.com/hdweiss/mOrgAnd.wiki");
+        editor.putString("git_branch", "master");
         editor.commit();
     }
 }
