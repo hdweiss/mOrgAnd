@@ -20,8 +20,10 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 public class JGitWrapper {
 
@@ -29,6 +31,8 @@ public class JGitWrapper {
 
     private final String localPath;
     private final String remotePath;
+
+    private final String branch;
 
     private final String commitAuthor;
     private final String commitEmail;
@@ -41,9 +45,23 @@ public class JGitWrapper {
         if (TextUtils.isEmpty(localPath))
             throw new IllegalArgumentException("Must specify local git path");
 
-        remotePath = preferences.getString("git_url", "");
-        if (TextUtils.isEmpty(remotePath))
+        String url = preferences.getString("git_url", "");
+        if (TextUtils.isEmpty(url))
             throw new IllegalArgumentException("Must specify remote git url");
+        try {
+            URIish urIish = new URIish(url);
+            if (urIish.getUser() == null) {
+                String username = preferences.getString("git_username", "");
+                urIish = urIish.setUser(username);
+            }
+            remotePath = urIish.toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid remote git url");
+        }
+
+        branch = preferences.getString("git_branch", "");
+        if (branch.isEmpty())
+            throw new IllegalArgumentException("Must specify a git branch");
 
         commitAuthor = preferences.getString("git_commit_author", "");
         commitEmail = preferences.getString("git_commit_email", "");
@@ -81,6 +99,7 @@ public class JGitWrapper {
         try {
             CloneCommand cloneCommand = Git.cloneRepository()
                     .setURI(remotePath)
+                    .setBranch(branch)
                     .setDirectory(localRepo)
                     .setBare(false);
             if (monitor != null)
@@ -187,5 +206,10 @@ public class JGitWrapper {
             return SyncState.Ahead;
         else
             return SyncState.Diverged;
+    }
+
+    public void cleanup() {
+        if (git != null)
+            git.close();
     }
 }

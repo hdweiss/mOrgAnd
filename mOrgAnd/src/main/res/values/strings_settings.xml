@@ -52,6 +52,7 @@
     <string name="pref_header_git">Git</string>
     <string name="pref_group_remote">Remote</string>
     <string name="pref_title_git_url">Git Url</string>
+    <string name="pref_title_git_branch">Git branch</string>
     <string name="pref_title_git_commit_author">Git commit author</string>
     <string name="pref_title_git_commit_email">Git commit email</string>
     <string name="pref_title_git_keyfile">Private ssh key file</string>

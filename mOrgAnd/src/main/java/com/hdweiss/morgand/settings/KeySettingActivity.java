@@ -41,9 +41,11 @@ public class KeySettingActivity extends Activity {
         if (resultCode == Activity.RESULT_OK) {
             String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
 
-            if (CopyKeyToStorage(filePath)) {
-                SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(this).edit();
-                edit.putString("git_key_info", GetKeyprint(GetInternalKeyPath()));
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String passphrase = prefs.getString("git_password", "");
+            if (CopyKeyToStorage(filePath, passphrase)) {
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putString("git_key_info", GetKeyprint(GetInternalKeyPath(), passphrase));
                 edit.putString("git_key_path", GetInternalKeyPath());
                 edit.commit();
             }
@@ -52,9 +54,11 @@ public class KeySettingActivity extends Activity {
         finish();
     }
 
-    private String GetKeyprint(String keyfilePath) {
+    private String GetKeyprint(String keyfilePath, String passphrase) {
         try {
             KeyPair keyPair = KeyPair.load(new JSch(), keyfilePath);
+            if (!passphrase.isEmpty() && keyPair.isEncrypted())
+                keyPair.decrypt(passphrase);
             String fingerprint = keyPair.getFingerPrint();
             keyPair.dispose();
             return fingerprint;
@@ -64,8 +68,8 @@ public class KeySettingActivity extends Activity {
         return "";
     }
 
-    private boolean CopyKeyToStorage(String filePath) {
-        String fingerprint = GetKeyprint(filePath);
+    private boolean CopyKeyToStorage(String filePath, String passphrase) {
+        String fingerprint = GetKeyprint(filePath, passphrase);
         if (TextUtils.isEmpty(fingerprint)) {
             Toast.makeText(this, R.string.error_key_file_info, Toast.LENGTH_LONG).show();
             return false;
