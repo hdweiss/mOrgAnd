@@ -65,7 +65,8 @@ public class SyncGitTask extends SafeAsyncTask<Void, SyncEvent, Void> {
 
     @Override
     protected void onCleanup() {
-        jGitWrapper.cleanup();
+        if (jGitWrapper != null)
+            jGitWrapper.cleanup();
     }
 
 

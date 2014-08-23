@@ -91,6 +91,9 @@ public abstract class SafeAsyncTask<Params, Progress, Result> extends AsyncTask<
 
     /** Reports the error according to {@link #mode}. */
     protected void reportError(String error) {
+        if (error == null || error.isEmpty())
+            return;
+
         if (mode == ReportMode.Toast && context != null)
             Toast.makeText(context, error, Toast.LENGTH_LONG).show();
         if (mode != ReportMode.Silent)

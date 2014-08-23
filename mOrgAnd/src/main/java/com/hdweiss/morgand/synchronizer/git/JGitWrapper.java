@@ -19,6 +19,7 @@ import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.URIish;
 
@@ -36,6 +37,8 @@ public class JGitWrapper {
 
     private final String commitAuthor;
     private final String commitEmail;
+
+    private CredentialsProvider credentialsProvider;
 
     private MergeStrategy mergeStrategy;
 
@@ -81,6 +84,8 @@ public class JGitWrapper {
 
         JGitConfigSessionFactory session = new JGitConfigSessionFactory(username, password, keyLocation);
         SshSessionFactory.setInstance(session);
+
+        credentialsProvider = new JGitCredentialsProvider(username, password);
     }
 
     private Git initGitRepo(ProgressMonitor monitor) throws Exception {
@@ -98,6 +103,7 @@ public class JGitWrapper {
 
         try {
             CloneCommand cloneCommand = Git.cloneRepository()
+                    .setCredentialsProvider(credentialsProvider)
                     .setURI(remotePath)
                     .setBranch(branch)
                     .setDirectory(localRepo)
@@ -116,7 +122,13 @@ public class JGitWrapper {
         if (this.git == null)
             this.git = initGitRepo(monitor);
 
-        if (this.git.status().call().getConflicting().isEmpty() == false)
+        boolean hasConflicts = false;
+
+        try {
+            hasConflicts = this.git.status().call().getConflicting().isEmpty() == false;
+        } catch (Exception ex) {}
+
+        if (hasConflicts)
             throw new IllegalStateException("Unresolved conflict(s) in git repository");
 
         return this.git;
@@ -141,6 +153,7 @@ public class JGitWrapper {
         Git git = getGit(monitor);
 
         FetchCommand fetch = git.fetch();
+        fetch.setCredentialsProvider(credentialsProvider);
         if (monitor != null)
             fetch.setProgressMonitor(monitor);
         fetch.call();
@@ -155,7 +168,7 @@ public class JGitWrapper {
 
             case Ahead:
                 Log.d("Git", "Local branch ahead, pushing changes to remote");
-                git.push().setRemote(remotePath).call();
+                git.push().setCredentialsProvider(credentialsProvider).setRemote(remotePath).call();
                 break;
 
             case Behind:
@@ -169,7 +182,7 @@ public class JGitWrapper {
                 Log.d("Git", "Branches are diverged, merging with strategy " + mergeStrategy.getName());
                 MergeResult mergeResult = git.merge().include(fetchHead).setStrategy(mergeStrategy).call();
                 if (mergeResult.getMergeStatus().isSuccessful()) {
-                    git.push().setRemote(remotePath).call();
+                    git.push().setCredentialsProvider(credentialsProvider).setRemote(remotePath).call();
                 } else
                     throw new IllegalStateException("Merge failed for diverged branches using strategy " + mergeStrategy.getName());
                 break;
