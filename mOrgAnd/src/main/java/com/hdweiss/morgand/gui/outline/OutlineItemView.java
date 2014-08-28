@@ -65,6 +65,9 @@ public class OutlineItemView extends RelativeLayout implements Checkable {
     }
 
     public void setup(OrgNode node, boolean expanded, int level, DefaultTheme theme) {
+        if (node == null)
+            return;
+
         this.node = node;
         this.theme = theme;
 

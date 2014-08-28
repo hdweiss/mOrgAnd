@@ -69,8 +69,13 @@ public class OutlineListView extends ListView {
         long[] state = savedInstanceState.getLongArray(OUTLINE_NODES);
         ArrayList<Integer> levels = savedInstanceState.getIntegerArrayList(OUTLINE_LEVELS);
         boolean[] expanded = savedInstanceState.getBooleanArray(OUTLINE_EXPANDED);
+
         if(state != null) {
-            this.adapter.setState(state, levels, expanded);
+            try {
+                this.adapter.setState(state, levels, expanded);
+            } catch (IllegalStateException ex) {
+                this.adapter.init();
+            }
         }
 
         int checkedPos= savedInstanceState.getInt(OUTLINE_CHECKED_POS, 0);

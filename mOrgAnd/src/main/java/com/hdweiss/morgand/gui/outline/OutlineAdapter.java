@@ -65,7 +65,10 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 		for(int i = 0; i < state.length; i++) {
             try {
                 OrgNode node = OrgNodeRepository.queryForId((int) state[i]);
-                add(node);
+                if (node == null)
+                    throw new IllegalStateException("Give OutlineAdapter state is invalid, node with id " + state[i] + " not found");
+
+                    add(node);
             } catch(Exception ex) {}
 		}
 
@@ -108,7 +111,11 @@ public class OutlineAdapter extends ArrayAdapter<OrgNode> {
 			outlineItemView = new OutlineItemView(getContext());
 
 		outlineItemView.setAgendaMode(agendaMode);
-        outlineItemView.setup(getItem(position), getExpanded(position), getLevel(position), theme);
+
+        OrgNode node = getItem(position);
+
+        if (node != null)
+            outlineItemView.setup(node, getExpanded(position), getLevel(position), theme);
 
 		return outlineItemView;
 	}
