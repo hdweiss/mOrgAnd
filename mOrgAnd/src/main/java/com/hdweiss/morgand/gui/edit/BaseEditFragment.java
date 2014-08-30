@@ -8,8 +8,10 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.hdweiss.morgand.Application;
 import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
+import com.hdweiss.morgand.events.DataUpdatedEvent;
 import com.hdweiss.morgand.gui.edit.controller.AddController;
 import com.hdweiss.morgand.gui.edit.controller.BaseEditController;
 import com.hdweiss.morgand.gui.edit.controller.EditController;
@@ -93,6 +95,7 @@ public abstract class BaseEditFragment extends DialogFragment implements TextVie
             if (controller != null) {
                 OrgNode editedNode = getEditedNode();
                 controller.save(editedNode);
+                Application.getBus().post(new DataUpdatedEvent());
             }
             dismiss();
             return true;
