@@ -54,6 +54,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_data_sync);
 
+            bindPreferenceSummaryToValue(findPreference("sync_mode"));
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
             bindPreferenceSummaryToValue(findPreference("todo_active"));
             bindPreferenceSummaryToValue(findPreference("todo_inactive"));

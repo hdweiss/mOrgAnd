@@ -77,6 +77,9 @@ public class PreferenceUtils {
         return getPrefs().getBoolean("outline_expandall", false);
     }
 
+    public static String syncMode() {
+        return getPrefs().getString("sync_mode", "git");
+    }
 
     public static void setupGitToWiki() {
         SharedPreferences.Editor editor = getPrefs().edit();
@@ -90,6 +93,7 @@ public class PreferenceUtils {
         if (file.exists())
             FileUtils.deleteDirectory(file);
 
+        editor.putString("sync_mode", "git");
         editor.putString("git_local_path", file.getAbsolutePath());
         editor.putString("git_url", "git://github.com/hdweiss/mOrgAnd.wiki");
         editor.putString("git_branch", "master");

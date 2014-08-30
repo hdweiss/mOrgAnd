@@ -8,6 +8,7 @@ import com.hdweiss.morgand.data.dao.OrgNode;
 import com.hdweiss.morgand.data.dao.OrgNodeRepository;
 import com.hdweiss.morgand.events.SyncEvent;
 import com.hdweiss.morgand.gui.SynchronizerNotification;
+import com.hdweiss.morgand.settings.PreferenceUtils;
 import com.hdweiss.morgand.synchronizer.git.SyncGitTask;
 import com.hdweiss.morgand.utils.SafeAsyncTask;
 import com.hdweiss.morgand.utils.Utils;
@@ -86,7 +87,8 @@ public class SyncWriterTask extends SafeAsyncTask<OrgFile, SyncEvent, Void> {
 
     @Override
     protected void onSuccess(Void aVoid) {
-        new SyncGitTask(context).execute();
+        if (PreferenceUtils.syncMode().equals("git"))
+            new SyncGitTask(context).execute();
     }
 
     @Override

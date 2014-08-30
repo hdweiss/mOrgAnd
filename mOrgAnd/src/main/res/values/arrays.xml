@@ -17,4 +17,14 @@
         <item>theirs</item>
         <item>ours</item>
     </string-array>
+
+    <string-array name="pref_sync_mode_titles">
+        <item>Git</item>
+        <item>Update files</item>
+    </string-array>
+
+    <string-array name="pref_sync_mode_values">
+        <item>git</item>
+        <item>none</item>
+    </string-array>
 </resources>
