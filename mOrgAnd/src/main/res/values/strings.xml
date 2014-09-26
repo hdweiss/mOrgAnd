@@ -31,6 +31,7 @@
     <string name="error_sync">Synchronization failed</string>
     <string name="error_key_file_copy">Error copying key file to internal storage</string>
     <string name="error_key_file_info">Error getting fingerprint from key file</string>
+    <string name="error_key_need_pass">This key requires a passphrase</string>
     <string name="action_view">View</string>
     <string name="action_capture">Capture</string>
     <string name="action_edit">Edit</string>
