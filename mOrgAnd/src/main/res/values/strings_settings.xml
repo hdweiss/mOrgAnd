@@ -57,7 +57,7 @@
     <string name="pref_title_git_commit_author">Git commit author</string>
     <string name="pref_title_git_commit_email">Git commit email</string>
     <string name="pref_title_git_keyfile">Private ssh key file</string>
-    <string name="pref_title_git_password">Git password</string>
+    <string name="pref_title_git_password">Git (or key) password</string>
     <string name="pref_title_git_username">Git Username</string>
     <string name="pref_title_git_local_path">Git local repository path</string>
     <string name="pref_title_git_merge_strategy">Conflict merge strategy</string>
