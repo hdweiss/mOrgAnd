@@ -73,7 +73,7 @@ public class OrgFileParser {
 
         OrgNode.Type type = determineType(line);
         OrgNode node;
-        switch(determineType(line)) {
+        switch(type) {
             case Headline:
                 node = getNodeFromHeadline(line);
                 break;
