@@ -59,6 +59,10 @@ public class KeySettingActivity extends Activity {
             KeyPair keyPair = KeyPair.load(new JSch(), keyfilePath);
             if (!passphrase.isEmpty() && keyPair.isEncrypted())
                 keyPair.decrypt(passphrase);
+            else if (passphrase.isEmpty() && keyPair.isEncrypted()) {
+                Toast.makeText(this, R.string.error_key_need_pass, Toast.LENGTH_LONG).show();
+                return "";
+            }
             String fingerprint = keyPair.getFingerPrint();
             keyPair.dispose();
             return fingerprint;
