@@ -108,7 +108,7 @@ public class OrgFileParser {
     }
 
     public static OrgNode.Type determineType(final String line) {
-        if (line.startsWith("*"))
+        if (line.matches("[*]+[ ].*"))
             return OrgNode.Type.Headline;
 
         if (line.startsWith("#+"))
