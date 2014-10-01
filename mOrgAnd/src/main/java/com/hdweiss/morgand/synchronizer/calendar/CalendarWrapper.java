@@ -121,7 +121,6 @@ public class CalendarWrapper {
 		alertvalues.put(CalendarContract.CalendarAlerts.EVENT_ID, eventID);
 		alertvalues.put(CalendarContract.CalendarAlerts.BEGIN, beginTime);
 		alertvalues.put(CalendarContract.CalendarAlerts.END, endTime);
-		alertvalues.put(CalendarContract.CalendarAlerts.ALARM_TIME, this.reminderTime);
 		alertvalues.put(CalendarContract.CalendarAlerts.STATE,
 				CalendarContract.CalendarAlerts.STATE_SCHEDULED);
 		alertvalues.put(CalendarContract.CalendarAlerts.MINUTES, this.reminderTime);
