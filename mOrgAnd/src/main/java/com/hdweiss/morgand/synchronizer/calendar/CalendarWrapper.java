@@ -114,14 +114,13 @@ public class CalendarWrapper {
 		reminderValues.put(CalendarContract.Reminders.EVENT_ID, eventID);
 		reminderValues.put(CalendarContract.Reminders.METHOD,
                 CalendarContract.Reminders.METHOD_ALERT);
-		context.getContentResolver().insert(CalendarContract.CalendarAlerts.CONTENT_URI,
+		context.getContentResolver().insert(CalendarContract.Reminders.CONTENT_URI,
 				reminderValues);
 
 		ContentValues alertvalues = new ContentValues();
 		alertvalues.put(CalendarContract.CalendarAlerts.EVENT_ID, eventID);
 		alertvalues.put(CalendarContract.CalendarAlerts.BEGIN, beginTime);
 		alertvalues.put(CalendarContract.CalendarAlerts.END, endTime);
-		alertvalues.put(CalendarContract.CalendarAlerts.ALARM_TIME, this.reminderTime);
 		alertvalues.put(CalendarContract.CalendarAlerts.STATE,
 				CalendarContract.CalendarAlerts.STATE_SCHEDULED);
 		alertvalues.put(CalendarContract.CalendarAlerts.MINUTES, this.reminderTime);
