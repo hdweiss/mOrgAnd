@@ -60,56 +60,92 @@ public class OrgFileParser {
             @Override
             public Object call() throws Exception {
                 String currentLine;
+                boolean inBlock = false;
                 while ((currentLine = reader.readLine()) != null)
-                    parseLine(currentLine);
+                    inBlock = parseLine(currentLine, inBlock);
                 return null;
             }
         });
     }
 
-    private void parseLine(String line) throws IOException {
+    private boolean parseLine(String line, boolean inBlock) throws IOException {
         if (TextUtils.isEmpty(line))
-            return;
+            return false;
+
+        boolean returnValue = false;
 
         OrgNode.Type type = determineType(line);
         OrgNode node;
-        switch(determineType(line)) {
-            case Headline:
-                node = getNodeFromHeadline(line);
-                break;
 
-            case Drawer:
-                node = getNodeFromDrawer(line);
-                break;
+        if (inBlock) {
+            if (determineType(line) == OrgNode.Type.EndQuote ||
+                    determineType(line) == OrgNode.Type.EndSrc) {
+                returnValue = false;
+            }
+            node = getNodeFromBody(line);
+        } else {
+            switch (type) {
+                case Headline:
+                    node = getNodeFromHeadline(line);
+                    break;
 
-            case Setting:
-                node  = getNodeFromSetting(line);
-                break;
+                case Drawer:
+                    node = getNodeFromDrawer(line);
+                    break;
 
-            case Checkbox:
-                node = getNodeFromCheckbox(line);
-                break;
+                case Setting:
+                    node = getNodeFromSetting(line);
+                    break;
 
-            case Date:
-                node = getNodeFromLine(type, line);
-                break;
+                case Checkbox:
+                    node = getNodeFromCheckbox(line);
+                    break;
 
-            case Table:
-                node = getNodeFromTable(line);
-                break;
+                case Date:
+                    node = getNodeFromLine(type, line);
+                    break;
 
-            case Body:
-            default:
-                node = getNodeFromBody(line);
-                break;
+                case Table:
+                    node = getNodeFromTable(line);
+                    break;
+
+                case BeginQuote:
+                    node = getNodeFromBody(line);
+                    returnValue = true;
+                    break;
+
+                case BeginSrc:
+                    node = getNodeFromBody(line);
+                    returnValue = true;
+                    break;
+
+                case Body:
+                default:
+                    node = getNodeFromBody(line);
+                    break;
+            }
         }
         if (node != null)
             nodeDao.create(node);
+
+        return returnValue;
     }
 
     public static OrgNode.Type determineType(final String line) {
         if (line.matches("[*]+[ ].*"))
             return OrgNode.Type.Headline;
+
+        if (line.startsWith("#+BEGIN_QUOTE"))
+            return OrgNode.Type.BeginQuote;
+
+        if (line.startsWith("#+END_QUOTE"))
+            return OrgNode.Type.EndQuote;
+
+        if (line.startsWith("#+BEGIN_SRC"))
+            return OrgNode.Type.BeginSrc;
+
+        if (line.startsWith("#+END_SRC"))
+            return OrgNode.Type.EndSrc;
 
         if (line.startsWith("#+"))
             return OrgNode.Type.Setting;
